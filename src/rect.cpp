@@ -1,10 +1,11 @@
-#include "rect.h"
+#include "rect.hpp"
 
-Rect::Rect(int x, int y, int w, int h, float angle, SDL_Color color) {
+Rect::Rect(int x, int y, int width, int height, float angle, SDL_Color color) {
+  this->type = ObjectType::RECT;
   this->x = x;
   this->y = y;
-  this->w = w;
-  this->h = h;
+  this->width = width;
+  this->height = height;
   this->angle = angle;
   this->color = color;
 }
