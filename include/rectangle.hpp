@@ -1,0 +1,19 @@
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
+#include <SDL2/SDL.h>
+#include "sceneObject.hpp"
+#include "vector2.hpp"
+
+class Rectangle : public SceneObject {
+public:
+  Vector2 position;
+  int width, height;
+  float angle;
+  SDL_Color color;
+
+  Rectangle(Vector2 position, int width, int height, float angle, SDL_Color color);
+  Rectangle(int x, int y, int width, int height, float angle, SDL_Color color);
+};
+
+#endif
