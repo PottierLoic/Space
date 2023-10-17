@@ -3,32 +3,33 @@
 #include <iostream>
 #include <map>
 #include <SDL2/SDL.h>
-#include "constants.h"
-#include "renderer2d.h"
-#include "circle.h"
+#include "constants.hpp"
+#include "renderer2D.hpp"
+#include "eventManager.hpp"
+#include "scene.hpp"
+#include "circle.hpp"
 
 int main() {
   Renderer2D *renderer2d = new Renderer2D();
-  SDL_Event event;
+  EventManager *event_manager = new EventManager();
+  Scene *scene = new Scene();
+  scene->addSceneObject(std::make_unique<Circle>(100, 100, 50, SDL_Color{255, 0, 0, 255}));
+  scene->addSceneObject(std::make_unique<Circle>(200, 200, 50, SDL_Color{0, 255, 0, 255}));
+  scene->addSceneObject(std::make_unique<Rect>(100, 100, 100, 100, 0, SDL_Color{255, 0, 0, 255}));
+  scene->addSceneObject(std::make_unique<Rect>(200, 200, 100, 100, 45, SDL_Color{0, 255, 0, 255}));
 
-  Circle *circle = new Circle(WIDTH / 2, HEIGHT / 2, 100, {255, 255, 255, 255});
-
-  bool quit = false;
-  while (!quit) {
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
-        quit = true;
-      }
-    }
+  while (!event_manager->quit) {
+    event_manager->update();
     SDL_SetRenderDrawColor(renderer2d->renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer2d->renderer);
 
-    renderer2d->draw_circle(circle);
+    renderer2d->draw_scene(scene);
 
     SDL_RenderPresent(renderer2d->renderer);
   }
 
   delete renderer2d;
+  delete event_manager;
   return EXIT_SUCCESS;
 }
 

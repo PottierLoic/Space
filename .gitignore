@@ -1,5 +1,3 @@
-
 *.exe
-
-# ignore .vscode folder
+*.out
 .vscode/*
