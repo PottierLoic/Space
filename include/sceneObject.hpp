@@ -3,7 +3,8 @@
 
 enum ObjectType {
   RECT,
-  CIRCLE
+  CIRCLE,
+  TRIANGLE
 };
 
 class SceneObject {

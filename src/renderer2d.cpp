@@ -44,22 +44,25 @@ void Renderer2D::draw_scene(Scene *scene) {
   for (auto &obj : scene->objects) {
     switch (obj->type) {
       case ObjectType::RECT:
-        draw_rect((Rect *)obj.get());
+        draw_rectangle((Rectangle *)obj.get());
         break;
       case ObjectType::CIRCLE:
         draw_circle((Circle *)obj.get());
+        break;
+      case ObjectType::TRIANGLE:
+        draw_triangle((Triangle *)obj.get());
         break;
     }
   }
 }
 
-void Renderer2D::draw_rect(Rect *rect) {
+void Renderer2D::draw_rectangle(Rectangle *rect) {
   if (rect->angle != 0 ) {
-    double centerX = rect->x + rect->width / 2.0;
-    double centerY = rect->y + rect->height / 2.0;
+    double centerX = rect->position.x + rect->width / 2.0;
+    double centerY = rect->position.y + rect->height / 2.0;
 
-    for (int x = rect->x; x < rect->x + rect->width; x++) {
-      for (int y = rect->y; y < rect->y + rect->height; y++) {
+    for (int x = rect->position.x; x < rect->position.x + rect->width; x++) {
+      for (int y = rect->position.y; y < rect->position.y + rect->height; y++) {
         double relX = x - centerX;
         double relY = y - centerY;
 
@@ -69,9 +72,10 @@ void Renderer2D::draw_rect(Rect *rect) {
         draw_pixel((int)rotatedX, (int)rotatedY, rect->color);
       }
     }
+
   } else {
-    for (int x = rect->x; x < rect->x + rect->width; x++) {
-      for (int y = rect->y; y < rect->y + rect->height; y++) {
+    for (int x = rect->position.x; x < rect->position.x + rect->width; x++) {
+      for (int y = rect->position.y; y < rect->position.y + rect->height; y++) {
         draw_pixel(x, y, rect->color);
       }
     }
@@ -79,8 +83,8 @@ void Renderer2D::draw_rect(Rect *rect) {
 }
 
 void Renderer2D::draw_circle(Circle *circle) {
-  double centerX = circle->x;
-  double centerY = circle->y;
+  double centerX = circle->position.x;
+  double centerY = circle->position.y;
 
   for (int x = centerX - circle->radius; x <= centerX + circle->radius; x++) {
     for (int y = centerY - circle->radius; y <= centerY + circle->radius; y++) {
@@ -94,4 +98,8 @@ void Renderer2D::draw_circle(Circle *circle) {
       }
     }
   }
+}
+
+void Renderer2D::draw_triangle(Triangle *triangle) {
+  
 }
