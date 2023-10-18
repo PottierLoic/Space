@@ -15,6 +15,7 @@
 int main() {
   Renderer2D *renderer2d = new Renderer2D();
   EventManager *event_manager = new EventManager();
+
   Scene *scene = new Scene();
   scene->addSceneObject(std::make_unique<Circle>(Vector2(100, 100), 50, SDL_Color{255, 0, 0, 255}));
   scene->addSceneObject(std::make_unique<Circle>(Vector2(200, 200), 50, SDL_Color{0, 255, 0, 255}));
@@ -31,7 +32,7 @@ int main() {
     r1->angle += 0.01;
     Rectangle *r2 = (Rectangle *)scene->objects[3].get();
     r2->angle -= 0.01;
-    renderer2d->draw_scene(scene);
+    scene->render(renderer2d->renderer);
 
     SDL_RenderPresent(renderer2d->renderer);
   }

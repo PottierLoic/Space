@@ -14,6 +14,7 @@ public:
 
   Rectangle(Vector2 position, int width, int height, float angle, SDL_Color color);
   Rectangle(int x, int y, int width, int height, float angle, SDL_Color color);
+  void render(SDL_Renderer *renderer) override;
 };
 
 #endif

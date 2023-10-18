@@ -14,6 +14,7 @@ public:
   Circle();
   Circle(Vector2 position, int radius, SDL_Color color);
   Circle(int x, int y, int radius, SDL_Color color);
+  void render(SDL_Renderer *renderer) override;
 };
 
 #endif
