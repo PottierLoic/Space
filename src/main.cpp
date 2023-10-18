@@ -4,7 +4,6 @@
 #include <map>
 #include <SDL2/SDL.h>
 #include "constants.hpp"
-#include "renderer2D.hpp"
 #include "eventManager.hpp"
 #include "scene.hpp"
 #include "vector2.hpp"
@@ -13,7 +12,26 @@
 #include "triangle.hpp"
 
 int main() {
-  Renderer2D *renderer2d = new Renderer2D();
+  SDL_Renderer *renderer;
+  SDL_Window *window;
+
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    std::cout << "Error initalizing SDL: " << SDL_GetError() << std::endl;
+    return 1;
+  }
+
+  window = SDL_CreateWindow("Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
+  if (window == NULL) {
+    std::cerr << "Error creating window: " << SDL_GetError() << std::endl;
+    return false;
+  }
+
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  if (renderer == NULL) {
+    std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
+    return false;
+  }
+
   EventManager *event_manager = new EventManager();
 
   Scene *scene = new Scene();
@@ -25,20 +43,24 @@ int main() {
 
   while (!event_manager->quit) {
     event_manager->update();
-    SDL_SetRenderDrawColor(renderer2d->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer2d->renderer);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
     Rectangle *r1 = (Rectangle *)scene->objects[2].get();
     r1->angle += 0.01;
     Rectangle *r2 = (Rectangle *)scene->objects[3].get();
     r2->angle -= 0.01;
-    scene->render(renderer2d->renderer);
+    scene->render(renderer);
 
-    SDL_RenderPresent(renderer2d->renderer);
+    SDL_RenderPresent(renderer);
   }
 
-  delete renderer2d;
   delete event_manager;
+
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
+  SDL_Quit();
+
   return EXIT_SUCCESS;
 }
 
