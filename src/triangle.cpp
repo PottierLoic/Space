@@ -9,6 +9,7 @@ Triangle::Triangle(Vector2 p1, Vector2 p2, Vector2 p3, float angle, SDL_Color co
   this->color = color;
 }
 
+//TODO: fix it, doesn't display anything right now
 void Triangle::render(SDL_Renderer *renderer) {
   Vector2 center = Vector2((this->p1.x + this->p2.x + this->p3.x) / 3,
                             (this->p1.y + this->p2.y + this->p3.y) / 3);
