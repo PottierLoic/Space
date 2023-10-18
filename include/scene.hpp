@@ -13,6 +13,8 @@ public:
   /* Add an object to the scene objects list.
     It must inherit from SceneObject class. */
   void addSceneObject(std::unique_ptr<SceneObject> obj);
+
+  void render(SDL_Renderer *renderer);
 };
 
 #endif

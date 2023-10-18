@@ -44,6 +44,8 @@ public:
 
   /* Draw a triangle on the screen. */
   void draw_triangle(Triangle *triangle);
+
+  void draw_mandelbrot(int maxIterations);
 };
 
 #endif

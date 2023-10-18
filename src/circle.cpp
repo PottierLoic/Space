@@ -21,3 +21,22 @@ Circle::Circle(int x, int y, int radius, SDL_Color color) {
   this->color = color;
 }
 
+void Circle::render(SDL_Renderer *renderer) {
+  double centerX = this->position.x;
+  double centerY = this->position.y;
+
+  for (int x = centerX - this->radius; x <= centerX + this->radius; x++) {
+    for (int y = centerY - this->radius; y <= centerY + this->radius; y++) {
+      double relX = x - centerX;
+      double relY = y - centerY;
+
+      double distance = sqrt(relX * relX + relY * relY);
+
+      if (distance <= this->radius) {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderDrawPoint(renderer, x, y);
+      }
+    }
+  }
+}
