@@ -24,10 +24,6 @@ void Triangle::render(SDL_Renderer *renderer) {
   Vector2 p3_rotated = Vector2((this->p3.x - center.x) * cos(this->angle) - (this->p3.y - center.y) * sin(this->angle) + center.x,
                         (this->p3.x - center.x) * sin(this->angle) + (this->p3.y - center.y) * cos(this->angle) + center.y);
 
-  // Vector2 p1_rotated = this->p1;
-  // Vector2 p2_rotated = this->p2;
-  // Vector2 p3_rotated = this->p3;
-
   double min_x = std::min(p1_rotated.x, std::min(p2_rotated.x, p3_rotated.x));
   double max_x = std::max(p1_rotated.x, std::max(p2_rotated.x, p3_rotated.x));
 
@@ -37,20 +33,7 @@ void Triangle::render(SDL_Renderer *renderer) {
   for (int x = min_x; x <= max_x; x++) {
     for (int y = min_y; y <= max_y; y++) {
 
-    // double apx = p.getX () - a.getX ();
-    // double apy = p.getY () - a.getY ();
-    // double bpx = p.getX () - b.getX ();
-    // double bpy = p.getY () - b.getY ();
-    // double cpx = p.getX () - c.getX ();
-    // double cpy = p.getY () - c.getY ();
-    // double cpa = apx * bpy - apy * bpx;
-    // double cpb = bpx * cpy - bpy * cpx;
-    // double cpc = cpx * apy - cpy * apx;
-    // boolean da = (cpa > 0);
-    // boolean db = (cpb > 0);
-    // boolean dc = (cpc > 0);
-    // return da == db && db == dc;
-
+      // techno
       double apx = x - p1_rotated.x;
       double apy = y - p1_rotated.y;
 
@@ -59,6 +42,16 @@ void Triangle::render(SDL_Renderer *renderer) {
 
       double cpx = x - p1_rotated.x;
       double cpy = y - p1_rotated.y;
+      
+      // working
+      // double apx = x - p1_rotated.x;
+      // double apy = y - p1_rotated.y;
+
+      // double bpx = x - p2_rotated.x;
+      // double bpy = y - p2_rotated.y;
+
+      // double cpx = x - p3_rotated.x;
+      // double cpy = y - p3_rotated.y;
 
       double cpa = apx * bpy - apy * bpx;
       double cpb = bpx * cpy - bpy * cpx;
@@ -68,7 +61,7 @@ void Triangle::render(SDL_Renderer *renderer) {
       bool db = (cpb > 0);
       bool dc = (cpc > 0);
 
-      if (da == db && db == dc) {
+      if (cpa > 0 && cpb > 0 && cpc > 0) {
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
         SDL_RenderDrawPoint(renderer, x, y);
