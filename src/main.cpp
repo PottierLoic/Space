@@ -35,22 +35,20 @@ int main() {
   EventManager *event_manager = new EventManager();
 
   Scene *scene = new Scene();
-  scene->addSceneObject(std::make_unique<Circle>(Vector2(100, 100), 50, SDL_Color{255, 0, 0, 255}));
-  scene->addSceneObject(std::make_unique<Circle>(Vector2(200, 200), 50, SDL_Color{0, 255, 0, 255}));
-  scene->addSceneObject(std::make_unique<Rectangle>(Vector2(400, 100), 100, 100, 0, SDL_Color{255, 0, 0, 255}));
-  scene->addSceneObject(std::make_unique<Rectangle>(Vector2(600, 500), 50, 100, 45, SDL_Color{0, 255, 0, 255}));
-  scene->addSceneObject(std::make_unique<Triangle>(Vector2(100, 400), Vector2(200, 400), Vector2(150, 300), 0, SDL_Color{0, 0, 255, 255}));
+  // scene->addSceneObject(std::make_unique<Circle>(Vector2(100, 100), 50, SDL_Color{255, 0, 0, 255}));
+  // scene->addSceneObject(std::make_unique<Circle>(Vector2(200, 200), 50, SDL_Color{0, 255, 0, 255}));
+  // scene->addSceneObject(std::make_unique<Rectangle>(Vector2(400, 100), 100, 100, 0, SDL_Color{255, 0, 0, 255}));
+  // scene->addSceneObject(std::make_unique<Rectangle>(Vector2(600, 500), 50, 100, 45, SDL_Color{0, 255, 0, 255}));
+  scene->addSceneObject(std::make_unique<Triangle>(Vector2(300, 300), Vector2(300, 100), Vector2(500, 300), 0.01, SDL_Color{0, 0, 255, 255}));
 
   while (!event_manager->quit) {
     event_manager->update();
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
-    Rectangle *r1 = (Rectangle *)scene->objects[2].get();
-    r1->angle += 0.01;
-    Rectangle *r2 = (Rectangle *)scene->objects[3].get();
-    r2->angle -= 0.01;
     scene->render(renderer);
+
+    Triangle *t = (Triangle *)scene->objects[0].get();
+    t->angle += 0.01;
 
     SDL_RenderPresent(renderer);
   }
