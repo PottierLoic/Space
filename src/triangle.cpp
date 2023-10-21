@@ -9,12 +9,10 @@ Triangle::Triangle(Vector2 p1, Vector2 p2, Vector2 p3, float angle, SDL_Color co
   this->color = color;
 }
 
-//TODO: fix it, doesn't display anything right now
 void Triangle::render(SDL_Renderer *renderer) {
   Vector2 center = Vector2((this->p1.x + this->p2.x + this->p3.x) / 3,
                             (this->p1.y + this->p2.y + this->p3.y) / 3);
 
-  // rotate this around the center by angle
   Vector2 p1_rotated = Vector2((this->p1.x - center.x) * cos(this->angle) - (this->p1.y - center.y) * sin(this->angle) + center.x,
                        (this->p1.x - center.x) * sin(this->angle) + (this->p1.y - center.y) * cos(this->angle) + center.y);
 
@@ -32,26 +30,14 @@ void Triangle::render(SDL_Renderer *renderer) {
 
   for (int x = min_x; x <= max_x; x++) {
     for (int y = min_y; y <= max_y; y++) {
-
-      // techno
       double apx = x - p1_rotated.x;
       double apy = y - p1_rotated.y;
 
-      double bpx = x - p1_rotated.x;
-      double bpy = y - p1_rotated.y;
+      double bpx = x - p2_rotated.x;
+      double bpy = y - p2_rotated.y;
 
-      double cpx = x - p1_rotated.x;
-      double cpy = y - p1_rotated.y;
-      
-      // working
-      // double apx = x - p1_rotated.x;
-      // double apy = y - p1_rotated.y;
-
-      // double bpx = x - p2_rotated.x;
-      // double bpy = y - p2_rotated.y;
-
-      // double cpx = x - p3_rotated.x;
-      // double cpy = y - p3_rotated.y;
+      double cpx = x - p3_rotated.x;
+      double cpy = y - p3_rotated.y;
 
       double cpa = apx * bpy - apy * bpx;
       double cpb = bpx * cpy - bpy * cpx;
@@ -61,23 +47,11 @@ void Triangle::render(SDL_Renderer *renderer) {
       bool db = (cpb > 0);
       bool dc = (cpc > 0);
 
-      if (cpa > 0 && cpb > 0 && cpc > 0) {
+      if (da == db && db == dc) {
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
         SDL_RenderDrawPoint(renderer, x, y);
       }
     }
   }
-
-  /* Debug: draw triangle points with rotation applied. */
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderDrawPoint(renderer, p1_rotated.x, p1_rotated.y);
-  SDL_RenderDrawPoint(renderer, p2_rotated.x, p2_rotated.y);
-  SDL_RenderDrawPoint(renderer, p3_rotated.x, p3_rotated.y);
-
-  /* draw lines */
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderDrawLine(renderer, p1_rotated.x, p1_rotated.y, p2_rotated.x, p2_rotated.y);
-  SDL_RenderDrawLine(renderer, p2_rotated.x, p2_rotated.y, p3_rotated.x, p3_rotated.y);
-  SDL_RenderDrawLine(renderer, p3_rotated.x, p3_rotated.y, p1_rotated.x, p1_rotated.y);
 }
