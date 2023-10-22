@@ -1,8 +1,5 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 /* Window startup size */
 const int WIDTH = 1080;
 const int HEIGHT = 720;
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#pragma once
 
 #include <SDL2/SDL.h>
 #include "sceneObject.hpp"
@@ -16,5 +15,3 @@ public:
   Rectangle(int x, int y, int width, int height, float angle, SDL_Color color);
   void render(SDL_Renderer *renderer) override;
 };
-
-#endif

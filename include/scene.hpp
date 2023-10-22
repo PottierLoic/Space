@@ -1,5 +1,4 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -16,5 +15,3 @@ public:
 
   void render(SDL_Renderer *renderer);
 };
-
-#endif

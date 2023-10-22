@@ -1,5 +1,4 @@
-#ifndef VECTOR2_H
-#define VECTOR2_H
+#pragma once
 
 #include <cmath>
 
@@ -23,5 +22,3 @@ public:
 
   double distance(Vector2 &other);
 };
-
-#endif
