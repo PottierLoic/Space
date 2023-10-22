@@ -47,8 +47,12 @@ int main() {
     SDL_RenderClear(renderer);
     scene->render(renderer);
 
+    Rectangle *r = (Rectangle *)scene->objects[3].get();
+    r->angle += 0.01;
+
     Triangle *t = (Triangle *)scene->objects[4].get();
     t->angle += 0.01;
+
 
     SDL_RenderPresent(renderer);
   }

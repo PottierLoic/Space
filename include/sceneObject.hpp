@@ -1,5 +1,4 @@
-#ifndef SCENEOBJECT_H
-#define SCENEOBJECT_H
+#pragma once
 
 #include <iostream>
 #include <SDL2/SDL.h>
@@ -18,5 +17,3 @@ public:
   virtual ~SceneObject();
   virtual void render(SDL_Renderer *renderer);
 };
-
-#endif
