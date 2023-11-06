@@ -5,8 +5,7 @@
 #include <SDL2/SDL.h>
 #include "constants.hpp"
 #include "eventManager.hpp"
-#include "scene.hpp"
-#include "vector2.hpp"
+#include "scene2d.hpp"
 #include "rectangle.hpp"
 #include "circle.hpp"
 #include "triangle.hpp"
@@ -34,12 +33,12 @@ int main() {
 
   EventManager *event_manager = new EventManager();
 
-  Scene *scene = new Scene();
-  scene->addSceneObject(std::make_unique<Circle>(Vector2(100, 100), 50, SDL_Color{255, 0, 0, 255}));
-  scene->addSceneObject(std::make_unique<Circle>(Vector2(200, 200), 50, SDL_Color{0, 255, 0, 255}));
-  scene->addSceneObject(std::make_unique<Rectangle>(Vector2(400, 100), 100, 100, 0, SDL_Color{255, 0, 0, 255}));
-  scene->addSceneObject(std::make_unique<Rectangle>(Vector2(600, 500), 50, 100, 45, SDL_Color{0, 255, 0, 255}));
-  scene->addSceneObject(std::make_unique<Triangle>(Vector2(300, 300), Vector2(300, 100), Vector2(500, 300), 0.01, SDL_Color{0, 0, 255, 100}));
+  Scene2D *scene = new Scene2D();
+  scene->addSceneObject(std::make_unique<Circle>(Vector3(100, 100), 50, SDL_Color{255, 0, 0, 255}));
+  scene->addSceneObject(std::make_unique<Circle>(Vector3(200, 200), 50, SDL_Color{0, 255, 0, 255}));
+  scene->addSceneObject(std::make_unique<Rectangle>(Vector3(400, 100), 100, 100, 0, SDL_Color{255, 0, 0, 255}));
+  scene->addSceneObject(std::make_unique<Rectangle>(Vector3(600, 500), 50, 100, 45, SDL_Color{0, 255, 0, 255}));
+  scene->addSceneObject(std::make_unique<Triangle>(Vector3(300, 300), Vector3(300, 100), Vector3(500, 300), 0.01, SDL_Color{0, 0, 255, 100}));
 
   while (!event_manager->quit) {
     event_manager->update();

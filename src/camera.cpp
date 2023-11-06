@@ -1,24 +1,27 @@
 #include "camera.hpp"
-#include "vector2.hpp"
+#include "vector3.hpp"
 
 Camera::Camera() {
-  this->position = Vector2(0, 0);
-  this->size = Vector2(500, 500);
+  this->position = Vector3(0, 0, 0);
+  this->width = 0;
+  this->height = 0;
 }
 
-Camera::Camera(Vector2 position, Vector2 size) {
+Camera::Camera(Vector3 position, double width, double height) {
   this->position = position;
-  this->size = size;
+  this->width = width;
+  this->height = height;
 }
 
-void Camera::movePosition(Vector2 position) {
+void Camera::movePosition(Vector3 position) {
   this->position += position;
 }
 
-void Camera::setPosition(Vector2 position) {
+void Camera::setPosition(Vector3 position) {
   this->position = position;
 }
 
-void Camera::setSize(Vector2 size) {
-  this->size = size;
+void Camera::setSize(double width, double height) {
+  this->width = width;
+  this->height = height;
 }

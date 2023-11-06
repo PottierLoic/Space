@@ -1,15 +1,16 @@
 #pragma once
 
-#include "vector2.hpp"
+#include "vector3.hpp"
 
 class Camera {
 public:
-  Vector2 position;
-  Vector2 size;
+  Vector3 position;
+  double width;
+  double height;
 
   Camera();
-  Camera(Vector2 position, Vector2 size);
-  void movePosition(Vector2 position);
-  void setPosition(Vector2 position);
-  void setSize(Vector2 size);
+  Camera(Vector3 position, double width, double height);
+  void movePosition(Vector3 position);
+  void setPosition(Vector3 position);
+  void setSize(double width, double height);
 };

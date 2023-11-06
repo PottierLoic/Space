@@ -1,6 +1,6 @@
 #include "rectangle.hpp"
 
-Rectangle::Rectangle(Vector2 position, int width, int height, float angle, SDL_Color color) {
+Rectangle::Rectangle(Vector3 position, int width, int height, float angle, SDL_Color color) {
   this->type = ObjectType::RECT;
   this->position = position;
   this->width = width;
@@ -11,7 +11,7 @@ Rectangle::Rectangle(Vector2 position, int width, int height, float angle, SDL_C
 
 Rectangle::Rectangle(int x, int y, int width, int height, float angle, SDL_Color color) {
   this->type = ObjectType::RECT;
-  this->position = Vector2(x, y);
+  this->position = Vector3(x, y);
   this->width = width;
   this->height = height;
   this->angle = angle;
@@ -20,8 +20,8 @@ Rectangle::Rectangle(int x, int y, int width, int height, float angle, SDL_Color
 
 void Rectangle::render(SDL_Renderer *renderer) {
   if (angle != 0 ) {
-    Vector2 center = { position.x + width / 2, position.y + height / 2 };
-    Vector2 rotated_points[4] = {
+    Vector3 center = { position.x + width / 2, position.y + height / 2 };
+    Vector3 rotated_points[4] = {
       { position.x, position.y },
       { position.x + width, position.y },
       { position.x + width, position.y + height },
