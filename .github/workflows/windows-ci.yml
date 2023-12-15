@@ -1,0 +1,43 @@
+name: Windows build
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building with cmake/make
+        run: .\build.bat
+        shell: cmd
+      - name: Check if 'app.exe' exists
+        run: |
+          if (Test-Path -Path "build\app.exe") {
+            Write-Host "App executable exists."
+          } else {
+            Write-Host "App executable not found. Failing the CI test."
+            exit 1
+          }
+      - name: Check if 'test.exe' exists
+        run: |
+          if (Test-Path -Path "build\test.exe") {
+            Write-Host "Test executable exists."
+          } else {
+            Write-Host "Test executable not found. Failing the CI test."
+            exit 1
+          }
+      - name: Run tests
+        run: |
+          cd build
+          .\test.exe | Set-Content -Path test_output.txt -Encoding utf8
+
+      - name: Check test results
+        run: |
+          if (Select-String -Pattern "failed" -Path build/test_output.txt) {
+            Write-Output "Tests failed."
+            exit 1
+          } else {
+            Write-Output "Tests passed."
+          }

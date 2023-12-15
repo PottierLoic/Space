@@ -1,0 +1,46 @@
+name: MacOS build
+
+jobs:
+  macos-build:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make file executable
+        run: chmod +x build.sh
+      - name: Building with cmake/make
+        run: bash build.sh
+      - name: Check 'app' build success
+        run: |
+          if [ -e build/app ]; then
+            echo "App executable exists."
+          else
+            echo "App executable not found. Failing the CI test."
+            exit 1
+          fi
+      - name: Check 'test' build success
+        run: |
+          if [ -e build/test ]; then
+            echo "test executable exists."
+          else
+            echo "test executable not found. Failing the CI test."
+            exit 1
+          fi
+      - name: Run tests
+        run: |
+          cd build
+          ./test > test_output.txt 2>&1
+      - name: Check test results
+        run: |
+          cd build
+          if [ -e test_output.txt ]; then
+            if grep -q "failed" test_output.txt; then
+              echo "Tests failed."
+              exit 1
+            else
+              echo "Tests passed."
+            fi
+          fi
