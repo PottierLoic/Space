@@ -1,9 +1,6 @@
-[submodule "libraries/GLEW"]
-	path = libraries/GLEW
+[submodule "glew-cmake"]
+	path = libs/GLEW
 	url = https://github.com/Perlmint/glew-cmake
-[submodule "libraries/ImGui"]
-	path = libraries/ImGui
+[submodule "imgui-sfml"]
+	path = libs/ImGui
 	url = https://github.com/SFML/imgui-sfml
-[submodule "libraries/SFML"]
-	path = libraries/SFML
-	url = https://github.com/SFML/SFML
