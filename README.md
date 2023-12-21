@@ -1,17 +1,19 @@
 # Space
 
-Space is a WIP 2D / 3D game engine made for educational purposes.
-It will be cross-platform.
+Space is a WIP 2D / 3D game engine made for fun.
+
+It is cross platform and uses GLFW, OpenGL and DearImGui.
+
+**Please note that there is no official release for the project, and it is unlikely that there will be any in the future**  
+I'm mainly doing this to progress in c++ and OpenGL and because I always wanted to develop my own game engine.
 
 ## Building from source
-
-In case you want to build Space from source, here is the way :
 
 ### Requirements
 
 - [CMake](https://cmake.org/).
 - Make
-- a C++ compiler (MSVC, MinGW, Clang, ...)
+- a C++ compiler (MSVC, g++, Clang, ...)
 
 ### Building
 
@@ -35,3 +37,7 @@ The executable is now in the build folder.
 cd build
 ./space
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
