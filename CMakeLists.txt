@@ -1,65 +1,23 @@
-cmake_minimum_required(VERSION 3.5...3.27)
-set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
+cmake_minimum_required( VERSION 3.5 )
 
-project(space
-  LANGUAGES CXX
-  VERSION 1.0
-)
+project( Space )
 
-file(
-  GLOB_RECURSE HEADER_LIST
-  CONFIGURE_DEPENDS
-  "${PROJECT_SOURCE_DIR}/include/*.hpp"
-)
+find_package( OpenGL REQUIRED )
 
-file(
-  GLOB_RECURSE SOURCE_LIST
-  CONFIGURE_DEPENDS
-  "${PROJECT_SOURCE_DIR}/src/*.cpp"
-)
+include_directories( ${OPENGL_INCLUDE_DIRS} )
 
-add_executable(${PROJECT_NAME} ${SOURCE_LIST} ${HEADER_LIST})
+set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only" )
+set( GLAD_GL "" )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
+add_subdirectory( libs/glfw )
 
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-endif(CCACHE_FOUND)
+option( USE_GLAD "Use GLAD from GLFW" ON )
 
-add_subdirectory(dependencies)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ImGui-SFML::ImGui-SFML Glew::glew)
-
-if(FLAGS STREQUAL "--debug")
-  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
-else()
-  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror)
+if( USE_GLAD )
+	include_directories("${GLFW_SOURCE_DIR}/deps")
+	set( GLAD_GL "${GLFW_SOURCE_DIR}/deps/glad/gl.h" )
 endif()
 
-# TESTS SECTION
-project(test
-  LANGUAGES CXX
-  VERSION 1.0
-)
-
-file(
-  GLOB_RECURSE TEST_SOURCES_LIST
-  CONFIGURE_DEPENDS
-  "${PROJECT_SOURCE_DIR}/tests/*.cpp"
-  "${PROJECT_SOURCE_DIR}/src/*.cpp"
-)
-
-# Exclude src/main.cpp
-list(REMOVE_ITEM TEST_SOURCES_LIST "${PROJECT_SOURCE_DIR}/src/main.cpp")
-
-add_executable(${PROJECT_NAME} ${TEST_SOURCES_LIST} ${HEADER_LIST})
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ImGui-SFML::ImGui-SFML OpenGL::OpenGL GLEW::GLEW)
-
-if(FLAGS STREQUAL "--debug")
-  target_compile_options(test PRIVATE -Wall -Wextra)
-else()
-  target_compile_options(test PRIVATE -Wall -Wextra -Werror)
-endif()
+add_executable( Space WIN32 src/main.cpp ${GLAD_GL} )
+target_link_libraries( Space ${OPENGL_LIBRARIES} glfw )
