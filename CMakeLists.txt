@@ -56,20 +56,16 @@ target_include_directories(space PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 if (UNIX)
   if (APPLE)
-    target_link_libraries(space
-      PRIVATE
-      "-framework Cocoa"
-      "-framework IOKit"
-      "-framework CoreVideo"
-    )
+    target_link_libraries(space PRIVATE "-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
   else()
-    target_link_libraries(space
-      PRIVATE
-      ${CMAKE_THREAD_LIBS_INIT}
-      ${X11_LIBRARIES}
-      ${CMAKE_DL_LIBS}
-    )
+    target_link_libraries(space PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
   endif()
+endif()
+
+if(FLAGS STREQUAL "--debug")
+  target_compile_options(space PRIVATE -Wall -Wextra)
+else()
+  target_compile_options(space PRIVATE -Wall -Wextra -Werror)
 endif()
 
 # TESTING EXECUTABLE
@@ -96,18 +92,14 @@ target_include_directories(test PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 if (UNIX)
   if (APPLE)
-    target_link_libraries(test
-      PRIVATE
-      "-framework Cocoa"
-      "-framework IOKit"
-      "-framework CoreVideo"
-    )
+    target_link_libraries(test PRIVATE "-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
   else()
-    target_link_libraries(test
-      PRIVATE
-      ${CMAKE_THREAD_LIBS_INIT}
-      ${X11_LIBRARIES}
-      ${CMAKE_DL_LIBS}
-    )
+    target_link_libraries(test PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
   endif()
+endif()
+
+if(FLAGS STREQUAL "--debug")
+  target_compile_options(test PRIVATE -Wall -Wextra)
+else()
+  target_compile_options(test PRIVATE -Wall -Wextra -Werror)
 endif()
