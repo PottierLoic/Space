@@ -1,9 +1,9 @@
-// C++
 #include <string>
 #include <iostream>
 // GLFW
-#include <glad/glad.h>
-#include <glfw/glfw3.h>
+#include "glad/glad.h"
+#include "glfw/glfw3.h"
+#include "imgui/imgui_impl_glfw.h"
 
 std::string programName = "GLFW window";
 int windowWidth = 1200,
