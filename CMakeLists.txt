@@ -77,7 +77,7 @@ add_executable(test ${PROJECT_SOURCE_DIR}/tests/main.cpp)
 target_link_libraries(test PRIVATE glad)
 
 # GLFW
-include_directories("${GLFW_PREFIX}/include")
+include_directories("${GLFW_PREFIX}/glm")
 
 # Project sources and headers
 file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.hpp")
