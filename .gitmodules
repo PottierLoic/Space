@@ -1,6 +1,6 @@
-[submodule "imgui-sfml"]
-	path = libs/ImGui
-	url = https://github.com/SFML/imgui-sfml
 [submodule "glfw"]
 	path = libs/glfw
 	url = https://github.com/glfw/glfw
+[submodule "imgui"]
+	path = libs/imgui
+	url = https://github.com/ocornut/imgui
