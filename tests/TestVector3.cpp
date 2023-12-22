@@ -1,7 +1,7 @@
 #include "Test.hpp"
 #include "Vectors/Vector3.hpp"
 
-int test_vector3() {
+int testVector3() {
   Vector3 vec1 = Vector3(1.0, 2.0, 3.0);
   Vector3 vec2 = Vector3(3.0, 5.0, 7.0);
 
