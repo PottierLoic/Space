@@ -15,16 +15,17 @@
 #include "Components/Transform.hpp"
 /* DEBUG */
 
-static void glfw_error_callback(int error, const char* description) {
+static void glfwErrorCallback(int error, const char* description) {
   fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-void framebuffer_size_callback(GLFWwindow*, int width, int height) {
+void framebufferSizeCallback(GLFWwindow*, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
 int main() {
-  glfwSetErrorCallback(glfw_error_callback);
+  /* Set GLFW error callback function. */
+  glfwSetErrorCallback(glfwErrorCallback);
 
   // Initialize GLFW
   if (!glfwInit()) {
@@ -71,7 +72,7 @@ int main() {
   }
 
   // Set the framebuffer size callback
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -87,8 +88,20 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  // Setup Menu
-  Menu menu = Menu();
+  // Scene creation
+  Scene scene = Scene();
+  scene.addEntity(new Entity("Test1"));
+  scene.addEntity(new Entity("Test2"));
+  scene.addEntity(new Entity("Test3"));
+  scene.entities[0]->addChildren(new Entity("Test4"));
+
+  // Menu creation
+  Menu menu = Menu(&scene);
+  menu.selectedEntity = scene.entities[0];
+
+  // TODO : REMOVE THEME SELECTION FROM MAIN
+  menu.cherryTheme();
+  // TODO END
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {

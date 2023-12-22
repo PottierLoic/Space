@@ -20,3 +20,13 @@ T* Entity::getComponent() const {
   }
   return nullptr;
 }
+
+/* TODO: Add a removeComponent function */
+
+void Entity::addChildren(Entity* child) {
+  childs.push_back(child);
+}
+
+void Entity::removeChildren(Entity* child) {
+  childs.erase(std::remove(childs.begin(), childs.end(), child), childs.end());
+}

@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <cstring>
 
-extern int test_vector2();
-extern int test_vector3();
+extern int testVector2();
+extern int testVector3();
 
 struct TestFunction {
   const char* name;
@@ -11,8 +11,8 @@ struct TestFunction {
 };
 
 TestFunction test_fn[] = {
-  {"test_vector2", test_vector2},
-  {"test_vector3", test_vector3},
+  {"testVector2", testVector2},
+  {"testVector3", testVector3},
 };
 
 void run_all_tests() {
