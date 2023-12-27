@@ -13,6 +13,7 @@
 #include "Entity.hpp"
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
+#include "Components/Physic.hpp"
 /* DEBUG */
 
 static void glfwErrorCallback(int error, const char* description) {
@@ -95,11 +96,13 @@ int main() {
   scene.addEntity(new Entity("Test3"));
   scene.entities[0]->addChildren(new Entity("Test4"));
 
+  scene.entities[0]->addComponent<Physic>(new Physic());
+
   // Menu creation
   Menu menu = Menu(&scene);
   menu.selectedEntity = scene.entities[0];
 
-  // TODO : REMOVE THEME SELECTION FROM MAIN
+  // TODO: REMOVE THEME SELECTION FROM MAIN
   menu.cherryTheme();
   // TODO END
 

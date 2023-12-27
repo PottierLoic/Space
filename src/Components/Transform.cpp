@@ -36,6 +36,5 @@ void Transform::display() {
     if (ImGui::InputDouble("##transform.scale.y", &this->scale.y)) {}
     ImGui::SameLine(260);
     if (ImGui::InputDouble("##transform.scale.z", &this->scale.z)) {}
-    ImGui::Separator();
   }
 }
