@@ -10,6 +10,7 @@
 
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
+#include "Components/Physic.hpp"
 
 class Entity {
 public:

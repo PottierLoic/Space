@@ -3,6 +3,9 @@
 template void Entity::addComponent<Transform>(Transform*);
 template Transform* Entity::getComponent<Transform>() const;
 
+template void Entity::addComponent<Physic>(Physic*);
+template Physic* Entity::getComponent<Physic>() const;
+
 Entity::Entity(std::string name) {
   this->addComponent<Transform>(new Transform(name));
 }
