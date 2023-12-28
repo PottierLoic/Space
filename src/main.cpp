@@ -1,12 +1,13 @@
 #include <string>
 #include <iostream>
-// GLFW
+
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "Menu.hpp"
+#include "Shader.hpp"
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -16,20 +17,14 @@
 #include "Components/Physic.hpp"
 /* DEBUG */
 
-static void glfwErrorCallback(int error, const char* description) {
-  fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
-
 void framebufferSizeCallback(GLFWwindow*, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
 int main() {
-  /* Set GLFW error callback function. */
-  glfwSetErrorCallback(glfwErrorCallback);
-
   // Initialize GLFW
   if (!glfwInit()) {
+    std::cout << "Failed to initialize GLFW" << std::endl;
     return -1;
   }
 
@@ -57,23 +52,23 @@ int main() {
 
   // Create a window with graphic context
   GLFWwindow* window = glfwCreateWindow(1280, 720, "Space Engine", nullptr, nullptr);
-  if (window == nullptr)
-    return 1;
+  if (window == NULL) {
+    std::cout << "Failed to create GLFW window" << std::endl;
+    glfwTerminate();
+    return -1;
+  }
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(1); // Enable vsync
+  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-    std::cerr << "Failed to initialize Glad" << std::endl;
+    std::cout << "Failed to initialize Glad" << std::endl;
     int error = glGetError();
-    std::cerr << "OpenGL Error: " << error << std::endl;
+    std::cout << "OpenGL Error: " << error << std::endl;
     glfwDestroyWindow(window);
     glfwTerminate();
     return -1;
   }
-
-  // Set the framebuffer size callback
-  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -82,6 +77,7 @@ int main() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+  // TODO: Check if this is needed
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
 
@@ -89,6 +85,7 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
+  //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
   scene.addEntity(new Entity("Test1"));
@@ -104,6 +101,34 @@ int main() {
 
   // TODO: REMOVE THEME SELECTION FROM MAIN
   menu.cherryTheme();
+  // TODO END
+
+  // TODO: REMOVE OPENGL TESTS
+  Shader testShader("../shaders/test.vs", "../shaders/test.fs");
+
+  float vertices[] = {
+    // positions         // colors
+     0.5f,  -0.5f,  0.0f,   1.0f, 0.0f, 0.0f,  // bottom right
+    -0.5f,  -0.5f,  0.0f,   0.0f, 1.0f, 0.0f,  // bottom left
+     0.0f,   0.5f,  0.0f,   0.0f, 0.0f, 1.0f   // top
+  };
+
+  unsigned int VBO, VAO;
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+  // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+  glBindVertexArray(VAO);
+
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  // position attribute
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+  // color attribute
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+
   // TODO END
 
   // Main loop
@@ -123,6 +148,11 @@ int main() {
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    // Shaders
+    testShader.use();
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

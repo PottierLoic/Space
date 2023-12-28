@@ -30,11 +30,11 @@
  */
 class Menu {
 public:
-  bool showInspector = true;      // Inspector section visiblity flag.
-  bool showHierarchy = true;      // Hierarchy section visiblity flag.
-  bool showProject = true;        // Project section visiblity flag.
-  bool showScene = true;          // Scene section visiblity flag.
-  bool showRender = true;         // Render section visiblity flag.
+  bool showInspector = false;      // Inspector section visiblity flag.
+  bool showHierarchy = false;      // Hierarchy section visiblity flag.
+  bool showProject = false;        // Project section visiblity flag.
+  bool showScene = false;          // Scene section visiblity flag.
+  bool showRender = false;         // Render section visiblity flag.
 
   /* Reference to the actual Scene. */
   Scene* scene;
