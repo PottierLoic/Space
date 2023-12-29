@@ -47,10 +47,14 @@ list(APPEND IMGUI_SOURCES
   ${DEAR_IMGUI_PREFIX}/imgui_stdlib.h
 )
 
+# GLM
+file(GLOB_RECURSE GLM_HEADERS CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/libs/glm/*.hpp")
+
+# Space files
 file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.hpp")
 file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
-target_sources(space PRIVATE ${IMGUI_SOURCES} ${SOURCE_LIST} ${HEADER_LIST})
+target_sources(space PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
 target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} glfw )
 target_include_directories(space PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
@@ -86,7 +90,7 @@ file(GLOB_RECURSE TEST_SOURCE_LIST CONFIURE_DEPENDS "${PROJECT_SOURCE_DIR}/tests
 # Remove src/main.cpp
 list(REMOVE_ITEM SOURCE_LIST "${PROJECT_SOURCE_DIR}/src/main.cpp")
 
-target_sources(test PRIVATE ${IMGUI_SOURCES} ${SOURCE_LIST} ${TEST_SOURCE_LIST} ${HEADER_LIST})
+target_sources(test PRIVATE ${SOURCE_LIST} ${TEST_SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
 target_link_libraries(test PRIVATE ${OPENGL_gl_LIBRARY} glfw )
 target_include_directories(test PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
