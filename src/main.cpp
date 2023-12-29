@@ -8,6 +8,7 @@
 
 #include "Menu.hpp"
 #include "Shader.hpp"
+#include "Camera.hpp" // maybe not stay here
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -24,39 +25,32 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// camera
-glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-
+// Camera
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX =  1280.0f / 2.0;
+float lastY =  720.0 / 2.0;
 bool firstMouse = true;
-float yaw   = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-float pitch =  0.0f;
-float lastX =  800.0f / 2.0;
-float lastY =  600.0 / 2.0;
-float fov   =  45.0f;
 
 // timing
-float deltaTime = 0.0f;	// time between current frame and last frame
+float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 void processInput(GLFWwindow* window) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
-  float cameraSpeed = static_cast<float>(2.5 * deltaTime);
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    cameraPos += cameraSpeed * cameraFront;
+    camera.processKeyboard(FORWARD, deltaTime);
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    cameraPos -= cameraSpeed * cameraFront;
+    camera.processKeyboard(BACKWARD, deltaTime);
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    camera.processKeyboard(LEFT, deltaTime);
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    camera.processKeyboard(RIGHT, deltaTime);
 }
 
 /* DEBUG */
 
-void framebufferSizeCallback(GLFWwindow*, int width, int height) {
+void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
@@ -69,24 +63,15 @@ void mouseCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
 
   float xoffset = xpos - lastX;
   float yoffset = lastY - ypos;
+
   lastX = xpos;
   lastY = ypos;
 
-  float sensitivity = 0.1f;
-  xoffset *= sensitivity;
-  yoffset *= sensitivity;
+  camera.processMouseMovement(xoffset, yoffset);
+}
 
-  yaw += xoffset;
-  pitch += yoffset;
-
-  if (pitch > 89.0f) { pitch = 89.0f; }
-  if (pitch < -89.0f) { pitch = -89.0f; }
-
-  glm::vec3 direction;
-  direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-  direction.y = sin(glm::radians(pitch));
-  direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-  cameraFront = glm::normalize(direction);
+void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
+  camera.processMouseScoll(static_cast<float>(yoffset));
 }
 
 int main() {
@@ -126,7 +111,11 @@ int main() {
     return -1;
   }
   glfwMakeContextCurrent(window);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+  glfwSetCursorPosCallback(window, mouseCallback);
+  glfwSetScrollCallback(window, scrollCallback);
+
 
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
@@ -139,8 +128,8 @@ int main() {
   }
 
   glEnable(GL_DEPTH_TEST);
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  glfwSetCursorPosCallback(window, mouseCallback);
+  // TODO: REMOVE
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -298,9 +287,6 @@ int main() {
   testShader.use();
   glUniform1i(glGetUniformLocation(testShader.id, "texture1"), 0);
   testShader.setInt("texture2", 1);
-
-  glm::mat4 projection = glm::perspective(glm::radians(fov), 1280.0f / 720.0f, 0.1f, 100.0f);
-  testShader.setMat4("projection", projection);
   // TODO END
 
   // Main loop
@@ -333,8 +319,9 @@ int main() {
 
     testShader.use();
 
-
-    glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
+    testShader.setMat4("projection", projection);
+    glm::mat4 view = camera.getViewMatrix();
     testShader.setMat4("view", view);
 
     glBindVertexArray(VAO);
