@@ -5,7 +5,7 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(GLFW_DIR "${LIBS_DIR}/glfw")
-set(GLM_DIR "${LIBS_DIR}/glm")
+set(GLM_DIR "${LIBS_DIR}/")
 set(GLAD_DIR "${LIBS_DIR}/glad")
 set(IMGUI_DIR "${LIBS_DIR}/imgui")
 set(STB_DIR "${LIBS_DIR}/stb")
@@ -31,9 +31,6 @@ add_subdirectory(${LIBS_DIR}/glfw)
 # DearImGui
 file(GLOB IMGUI_SOURCES "${IMGUI_DIR}/*.cpp" "${IMGUI_DIR}/*.h")
 
-# GLM
-file(GLOB_RECURSE GLM_HEADERS CONFIGURE_DEPENDS "${GLM_DIR}/*.hpp")
-
 # Space
 file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${INCLUDE_DIR}/*.hpp")
 file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "${SOURCE_DIR}/*.cpp")
@@ -44,6 +41,7 @@ target_include_directories(space PRIVATE ${INCLUDE_DIR}
   "${GLFW_DIR}/include"
   "${GLAD_DIR}/include"
   "${STB_DIR}/"
+  "${GLM_DIR}/glm"
 )
 target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} glfw glad)
 
