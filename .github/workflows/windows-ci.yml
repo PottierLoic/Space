@@ -1,7 +1,5 @@
 name: Windows build
 
-on: [push]
-
 jobs:
   windows-build:
     runs-on: windows-latest
