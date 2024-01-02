@@ -1,7 +1,5 @@
 name: Ubuntu build
 
-on: [push]
-
 jobs:
   ubuntu-build:
     runs-on: ubuntu-latest

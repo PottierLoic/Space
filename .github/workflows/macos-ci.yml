@@ -1,7 +1,5 @@
 name: MacOS build
 
-on: [push]
-
 jobs:
   macos-build:
     runs-on: macos-latest

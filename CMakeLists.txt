@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.21)
 set(GLAD_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/libs/glad" CACHE STRING "Path to glad")
 set(GLFW_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/libs/glfw" CACHE STRING "Path to GLFW")
 set(DEAR_IMGUI_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui" CACHE STRING "Path to Dear imgui")
+set(ASSIMP_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/libs/assimp" CACHE STRING "Path to assimp")
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libs")
 
@@ -50,11 +51,29 @@ list(APPEND IMGUI_SOURCES
 # GLM
 file(GLOB_RECURSE GLM_HEADERS CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/libs/glm/*.hpp")
 
+# ASSIMP
+set(ASSIMP_BUILD_TESTS OFF)
+add_subdirectory(${ASSIMP_PREFIX})
+file(
+  GLOB_RECURSE
+  ASSIMP_SOURCES
+  CONFIGURE_DEPENDS
+  "${ASSIMP_PREFIX}/*.hpp"
+  "${ASSIMP_PREFIX}/*.h"
+  "${ASSIMP_PREFIX}/*.cpp"
+  "${ASSIMP_PREFIX}/*.c"
+  "${ASSIMP_PREFIX}/contrib/zip/*.h"
+)
+
+target_sources(space PRIVATE ${ASSIMP_SOURCES})
+target_include_directories(space PRIVATE "${ASSIMP_PREFIX}/include" "${PROJECT_SOURCE_DIR}/build/libs/assimp/include/" "${ASSIMP_PREFIX}/code")
+target_link_libraries(space ${ASSIMP_LIBRARIES})
+
 # Space files
 file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.hpp")
 file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
-target_sources(space PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
+target_sources(space PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS} ${ASSIMP_SOURCES})
 target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} glfw )
 target_include_directories(space PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
