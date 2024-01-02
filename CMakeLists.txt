@@ -8,11 +8,12 @@ set(GLFW_DIR "${LIBS_DIR}/glfw")
 set(GLM_DIR "${LIBS_DIR}/glm")
 set(GLAD_DIR "${LIBS_DIR}/glad")
 set(IMGUI_DIR "${LIBS_DIR}/imgui")
+set(STB_DIR "${LIBS_DIR}/stb")
 
 include_directories("${LIBS_DIR}")
 find_package(OpenGL REQUIRED)
 
-# MAIN EXECUTABLE
+# Executable
 project(space)
 set(CMAKE_CXX_STANDARD 17)
 add_executable(space ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
@@ -33,14 +34,20 @@ file(GLOB IMGUI_SOURCES "${IMGUI_DIR}/*.cpp" "${IMGUI_DIR}/*.h")
 # GLM
 file(GLOB_RECURSE GLM_HEADERS CONFIGURE_DEPENDS "${GLM_DIR}/*.hpp")
 
-# Space files
+# Space
 file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${INCLUDE_DIR}/*.hpp")
 file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "${SOURCE_DIR}/*.cpp")
 
+# All
 target_sources(space PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
-target_include_directories(space PRIVATE ${INCLUDE_DIR} "${GLFW_DIR}/include" "${GLAD_DIR}/include")
+target_include_directories(space PRIVATE ${INCLUDE_DIR}
+  "${GLFW_DIR}/include"
+  "${GLAD_DIR}/include"
+  "${STB_DIR}/"
+)
 target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} glfw glad)
 
+# Special cases
 if (UNIX)
   if (APPLE)
     target_link_libraries(space PRIVATE "-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
@@ -51,6 +58,7 @@ if (UNIX)
   endif()
 endif()
 
+# Debug mode
 if(FLAGS STREQUAL "--debug")
   target_compile_options(space PRIVATE -Wall -Wextra)
 else()
