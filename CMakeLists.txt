@@ -11,13 +11,14 @@ set(IMGUI_DIR "${LIBS_DIR}/imgui")
 set(STB_DIR "${LIBS_DIR}/stb")
 set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 
-include_directories("${LIBS_DIR}")
-find_package(OpenGL REQUIRED)
 
 # Executable
 project(space)
 set(CMAKE_CXX_STANDARD 17)
 add_executable(space ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+
+target_include_directories(space PRIVATE "${LIBS_DIR}")
+find_package(OpenGL REQUIRED)
 
 # GLAD
 add_library(glad "${LIBS_DIR}/glad/src/glad.c")
@@ -34,8 +35,10 @@ file(GLOB IMGUI_SOURCES "${IMGUI_DIR}/*.cpp" "${IMGUI_DIR}/*.h")
 
 # Assimp
 option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+option(ASSIMP_BUILD_ASSIMP_VIEW OFF)
 option(ASSIMP_BUILD_SAMPLES OFF)
 option(ASSIMP_BUILD_TESTS OFF)
+option(ASSIMP_INSTALL OFF)
 add_subdirectory(${ASSIMP_DIR})
 
 # Space
