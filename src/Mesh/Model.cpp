@@ -21,12 +21,10 @@ void Model::loadModel(std::string path) {
 
   directory = path.substr(0, path.find_last_of('/'));
 
-  std::cout<<"loading"<<std::endl;
   processNode(scene->mRootNode, scene);
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene) {
-  std::cout<<"processing node" << std::endl;
   /* Processing all meshes */
   for(unsigned int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
@@ -44,7 +42,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   std::vector<unsigned int> indices;
   std::vector<Texture> textures;
 
-  std::cout<<"Vertice started" << std::endl;
   for(unsigned int i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
     glm::vec3 vector; // placeholder vector
@@ -92,7 +89,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   // specular maps
   std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
   textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-  std::cout << "specular passed" << std::endl;
 
   // normal maps
   std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");

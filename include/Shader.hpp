@@ -13,7 +13,7 @@ public:
   unsigned int id;    // Program id
 
   // Constructor reads and builds the shader
-  Shader(const char* vertexPath, const char* fragmentPath);
+  Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
 
   // Use / activate the shader
   void use();
@@ -30,4 +30,6 @@ public:
   void setMat2(const std::string &name, const glm::mat2 &mat) const;
   void setMat3(const std::string &name, const glm::mat3 &mat) const;
   void setMat4(const std::string &name, const glm::mat4 &mat) const;
+
+  void checkCompileErrors(GLuint shader, std::string type);
 };
