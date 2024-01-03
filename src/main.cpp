@@ -128,6 +128,8 @@ int main() {
     return -1;
   }
 
+  stbi_set_flip_vertically_on_load(true);
+
   glEnable(GL_DEPTH_TEST);
   // TODO: REMOVE
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -166,7 +168,7 @@ int main() {
   // TODO END
 
   // TODO: REMOVE OPENGL TESTS
-  Shader testShader("../shaders/test.vs", "../shaders/test.fs");
+  Shader testShader("../shaders/test.vs", "../shaders/test.fs", nullptr);
 
   // TODO: REMOVE TEST MODEL IMPORT
   Model testModel("../models/backpack/backpack.obj");
