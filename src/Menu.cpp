@@ -2,6 +2,7 @@
 
 Menu::Menu(Scene* scene) {
   this->scene = scene;
+  cherryTheme();
 }
 
 void Menu::display() {
@@ -94,7 +95,7 @@ void Menu::displayHierarchy() {
 }
 
 void Menu::displayProject() {
-  if (ImGui::Begin("Scene")) {
+  if (ImGui::Begin("Project")) {
     //TODO: Render the scene view.
   ImGui::End();
   }

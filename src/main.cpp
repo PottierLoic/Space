@@ -141,10 +141,6 @@ int main() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-  // TODO: Check if this is needed
-  // Setup Dear ImGui style
-  ImGui::StyleColorsDark();
-
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
@@ -162,10 +158,6 @@ int main() {
   // Menu creation
   Menu menu = Menu(&scene);
   menu.selectedEntity = scene.entities[0];
-
-  // TODO: REMOVE THEME SELECTION FROM MAIN
-  menu.cherryTheme();
-  // TODO END
 
   // TODO: REMOVE OPENGL TESTS
   Shader testShader("../shaders/test.vs", "../shaders/test.fs", nullptr);
