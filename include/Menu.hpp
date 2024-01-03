@@ -8,6 +8,8 @@
 #include "Entity.hpp"
 #include "Components/Transform.hpp"
 
+#include "FrameBuffer.hpp"
+
 /*
  * The Menu class represents a user interface and control various aspects of a scene, including tools, inspector, hierarchy, and generation options.
  * It includes flags to control the visibility of different menu sections, a reference to the current scene, the selected scene object, and the current menu layout.
@@ -33,7 +35,7 @@ public:
   bool showInspector = false;      // Inspector section visiblity flag.
   bool showHierarchy = false;      // Hierarchy section visiblity flag.
   bool showProject = false;        // Project section visiblity flag.
-  bool showScene = false;          // Scene section visiblity flag.
+  bool showScene = true;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
 
   /* Reference to the actual Scene. */
