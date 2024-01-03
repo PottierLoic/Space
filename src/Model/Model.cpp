@@ -1,4 +1,4 @@
-#include "Mesh/Model.hpp"
+#include "Model/Model.hpp"
 
 Model::Model(const char *path) {
   loadModel(path);

@@ -17,11 +17,19 @@ I'm mainly doing this to progress in c++ and OpenGL and because I always wanted 
 
 ### Building
 
+First, get the repo on your machine
 ```bash
 git clone https://github.com/PottierLoic/Space.git
 cd Space
 ```
 
+Get the submodules too
+```bash
+git submodule init
+git submodule update
+```
+
+Build using the corresponding file
 ```bash
 # On Unix, you have to give permission.
 chmod +x ./build.sh
@@ -43,17 +51,10 @@ cd build
 Space is using many libraries
 
 - GLFW - Graphic library
-- Glad - OpenGl loader
+- Glad - OpenGL loader
 - ImGui - C++ User interface
-- GLM - Mathematics library
+- GLM - Mathematics OpenGL library
 - Assimp - 3D model loader
-
-Theses libraries are automatically cloned with this repository.  
-In case you still want to clone them:
-```bash
-git submodule init
-git submodule update
-```
 
 ## License
 

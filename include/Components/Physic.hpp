@@ -1,8 +1,5 @@
 #pragma once
 
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_stdlib.h"
-
 #include "Components/Component.hpp"
 
 class Physic : public Component {

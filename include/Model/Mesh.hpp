@@ -4,8 +4,8 @@
 
 #include "glad/glad.h"
 
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Texture.hpp"
+#include "Model/Vertex.hpp"
+#include "Model/Texture.hpp"
 #include "Shader.hpp"
 
 class Mesh {

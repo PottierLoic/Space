@@ -9,7 +9,7 @@
 #include "Menu.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp" // maybe not stay here
-#include "Mesh/Model.hpp" // maybe removed soon
+#include "Model/Model.hpp" // maybe removed soon
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -112,7 +112,7 @@ int main() {
     return -1;
   }
   glfwMakeContextCurrent(window);
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
   glfwSetCursorPosCallback(window, mouseCallback);
   glfwSetScrollCallback(window, scrollCallback);

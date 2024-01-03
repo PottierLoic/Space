@@ -8,8 +8,8 @@
 #include "assimp/postprocess.h"
 #include "stb_image.h"
 
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Texture.hpp"
+#include "Model/Mesh.hpp"
+#include "Model/Texture.hpp"
 #include "Shader.hpp"
 
 unsigned int textureFromFile(const char *path, const std::string &directory, bool gamma = false);
