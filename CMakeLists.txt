@@ -5,10 +5,11 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(GLFW_DIR "${LIBS_DIR}/glfw")
-set(GLM_DIR "${LIBS_DIR}/")
+set(GLM_DIR "${LIBS_DIR}/glm")
 set(GLAD_DIR "${LIBS_DIR}/glad")
 set(IMGUI_DIR "${LIBS_DIR}/imgui")
 set(STB_DIR "${LIBS_DIR}/stb")
+set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 
 include_directories("${LIBS_DIR}")
 find_package(OpenGL REQUIRED)
@@ -31,6 +32,12 @@ add_subdirectory(${LIBS_DIR}/glfw)
 # DearImGui
 file(GLOB IMGUI_SOURCES "${IMGUI_DIR}/*.cpp" "${IMGUI_DIR}/*.h")
 
+# Assimp
+option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+option(ASSIMP_BUILD_SAMPLES OFF)
+option(ASSIMP_BUILD_TESTS OFF)
+add_subdirectory(${ASSIMP_DIR})
+
 # Space
 file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${INCLUDE_DIR}/*.hpp")
 file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "${SOURCE_DIR}/*.cpp")
@@ -41,9 +48,10 @@ target_include_directories(space PRIVATE ${INCLUDE_DIR}
   "${GLFW_DIR}/include"
   "${GLAD_DIR}/include"
   "${STB_DIR}/"
-  "${GLM_DIR}/glm"
+  "${GLM_DIR}/"
+  "${ASSIMP_DIR}/include"
 )
-target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} glfw glad)
+target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} assimp glfw glad)
 
 # Special cases
 if (UNIX)
