@@ -38,6 +38,23 @@ cd build
 ./space
 ```
 
+## External libraries
+
+Space is using many libraries
+
+- GLFW - Graphic library
+- Glad - OpenGl loader
+- ImGui - C++ User interface
+- GLM - Mathematics library
+- Assimp - 3D model loader
+
+Theses libraries are automatically cloned with this repository.  
+In case you still want to clone them:
+```bash
+git submodule init
+git submodule update
+```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
