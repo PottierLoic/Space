@@ -93,7 +93,7 @@ file(
 list(REMOVE_ITEM TEST_SOURCES "${SOURCE_DIR}/src/main.cpp")
 
 add_executable(test ${TEST_SOURCES})
-target_sources(test PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
+target_sources(test PRIVATE ${TEST_SOURCES} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
 target_include_directories(test PRIVATE ${INCLUDE_DIR}
   "${GLFW_DIR}/include"
   "${GLAD_DIR}/include"
@@ -102,3 +102,4 @@ target_include_directories(test PRIVATE ${INCLUDE_DIR}
   "${ASSIMP_DIR}/include"
 )
 target_link_libraries(test PRIVATE ${OPENGL_gl_LIBRARY} assimp glfw glad)
+target_compile_options(test PRIVATE -Wall -Wextra -Werror)
