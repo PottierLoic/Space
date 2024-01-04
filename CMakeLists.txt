@@ -11,7 +11,6 @@ set(IMGUI_DIR "${LIBS_DIR}/imgui")
 set(STB_DIR "${LIBS_DIR}/stb")
 set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 
-
 # Executable
 project(space)
 set(CMAKE_CXX_STANDARD 17)
@@ -73,3 +72,33 @@ if(FLAGS STREQUAL "--debug")
 else()
   target_compile_options(space PRIVATE -Wall -Wextra -Werror)
 endif()
+
+# ----- Test executable section ----- #
+project(
+  test
+  LANGUAGES CXX
+  VERSION 1.0
+)
+
+set(CMAKE_CXX_STANDARD 14)
+
+file(
+  GLOB_RECURSE
+  TEST_SOURCES
+  "${SOURCE_DIR}/tests/*.cpp"
+  "${SOURCE_DIR}/src/*.cpp"
+)
+
+# Exclude src/main.cpp
+list(REMOVE_ITEM TEST_SOURCES "${SOURCE_DIR}/src/main.cpp")
+
+add_executable(test ${TEST_SOURCES})
+target_sources(test PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
+target_include_directories(test PRIVATE ${INCLUDE_DIR}
+  "${GLFW_DIR}/include"
+  "${GLAD_DIR}/include"
+  "${STB_DIR}/"
+  "${GLM_DIR}/"
+  "${ASSIMP_DIR}/include"
+)
+target_link_libraries(test PRIVATE ${OPENGL_gl_LIBRARY} assimp glfw glad)

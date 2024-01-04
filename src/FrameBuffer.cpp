@@ -24,7 +24,6 @@ FrameBuffer::FrameBuffer(float width, float height) {
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
-
 FrameBuffer::~FrameBuffer() {
 	glDeleteFramebuffers(1, &fbo);
 	glDeleteTextures(1, &texture);
