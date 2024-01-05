@@ -2,6 +2,9 @@
 #include <iomanip>
 #include <cstring>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 extern int testVector2();
 extern int testVector3();
 
@@ -39,7 +42,7 @@ void run_all_tests() {
   }
 
   if (count > 0) {
-    std::cout << count << " tests failed." << std::endl;
+    std::cout << count << " Tests failed." << std::endl;
   } else {
     std::cout << "All tests passed." << std::endl;
   }
