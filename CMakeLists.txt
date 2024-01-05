@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.21)
 
+project(space)
+set(CMAKE_CXX_STANDARD 17)
+
 # Variables
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(GLFW_DIR "${LIBS_DIR}/glfw")
 set(GLM_DIR "${LIBS_DIR}/glm")
@@ -11,12 +15,10 @@ set(IMGUI_DIR "${LIBS_DIR}/imgui")
 set(STB_DIR "${LIBS_DIR}/stb")
 set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 
-# Executable
-project(space)
-set(CMAKE_CXX_STANDARD 17)
-add_executable(space ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+file(GLOB_RECURSE COMMON_SOURCES "${SOURCE_DIR}/*.cpp" "${TEST_DIR}/*.cpp")
+list(REMOVE_ITEM COMMON_SOURCES "${SOURCE_DIR}/main.cpp" "${TEST_DIR}/main.cpp")
 
-target_include_directories(space PRIVATE "${LIBS_DIR}")
+include_directories("${LIBS_DIR}")
 find_package(OpenGL REQUIRED)
 
 # GLAD
@@ -40,66 +42,35 @@ option(ASSIMP_BUILD_TESTS OFF)
 option(ASSIMP_INSTALL OFF)
 add_subdirectory(${ASSIMP_DIR})
 
-# Space
-file(GLOB_RECURSE HEADER_LIST CONFIGURE_DEPENDS "${INCLUDE_DIR}/*.hpp")
-file(GLOB_RECURSE SOURCE_LIST CONFIGURE_DEPENDS "${SOURCE_DIR}/*.cpp")
-
 # All
-target_sources(space PRIVATE ${SOURCE_LIST} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
-target_include_directories(space PRIVATE ${INCLUDE_DIR}
-  "${GLFW_DIR}/include"
-  "${GLAD_DIR}/include"
-  "${STB_DIR}/"
-  "${GLM_DIR}/"
-  "${ASSIMP_DIR}/include"
-)
-target_link_libraries(space PRIVATE ${OPENGL_gl_LIBRARY} assimp glfw glad)
+link_libraries(${OPENGL_gl_LIBRARY} assimp glfw glad)
 
 # Special cases
 if (UNIX)
   if (APPLE)
-    target_link_libraries(space PRIVATE "-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
+    link_libraries("-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
   else()
     find_package(Threads REQUIRED)
     find_package(X11 REQUIRED)
-    target_link_libraries(space PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
+    link_libraries(${CMAKE_THREAD_LIBS_INIT} ${X11_LIBRARIES} ${CMAKE_DL_LIBS})
   endif()
 endif()
 
 # Debug mode
 if(FLAGS STREQUAL "--debug")
-  target_compile_options(space PRIVATE -Wall -Wextra)
+  add_compile_options(-Wall -Wextra)
 else()
-  target_compile_options(space PRIVATE -Wall -Wextra -Werror)
+  add_compile_options(-Wall -Wextra -Werror)
 endif()
 
-# ----- Test executable section ----- #
-project(
-  test
-  LANGUAGES CXX
-  VERSION 1.0
-)
+# Targets
+macro(create_target target sources)
+  add_executable(${target} ${sources})
+  target_sources(${target} PRIVATE ${COMMON_SOURCES} ${HEADER_LIST} ${IMGUI_SOURCES} ${GLM_HEADERS})
+  target_link_libraries(${target} PRIVATE assimp glfw glad ${OPENGL_gl_LIBRARY})
+  target_include_directories(${target} PRIVATE ${INCLUDE_DIR} ${GLFW_DIR}/include ${GLAD_DIR}/include ${STB_DIR}/ ${GLM_DIR}/ ${ASSIMP_DIR}/include)
+endmacro()
 
-set(CMAKE_CXX_STANDARD 14)
-
-file(
-  GLOB_RECURSE
-  TEST_SOURCES
-  "${SOURCE_DIR}/tests/*.cpp"
-  "${SOURCE_DIR}/src/*.cpp"
-)
-
-# Exclude src/main.cpp
-list(REMOVE_ITEM TEST_SOURCES "${SOURCE_DIR}/src/main.cpp")
-
-add_executable(test ${TEST_SOURCES})
-target_sources(test PRIVATE ${TEST_SOURCES} ${IMGUI_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
-target_include_directories(test PRIVATE ${INCLUDE_DIR}
-  "${GLFW_DIR}/include"
-  "${GLAD_DIR}/include"
-  "${STB_DIR}/"
-  "${GLM_DIR}/"
-  "${ASSIMP_DIR}/include"
-)
-target_link_libraries(test PRIVATE ${OPENGL_gl_LIBRARY} assimp glfw glad)
-target_compile_options(test PRIVATE -Wall -Wextra -Werror)
+# Main and Test targets
+create_target(space ${SOURCE_DIR}/main.cpp)
+create_target(test ${TEST_DIR}/main.cpp)
