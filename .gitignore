@@ -1,4 +1,13 @@
+# Ignore space build
 /build
-/projects
+
+# TODO: Bring models once the default ones (cubes etc.. are done)
 /models
-/.vscode
+
+# Ignore test generated files
+/tests/Generated/
+
+# Editor specs
+.vscode/
+.idea/
+*.DS_Store

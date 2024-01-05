@@ -18,34 +18,29 @@ set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 file(GLOB_RECURSE COMMON_SOURCES "${SOURCE_DIR}/*.cpp" "${TEST_DIR}/*.cpp")
 list(REMOVE_ITEM COMMON_SOURCES "${SOURCE_DIR}/main.cpp" "${TEST_DIR}/main.cpp")
 
-include_directories("${LIBS_DIR}")
 find_package(OpenGL REQUIRED)
 
-# GLAD
+# Glad library creation
 add_library(glad "${LIBS_DIR}/glad/src/glad.c")
 target_include_directories(glad PRIVATE "${LIBS_DIR}/glad/include")
 
-# GLFW
+# GLFW build
 set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_DOCS OFF)
 add_subdirectory(${LIBS_DIR}/glfw)
 
-# DearImGui
+# DearImGui sources
 file(GLOB IMGUI_SOURCES "${IMGUI_DIR}/*.cpp" "${IMGUI_DIR}/*.h")
 
-# Assimp
+# Assimp build
 option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 option(ASSIMP_BUILD_ASSIMP_VIEW OFF)
 option(ASSIMP_BUILD_SAMPLES OFF)
 option(ASSIMP_BUILD_TESTS OFF)
-option(ASSIMP_INSTALL OFF)
 add_subdirectory(${ASSIMP_DIR})
 
-# All
-link_libraries(${OPENGL_gl_LIBRARY} assimp glfw glad)
-
-# Special cases
+# Specific cases
 if (UNIX)
   if (APPLE)
     link_libraries("-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
@@ -68,7 +63,7 @@ macro(create_target target sources)
   add_executable(${target} ${sources})
   target_sources(${target} PRIVATE ${COMMON_SOURCES} ${HEADER_LIST} ${IMGUI_SOURCES} ${GLM_HEADERS})
   target_link_libraries(${target} PRIVATE assimp glfw glad ${OPENGL_gl_LIBRARY})
-  target_include_directories(${target} PRIVATE ${INCLUDE_DIR} ${GLFW_DIR}/include ${GLAD_DIR}/include ${STB_DIR}/ ${GLM_DIR}/ ${ASSIMP_DIR}/include)
+  target_include_directories(${target} PRIVATE ${LIBS_DIR} ${INCLUDE_DIR} ${GLFW_DIR}/include ${GLAD_DIR}/include ${STB_DIR}/ ${GLM_DIR}/ ${ASSIMP_DIR}/include)
 endmacro()
 
 # Main and Test targets

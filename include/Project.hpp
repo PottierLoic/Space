@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 #include "Scene.hpp"
 

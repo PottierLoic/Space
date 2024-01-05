@@ -1,12 +1,14 @@
 #include <iostream>
 #include <iomanip>
 #include <cstring>
+#include <filesystem>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 extern int testVector2();
 extern int testVector3();
+extern int testProject();
 
 struct TestFunction {
   const char* name;
@@ -16,6 +18,7 @@ struct TestFunction {
 TestFunction test_fn[] = {
   {"testVector2", testVector2},
   {"testVector3", testVector3},
+  {"testProject", testProject},
 };
 
 void run_all_tests() {
@@ -49,6 +52,14 @@ void run_all_tests() {
 }
 
 int main() {
+  std::filesystem::path currentPath = __FILE__;
+  std::filesystem::path sourceDir = currentPath.parent_path();
+
+  // Clear previously generated files
+  std::filesystem::remove_all((sourceDir / "Generated").string());
+  std::filesystem::create_directory((sourceDir / "Generated").string());
+
+  /* Distance check */
   run_all_tests();
   return 0;
 }

@@ -1,20 +1,31 @@
 #include "Project.hpp"
 
 Project::Project(std::string path, std::string name) {
-  this->path = path;
-  this->name = name;
-
-  std::string projectDirectory = path + "/" + name;
-
-  /* TODO: Should throw errors instead of just printing to std::cerr */
-  /* TODO: Should create the project in this directory, create a basic scene etc.*/
-  if (!std::filesystem::is_directory(projectDirectory)) {
-    try {
-      std::filesystem::create_directory(projectDirectory);
-    } catch(const std::filesystem::filesystem_error& e) {
-      std::cerr << "Filesystem error: " << e.what() << '\n';
-    }
-  } else {
-    std::cerr << "Error: Project directory already exists.\n";
+  if (std::filesystem::exists(path + "/" + name)) {
+    std::cerr << "Error: Project directory already exists." << std::endl;
   }
+
+  std::filesystem::create_directory(path + "/" + name);
+  std::filesystem::create_directory(path + "/" + name + "/assets");
+  std::filesystem::create_directory(path + "/" + name + "/assets/textures");
+  std::filesystem::create_directory(path + "/" + name + "/assets/models");
+  std::filesystem::create_directory(path + "/" + name + "/assets/sounds");
+  std::filesystem::create_directory(path + "/" + name + "/config");
+  std::filesystem::create_directory(path + "/" + name + "/src");
+
+  // Create main.cpp
+  std::ofstream mainFile(path + "/" + name + "/src/main.cpp");
+  mainFile << "#include <iostream>\n\n";
+  mainFile << "int main() {\n";
+  mainFile << "    std::cout << \"Hello, " << name << "!\" << std::endl;\n";
+  mainFile << "    return 0;\n";
+  mainFile << "}\n";
+  mainFile.close();
+
+  // Create CMakeLists.txt
+  std::ofstream cmakeFile(path + "/" + name + "/CMakeLists.txt");
+  cmakeFile << "cmake_minimum_required(VERSION 3.21)\n\n";
+  cmakeFile << "project(" << name << ")\n\n";
+  cmakeFile << "add_executable(" << name << " src/main.cpp)\n";
+  cmakeFile.close();
 }
