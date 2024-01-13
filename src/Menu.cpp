@@ -153,7 +153,7 @@ void Menu::cherryTheme() {
   style.Colors[ImGuiCol_Header]                = MED( 0.76f);
   style.Colors[ImGuiCol_HeaderHovered]         = MED( 0.86f);
   style.Colors[ImGuiCol_HeaderActive]          = HI( 1.00f);
-  style.Colors[ImGuiCol_COUNT]                = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
+  // style.Colors[ImGuiCol_COUNT]                = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
   style.Colors[ImGuiCol_ButtonHovered]         = MED( 0.78f);
   style.Colors[ImGuiCol_ButtonActive]          = MED( 1.00f);
   style.Colors[ImGuiCol_ResizeGrip]            = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);

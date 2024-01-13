@@ -58,6 +58,6 @@ bool Vector2::operator!=(const Vector2 &other) {
   return this->x != other.x || this->y != other.y;
 }
 
-double Vector2::distance(Vector2 &other) {
+double Vector2::distance(const Vector2 &other) {
   return std::sqrt(std::pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
 }

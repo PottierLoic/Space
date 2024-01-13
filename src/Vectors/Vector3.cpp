@@ -64,7 +64,7 @@ bool Vector3::operator!=(const Vector3 &other) {
   return this->x != other.x || this->y != other.y || this->z != other.z;
 }
 
-double Vector3::distance(Vector3 &other) {
+double Vector3::distance(const Vector3 &other) {
   return sqrt(pow(this->x - other.x, 2) +
               pow(this->y - other.y, 2) +
               pow(this->z - other.z, 2));
