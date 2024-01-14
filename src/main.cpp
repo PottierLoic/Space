@@ -72,7 +72,7 @@ void mouseCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
 }
 
 void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
-  camera.processMouseScoll(static_cast<float>(yoffset));
+  camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
 int main() {
