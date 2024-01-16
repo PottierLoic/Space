@@ -149,10 +149,6 @@ int main() {
   // Scene creation
   Scene scene = Scene();
   scene.addEntity(new Entity("Test1"));
-  scene.addEntity(new Entity("Test2"));
-  scene.addEntity(new Entity("Test3"));
-  scene.entities[0]->addChildren(new Entity("Test4"));
-
   scene.entities[0]->addComponent<Physic>(new Physic());
 
   // Menu creation
