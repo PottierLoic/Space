@@ -26,16 +26,29 @@ public:
    * Add a given component to the Entity.
    * @tparam T: Type of the component to add.
    * @param component: A pointer to the component to add.
+   *
+   * @note Declared in .hpp to avoid massive template declaration.
    */
   template <typename T>
-  void addComponent(T* component);
+  void addComponent(T* component) {
+    components[typeid(T)] = component;
+  }
 
   /*
    * Add a given component to the Entity.
    * @tparam T: Type of the component to get.
+   *
+   * @note Declared in .hpp to avoid massive template declaration.
    */
   template <typename T>
-  T* getComponent() const;
+  T* getComponent() const {
+    auto it = components.find(typeid(T));
+    if (it != components.end()) {
+      return dynamic_cast<T*>(it->second);
+    }
+    return nullptr;
+  }
+
 
   /* TODO: Add a removeComponent function */
 
