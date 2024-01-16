@@ -35,7 +35,7 @@ public:
   }
 
   /*
-   * Add a given component to the Entity.
+   * Get a given component from the Entity.
    * @tparam T: Type of the component to get.
    *
    * @note Declared in .hpp to avoid massive template declaration.
@@ -49,8 +49,19 @@ public:
     return nullptr;
   }
 
-
-  /* TODO: Add a removeComponent function */
+  /*
+   * Remove a given component from the Entity.
+   * @tparam T: Type of the component to remove.
+   *
+   * @note Declared in .hpp to avoid massive template declaration.
+   */
+  template <typename T>
+  void removeComponent() {
+    auto it = components.find(typeid(T));
+    if (it != components.end()) {
+      components.erase(it);
+    }
+  }
 
   /* WARNING: TODO: Be careful with the two following as they could lead to infinite
     loop on menu display  In case a children contains one of its parent, ImGui will

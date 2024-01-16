@@ -90,6 +90,7 @@ void Menu::displayInspector() {
 
 void Menu::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
+    // TODO: Render the hierarchy view.
     ImGui::End();
   }
 }
@@ -97,7 +98,7 @@ void Menu::displayHierarchy() {
 void Menu::displayProject() {
   if (ImGui::Begin("Project")) {
     //TODO: Render the scene view.
-  ImGui::End();
+    ImGui::End();
   }
 }
 
