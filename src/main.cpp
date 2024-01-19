@@ -132,7 +132,7 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
   // TODO: REMOVE
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();

@@ -1,7 +1,7 @@
 # Ignore space build
 /build
 
-# TODO: Bring models once the default ones (cubes etc.. are done)
+# TODO: Remove this and bring models once the default ones (cubes etc.. are done)
 /models
 
 # Ignore test generated files

@@ -5,16 +5,18 @@ Project::Project(std::string path, std::string name) {
     std::cerr << "Error: Project directory already exists." << std::endl;
   }
 
-  std::filesystem::create_directory(path + "/" + name);
-  std::filesystem::create_directory(path + "/" + name + "/assets");
-  std::filesystem::create_directory(path + "/" + name + "/assets/textures");
-  std::filesystem::create_directory(path + "/" + name + "/assets/models");
-  std::filesystem::create_directory(path + "/" + name + "/assets/sounds");
-  std::filesystem::create_directory(path + "/" + name + "/config");
-  std::filesystem::create_directory(path + "/" + name + "/src");
+  std::string projectPath = path + "/" + name;
+
+  std::filesystem::create_directory(projectPath);
+  std::filesystem::create_directory(projectPath + "/assets");
+  std::filesystem::create_directory(projectPath + "/assets/textures");
+  std::filesystem::create_directory(projectPath + "/assets/models");
+  std::filesystem::create_directory(projectPath + "/assets/sounds");
+  std::filesystem::create_directory(projectPath + "/config");
+  std::filesystem::create_directory(projectPath + "/src");
 
   // Create main.cpp
-  std::ofstream mainFile(path + "/" + name + "/src/main.cpp");
+  std::ofstream mainFile(projectPath + "/src/main.cpp");
   mainFile << "#include <iostream>\n\n";
   mainFile << "int main() {\n";
   mainFile << "    std::cout << \"Hello, " << name << "!\" << std::endl;\n";
@@ -23,9 +25,6 @@ Project::Project(std::string path, std::string name) {
   mainFile.close();
 
   // Create CMakeLists.txt
-  std::ofstream cmakeFile(path + "/" + name + "/CMakeLists.txt");
-  cmakeFile << "cmake_minimum_required(VERSION 3.21)\n\n";
-  cmakeFile << "project(" << name << ")\n\n";
-  cmakeFile << "add_executable(" << name << " src/main.cpp)\n";
-  cmakeFile.close();
+  std::ofstream CMakeFile(projectPath + "/CMakeLists.txt");
+  std::filesystem::copy("./templates/CMakeLists.txt", projectPath + "/CMakeLists.txt");
 }

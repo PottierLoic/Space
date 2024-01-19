@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21)
 project(space)
 set(CMAKE_CXX_STANDARD 17)
 
-set(EDITOR_MODE ON CACHE BOOL "Build the editor")
+set(EDITOR_MODE OFF CACHE BOOL "Build the editor")
 
 # Variables
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
