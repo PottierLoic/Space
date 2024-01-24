@@ -56,8 +56,13 @@ int main() {
   std::filesystem::path sourceDir = currentPath.parent_path();
 
   // Clear previously generated files
-  std::filesystem::remove_all((sourceDir / "Generated").string());
-  std::filesystem::create_directory((sourceDir / "Generated").string());
+  try {
+    std::filesystem::remove_all((sourceDir / "Generated").string());
+    std::filesystem::create_directory((sourceDir / "Generated").string());
+  }
+  catch(const std::exception& e) {
+    std::cerr << e.what() << '\n';
+  }
 
   /* Distance check */
   run_all_tests();
