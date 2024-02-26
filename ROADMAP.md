@@ -4,7 +4,7 @@
 
 ### 1. Rendering System
 - [ ] **Objective:** Implement a versatile rendering system capable of handling both 2D and 3D graphics.
-  - [ ] Integrate OpenGL for rendering capabilities.
+  - [x] Integrate OpenGL for rendering capabilities.
   - [ ] Implement shader management and customization.
   - [ ] Support for various rendering techniques like shadows, post-processing, and more.
 
