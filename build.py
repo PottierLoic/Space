@@ -1,7 +1,7 @@
 import os
 import shutil
+import subprocess
 
-# Move files from imgui/backends to imgui
 shutil.copy2('./libs/imgui/backends/imgui_impl_glfw.cpp', './libs/imgui')
 shutil.copy2('./libs/imgui/backends/imgui_impl_glfw.h', './libs/imgui')
 shutil.copy2('./libs/imgui/backends/imgui_impl_opengl3.cpp', './libs/imgui')
@@ -10,11 +10,11 @@ shutil.copy2('./libs/imgui/backends/imgui_impl_opengl3_loader.h', './libs/imgui'
 shutil.copy2('./libs/imgui/misc/cpp/imgui_stdlib.cpp', './libs/imgui')
 shutil.copy2('./libs/imgui/misc/cpp/imgui_stdlib.h', './libs/imgui')
 
-# Remove Generated tests files
-shutil.rmtree('./tests/Generated')
+generated_tests_path = './tests/Generated'
+if os.path.exists(generated_tests_path):
+    shutil.rmtree(generated_tests_path)
 
 if os.name == 'nt':
-  user_os = 'windows'
+  subprocess.run(['build.bat'])
 else:
-  user_os = 'unix'
-
+  subprocess.run(['./build.sh'], shell=True)
