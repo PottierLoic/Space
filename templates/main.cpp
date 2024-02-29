@@ -1,31 +1,24 @@
-#include <string>
-#include <iostream>
-
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include "Menu.hpp"
-
 #include "Shader.hpp"
-#include "Camera.hpp" // maybe not stay here
-#include "Model/Model.hpp" // maybe removed soon
+#include "Camera.hpp"
+#include "Model/Model.hpp"
 
-/* TODO: REMOVE */
-/* DEBUG */
 #include "Entity.hpp"
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Physic.hpp"
 
-// OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <string>
+#include <iostream>
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -49,8 +42,6 @@ void processInput(GLFWwindow* window) {
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     camera.processKeyboard(RIGHT, deltaTime);
 }
-
-/* DEBUG */
 
 void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
@@ -118,7 +109,6 @@ int main() {
   glfwSetCursorPosCallback(window, mouseCallback);
   glfwSetScrollCallback(window, scrollCallback);
 
-
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::cout << "Failed to initialize Glad" << std::endl;
@@ -132,29 +122,12 @@ int main() {
   stbi_set_flip_vertically_on_load(true);
 
   glEnable(GL_DEPTH_TEST);
-  // TODO: REMOVE
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-  // Setup ImGui context
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO(); (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init(glsl_version);
 
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
   scene.addEntity(new Entity("Test1"));
   scene.entities[0]->addComponent<Physic>(new Physic());
-
-  // Menu creation
-  Menu menu = Menu(&scene);
-  menu.selectedEntity = scene.entities[0];
 
   // TODO: REMOVE OPENGL TESTS
   Shader testShader("../shaders/test.vs", "../shaders/test.fs", nullptr);
@@ -169,14 +142,6 @@ int main() {
     lastFrame = currentFrame;
 
     processInput(window);
-
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    menu.display();
-
-    ImGui::Render();
 
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -198,16 +163,9 @@ int main() {
     testShader.setMat4("model", model);
     testModel.draw(testShader);
 
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
-
-  // Cleanup ImGui
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
 
   // Cleanup GLFW
   glfwDestroyWindow(window);

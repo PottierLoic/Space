@@ -13,7 +13,6 @@ set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 set(GLFW_DIR "${LIBS_DIR}/glfw")
 set(GLM_DIR "${LIBS_DIR}/glm")
 set(GLAD_DIR "${LIBS_DIR}/glad")
-set(IMGUI_DIR "${LIBS_DIR}/imgui")
 set(STB_DIR "${LIBS_DIR}/stb")
 set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 
@@ -31,9 +30,6 @@ set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_DOCS OFF)
 add_subdirectory(${LIBS_DIR}/glfw)
-
-# DearImGui sources
-file(GLOB IMGUI_SOURCES "${IMGUI_DIR}/*.cpp" "${IMGUI_DIR}/*.h")
 
 # Assimp build
 option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
@@ -63,7 +59,7 @@ endif()
 # Targets
 macro(create_target target sources)
   add_executable(${target} ${sources})
-  target_sources(${target} PRIVATE ${COMMON_SOURCES} ${HEADER_LIST} ${IMGUI_SOURCES} ${GLM_HEADERS})
+  target_sources(${target} PRIVATE ${COMMON_SOURCES} ${HEADER_LIST} ${GLM_HEADERS})
   target_link_libraries(${target} PRIVATE assimp glfw glad ${OPENGL_gl_LIBRARY})
   target_include_directories(${target} PRIVATE ${LIBS_DIR} ${INCLUDE_DIR} ${GLFW_DIR}/include ${GLAD_DIR}/include ${STB_DIR}/ ${GLM_DIR}/ ${ASSIMP_DIR}/include)
 endmacro()

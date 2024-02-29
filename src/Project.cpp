@@ -15,16 +15,10 @@ Project::Project(std::string path, std::string name) {
   std::filesystem::create_directory(projectPath + "/config");
   std::filesystem::create_directory(projectPath + "/src");
 
-  // Create main.cpp
-  std::ofstream mainFile(projectPath + "/src/main.cpp");
-  mainFile << "#include <iostream>\n\n";
-  mainFile << "int main() {\n";
-  mainFile << "    std::cout << \"Hello, " << name << "!\" << std::endl;\n";
-  mainFile << "    return 0;\n";
-  mainFile << "}\n";
-  mainFile.close();
+  // Bring basic main.cpp from template folder
+  std::filesystem::copy("../templates/main.cpp", projectPath + "/src/main.cpp");
 
-  // Create CMakeLists.txt
-  std::ofstream CMakeFile(projectPath + "/CMakeLists.txt");
-  std::filesystem::copy("./templates/CMakeLists.txt", projectPath + "/CMakeLists.txt");
+  // Bring basic CMakeLists.txt from template folder
+  std::filesystem::copy("../templates/CMakeLists.txt", projectPath + "/CMakeLists.txt");
+
 }
