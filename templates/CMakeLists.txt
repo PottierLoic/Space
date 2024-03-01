@@ -8,16 +8,17 @@ set(EDITOR_MODE OFF CACHE BOOL "Build the editor")
 # Variables
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
-set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs")
+set(EDITOR_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../src")
+set(EDITOR_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../include")
+set(LIBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs")
 set(GLFW_DIR "${LIBS_DIR}/glfw")
 set(GLM_DIR "${LIBS_DIR}/glm")
 set(GLAD_DIR "${LIBS_DIR}/glad")
 set(STB_DIR "${LIBS_DIR}/stb")
 set(ASSIMP_DIR "${LIBS_DIR}/assimp")
 
-file(GLOB_RECURSE COMMON_SOURCES "${SOURCE_DIR}/*.cpp" "${TEST_DIR}/*.cpp")
-list(REMOVE_ITEM COMMON_SOURCES "${SOURCE_DIR}/main.cpp" "${TEST_DIR}/main.cpp")
+file(GLOB_RECURSE COMMON_SOURCES "${SOURCE_DIR}/*.cpp" "${EDITOR_SOURCE_DIR}/*.cpp")
+list(REMOVE_ITEM COMMON_SOURCES "${SOURCE_DIR}/main.cpp" "${EDITOR_SOURCE_DIR}/main.cpp")
 
 find_package(OpenGL REQUIRED)
 
@@ -66,4 +67,3 @@ endmacro()
 
 # Main and Test targets
 create_target(space ${SOURCE_DIR}/main.cpp)
-create_target(test ${TEST_DIR}/main.cpp)

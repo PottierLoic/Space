@@ -21,4 +21,9 @@ Project::Project(std::string path, std::string name) {
   // Bring basic CMakeLists.txt from template folder
   std::filesystem::copy("../templates/CMakeLists.txt", projectPath + "/CMakeLists.txt");
 
+  // Bring build-mingw.bat and build-unix.sh from template folder
+  std::filesystem::copy("../templates/build-mingw.bat", projectPath + "/build.bat");
+  std::filesystem::copy("../templates/build-unix.sh", projectPath + "/build.sh");
+
+
 }

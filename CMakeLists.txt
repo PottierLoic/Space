@@ -40,6 +40,13 @@ option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 option(ASSIMP_BUILD_ASSIMP_VIEW OFF)
 option(ASSIMP_BUILD_SAMPLES OFF)
 option(ASSIMP_BUILD_TESTS OFF)
+
+# TODO: Find a way to only import necessary importers.
+# option(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF)
+# option(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF)
+# option(ASSIMP_BUILD_OBJ_IMPORTER ON)
+# option(ASSIMP_BUILD_FBX_IMPORTER ON)
+
 add_subdirectory(${ASSIMP_DIR})
 
 # Specific cases
