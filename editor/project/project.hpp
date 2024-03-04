@@ -6,7 +6,9 @@
 #include <vector>
 #include <fstream>
 
-#include "scene.hpp"
+#include "scene/scene.hpp"
+
+namespace SpaceEditor {
 
 class Project {
 public:
@@ -24,3 +26,5 @@ public:
 
   Project(std::string path, std::string name);
 };
+
+}

@@ -1,5 +1,7 @@
 #include "menu.hpp"
 
+namespace SpaceEditor {
+
 Menu::Menu(Scene* scene) {
   this->scene = scene;
   cherryTheme();
@@ -186,4 +188,6 @@ void Menu::cherryTheme() {
   style.Colors[ImGuiCol_Border] = ImVec4(0.539f, 0.479f, 0.255f, 0.162f);
   style.FrameBorderSize = 0.0f;
   style.WindowBorderSize = 1.0f;
+}
+
 }
