@@ -57,8 +57,8 @@ int main() {
 
   // Clear previously generated files
   try {
-    std::filesystem::remove_all((sourceDir / "Generated").string());
-    std::filesystem::create_directory((sourceDir / "Generated").string());
+    std::filesystem::remove_all((sourceDir / "generated").string());
+    std::filesystem::create_directory((sourceDir / "generated").string());
   }
   catch(const std::exception& e) {
     std::cerr << e.what() << '\n';
