@@ -6,6 +6,7 @@ set(LIBS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs")
 option(BUILD_EDITOR "Build the SpaceEditor application" ON)
 
 add_subdirectory(core)
+
 if(BUILD_EDITOR)
   add_subdirectory(editor)
 endif()
