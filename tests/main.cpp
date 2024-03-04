@@ -3,9 +3,6 @@
 #include <cstring>
 #include <filesystem>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 extern int testVector2();
 extern int testVector3();
 extern int testProject();
