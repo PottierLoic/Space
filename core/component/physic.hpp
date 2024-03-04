@@ -2,6 +2,8 @@
 
 #include "component/component.hpp"
 
+namespace SpaceEngine {
+
 /**
  * The Physic class represents a component defining physical properties for an object.
  *
@@ -33,8 +35,6 @@ public:
    */
   ~Physic();
 
-  /**
-   * @brief Display the Physic component properties in the inspector tab.
-   */
-  void display() override;
 };
+
+}

@@ -3,6 +3,8 @@
 #include "component/component.hpp"
 #include "vector/vector3.hpp"
 
+namespace SpaceEngine {
+
 /**
  * The Transform class represents a transformation component in 3D space, inheriting from Component.
  *
@@ -35,8 +37,6 @@ public:
    */
   ~Transform();
 
-  /**
-   * @brief Display the transform component properties in the inspector tab.
-   */
-  void display() override;
 };
+
+}

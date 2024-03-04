@@ -8,6 +8,8 @@
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 
+namespace SpaceEngine {
+
 /*
  * The Shader class represents a shader program in OpenGL, encapsulating vertex, fragment, and geometry shaders.
  *
@@ -147,3 +149,5 @@ public:
    */
   void checkCompileErrors(GLuint shader, std::string type);
 };
+
+}

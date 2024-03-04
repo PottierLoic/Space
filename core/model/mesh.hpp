@@ -6,7 +6,9 @@
 
 #include "model/vertex.hpp"
 #include "model/texture.hpp"
-#include "shader.hpp"
+#include "shader/shader.hpp"
+
+namespace SpaceEngine {
 
 class Mesh {
 public:
@@ -21,3 +23,5 @@ private:
   unsigned int VAO, VBO, EBO;
   void setupMesh();
 };
+
+}

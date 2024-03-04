@@ -6,6 +6,8 @@
 
 #include <vector>
 
+namespace SpaceEngine {
+
 enum CameraMovement {
   FORWARD,
   BACKWARD,
@@ -110,3 +112,5 @@ private:
    */
   void updateCameraVectors();
 };
+
+}

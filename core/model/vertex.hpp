@@ -2,6 +2,8 @@
 
 #include "glm/glm.hpp"
 
+namespace SpaceEngine {
+
 #define MAX_BONE_INFLUENCE 4
 
 struct Vertex {
@@ -16,3 +18,5 @@ struct Vertex {
 	//weights from each bone
 	float m_Weights[MAX_BONE_INFLUENCE];
 };
+
+}

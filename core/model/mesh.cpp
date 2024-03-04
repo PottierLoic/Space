@@ -1,5 +1,7 @@
 #include "model/mesh.hpp"
 
+namespace SpaceEngine {
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) {
   this->vertices = vertices;
   this->indices = indices;
@@ -80,4 +82,6 @@ void Mesh::draw(Shader &shader) {
   glBindVertexArray(0);
 
   glActiveTexture(GL_TEXTURE0);
+}
+
 }
