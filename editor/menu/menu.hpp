@@ -4,9 +4,11 @@
 
 #include "imgui/imgui_impl_glfw.h"
 
-#include "scene.hpp"
-#include "entity.hpp"
+#include "scene/scene.hpp"
+#include "entity/entity.hpp"
 #include "component/transform.hpp"
+
+namespace SpaceEditor {
 
 /*
  * The Menu class represents a user interface and control various aspects of a scene, including tools, inspector, hierarchy, and generation options.
@@ -72,3 +74,5 @@ public:
   /* Menu themes */
   void cherryTheme();
 };
+
+}

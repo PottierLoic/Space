@@ -1,5 +1,7 @@
 #include "project.hpp"
 
+namespace SpaceEditor {
+
 Project::Project(std::string path, std::string name) {
   if (std::filesystem::exists(path + "/" + name)) {
     std::cerr << "Error: Project directory already exists." << std::endl;
@@ -27,4 +29,6 @@ Project::Project(std::string path, std::string name) {
   // Create CMakeLists.txt
   std::ofstream CMakeFile(projectPath + "/CMakeLists.txt");
   std::filesystem::copy("./templates/CMakeLists.txt", projectPath + "/CMakeLists.txt");
+}
+
 }
