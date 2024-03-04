@@ -10,7 +10,9 @@
 
 #include "model/mesh.hpp"
 #include "model/texture.hpp"
-#include "shader.hpp"
+#include "shader/shader.hpp"
+
+namespace SpaceEngine {
 
 unsigned int textureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
@@ -30,3 +32,5 @@ private:
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 };
+
+}

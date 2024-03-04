@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_stdlib.h"
+namespace SpaceEngine {
 
 /**
  * The Component class serves as a base class for components in the entity-component system.
@@ -25,8 +24,6 @@ public:
    */
   virtual ~Component();
 
-  /**
-   * @brief Virtual method to display component properties in the user interface.
-   */
-  virtual void display();
 };
+
+}

@@ -12,6 +12,8 @@
 #include "component/transform.hpp"
 #include "component/physic.hpp"
 
+namespace SpaceEngine {
+
 class Entity {
 public:
   /* Map of components an Entity has. */
@@ -79,3 +81,5 @@ public:
    */
   void removeChildren(Entity* child);
 };
+
+}

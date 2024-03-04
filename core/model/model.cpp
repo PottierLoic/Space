@@ -1,5 +1,7 @@
 #include "model/model.hpp"
 
+namespace SpaceEngine {
+
 Model::Model(const char *path) {
   loadModel(path);
 }
@@ -156,4 +158,6 @@ unsigned int textureFromFile(const char *path, const std::string &directory, boo
     stbi_image_free(data);
   }
   return textureID;
+}
+
 }

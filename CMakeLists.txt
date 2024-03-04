@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
 project(Space)
-
 set(CMAKE_CXX_STANDARD 17)
 
-# Include the core library
+set(LIBS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs")
+option(BUILD_EDITOR "Build the SpaceEditor application" OFF)
+
 add_subdirectory(core)
+if(BUILD_EDITOR)
+  add_subdirectory(editor)
+endif()
 
-# TODO: Add the CMakeLists to the editor
-# If you have an editor that depends on the core library
-# add_subdirectory(editor)
-
-# Include the tests directory
 add_subdirectory(tests)

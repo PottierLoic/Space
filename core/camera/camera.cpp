@@ -1,4 +1,6 @@
-#include "Camera.hpp"
+#include "camera.hpp"
+
+namespace SpaceEngine {
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
   front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -75,4 +77,6 @@ void Camera::updateCameraVectors() {
   front = glm::normalize(tmpFront);
   right = glm::normalize(glm::cross(front, worldUp));
   up = glm::normalize(glm::cross(right, front));
+}
+
 }

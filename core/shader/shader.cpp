@@ -1,5 +1,7 @@
 #include "shader.hpp"
 
+namespace SpaceEngine {
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr) {
   // Retrieve souce code.
   std::string vertexCode;
@@ -154,4 +156,6 @@ void Shader::checkCompileErrors(GLuint shader, std::string type) {
       std::cout << "ERROR::SHADER::LINKING_ERROR of type: " << type << "\n" << infoLog << std::endl;
     }
   }
+}
+
 }
