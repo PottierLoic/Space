@@ -8,6 +8,9 @@
 #include "entity/entity.hpp"
 #include "component/transform.hpp"
 
+using SpaceEngine::Scene;
+using SpaceEngine::Entity;
+
 namespace SpaceEditor {
 
 /*
