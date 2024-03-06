@@ -4,6 +4,7 @@ namespace SpaceEditor {
 
 Menu::Menu(Scene* scene) {
   this->scene = scene;
+  initComponentViewers();
   cherryTheme();
 }
 
@@ -80,10 +81,16 @@ void Menu::displayMenuBar() {
 
 void Menu::displayInspector() {
   if (ImGui::Begin("Inspector")) {
-    if (selectedEntity != nullptr) {
-      for (const auto& componentPair : selectedEntity->components) {
-        Component* component = componentPair.second;
-        component->display();
+    if (selectedEntity == nullptr) {
+      return;
+    }
+
+    for (const auto& componentPair : selectedEntity->components) {
+      std::type_index typeIndex = componentPair.first;
+      Component* component = componentPair.second;
+      auto viewerIt = componentViewers.find(typeIndex);
+      if (viewerIt != componentViewers.end()) {
+        viewerIt->second(component);
       }
     }
     ImGui::End();

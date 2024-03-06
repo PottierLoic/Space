@@ -1,15 +1,22 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
+#include <functional>
 
 #include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_stdlib.h"
 
 #include "scene/scene.hpp"
 #include "entity/entity.hpp"
+#include "component/component.hpp"
 #include "component/transform.hpp"
 
 using SpaceEngine::Scene;
 using SpaceEngine::Entity;
+using SpaceEngine::Component;
+using SpaceEngine::Transform;
+using SpaceEngine::Physic;
 
 namespace SpaceEditor {
 
@@ -31,30 +38,22 @@ namespace SpaceEditor {
  * - Menu(): Initializes a new Menu.
  *
  * Methods:
+ * - void initComponentViewers(): Place all the component viewers functions inside of the componentViewers map.
  * - void display(): Displays the menu, rendering different sections based on the state of the flags.
+ * - void cherryTheme(): Set the actual menu theme to cherry theme.
  */
 class Menu {
-public:
+private:
   bool showInspector = false;      // Inspector section visiblity flag.
   bool showHierarchy = false;      // Hierarchy section visiblity flag.
   bool showProject = false;        // Project section visiblity flag.
   bool showScene = true;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
 
-  /* Reference to the actual Scene. */
-  Scene* scene;
+  std::unordered_map<std::type_index, std::function<void(Component*)>> componentViewers;
 
-  /* Reference to the selected Entity. */
-  Entity* selectedEntity = nullptr;
-
-  /*
-   * Main constructor that use default flags.
-   * @param scene: Reference to a scene.
-   */
-  Menu(Scene* scene);
-
-  /* Display the whole menu. */
-  void display();
+  /* Display a transform component section. */
+  void initComponentViewers();
 
   /* Display the menu bar. */
   void displayMenuBar();
@@ -73,6 +72,22 @@ public:
 
   /* Display the render section. */
   void displayRender();
+
+public:
+  /* Reference to the actual Scene. */
+  Scene* scene;
+
+  /* Reference to the selected Entity. */
+  Entity* selectedEntity = nullptr;
+
+  /*
+   * Main constructor that use default flags.
+   * @param scene: Reference to a scene.
+   */
+  Menu(Scene* scene);
+
+  /* Display the whole menu. */
+  void display();
 
   /* Menu themes */
   void cherryTheme();

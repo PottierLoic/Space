@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 file(GLOB_RECURSE CORE_SOURCES
   "vector/*.cpp"
   "entity/*.cpp"
-  # "model/*.cpp"
-  # "scene/*.cpp"
+  "model/*.cpp"
+  "scene/*.cpp"
   "camera/*.cpp"
   "component/*.cpp"
   "shader/*.cpp"
