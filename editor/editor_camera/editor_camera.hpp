@@ -1,12 +1,12 @@
 #pragma once
 
+#include <vector>
+
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include <vector>
-
-namespace SpaceEngine {
+namespace SpaceEditor {
 
 enum CameraMovement {
   FORWARD,
@@ -22,7 +22,7 @@ const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
 /**
- * The Camera class represents a 3D camera in a virtual scene.
+ * The EditorCamera class represents a 3D camera in a virtual scene.
  *
  * Properties:
  * - position (glm::vec3): The position of the camera.
@@ -37,14 +37,14 @@ const float ZOOM = 45.0f;
  * - zoom (float): The zoom level of the camera.
  *
  * Methods:
- * - Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): Constructor with vector.
- * - Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch): Constructor with scalars.
+ * - EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): Constructor with vector.
+ * - EditorCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch): Constructor with scalars.
  * - glm::mat4 getViewMatrix(): Get the view matrix of the camera.
  * - void processKeyboard(CameraMovement direction, float deltaTime): Process keyboard input to move the camera.
  * - void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true): Process mouse movement to update camera angles.
  * - void processMouseScroll(float yoffset): Process mouse scroll to update zoom level.
  */
-class Camera {
+class EditorCamera {
 public:
   glm::vec3 position;         /* The position of the camera. */
   glm::vec3 front;            /* The front direction vector of the camera. */
@@ -64,7 +64,7 @@ public:
    * @param yaw: The yaw angle of the camera.
    * @param pitch: The pitch angle of the camera.
    */
-  Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
+  EditorCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
 
   /**
    * @brief Constructor with scalars.
@@ -77,7 +77,7 @@ public:
    * @param yaw: The yaw angle of the camera.
    * @param pitch: The pitch angle of the camera.
    */
-  Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
+  EditorCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
   /**
    * @brief Get the view matrix of the camera.

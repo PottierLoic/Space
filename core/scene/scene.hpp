@@ -30,6 +30,8 @@ public:
   // Vector of pointers to Entity contained within the scene
   std::vector<Entity*> entities;
 
+  Camera selectedCamera;
+
   Scene();                    // Initializes a new empty scene with a default name.
   Scene(std::string name);    // Initializes a new scene with the specified name.
 

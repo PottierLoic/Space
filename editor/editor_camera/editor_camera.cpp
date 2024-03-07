@@ -1,8 +1,8 @@
-#include "camera.hpp"
+#include "editor_camera.hpp"
 
-namespace SpaceEngine {
+namespace SpaceEditor {
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
+EditorCamera::EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
   front = glm::vec3(0.0f, 0.0f, -1.0f);
   movementSpeed = SPEED;
   mouseSensitivity = SENSITIVITY;
@@ -14,7 +14,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
   updateCameraVectors();
 }
 
-Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) {
+EditorCamera::EditorCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) {
   front = glm::vec3(0.0f, 0.0f, -1.0f);
   movementSpeed = SPEED;
   mouseSensitivity = SENSITIVITY;
@@ -26,11 +26,11 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
   updateCameraVectors();
 }
 
-glm::mat4 Camera::getViewMatrix() {
+glm::mat4 EditorCamera::getViewMatrix() {
   return glm::lookAt(position, position + front, up);
 }
 
-void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
+void EditorCamera::processKeyboard(CameraMovement direction, float deltaTime) {
   float velocity = movementSpeed * deltaTime;
   switch (direction) {
     case FORWARD:
@@ -48,7 +48,7 @@ void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
   }
 }
 
-void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
+void EditorCamera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
   xoffset *= mouseSensitivity;
   yoffset *= mouseSensitivity;
 
@@ -63,13 +63,13 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
   updateCameraVectors();
 }
 
-void Camera::processMouseScroll(float yoffset) {
+void EditorCamera::processMouseScroll(float yoffset) {
   zoom -= yoffset;
   if (zoom < 1.0f ) { zoom = 1.0f; }
   if (zoom > 45.0f ) { zoom = 45.0f; }
 }
 
-void Camera::updateCameraVectors() {
+void EditorCamera::updateCameraVectors() {
   glm::vec3 tmpFront;
   tmpFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
   tmpFront.y = sin(glm::radians(pitch));

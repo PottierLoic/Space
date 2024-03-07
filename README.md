@@ -2,7 +2,7 @@
 
 Space is a WIP 2D / 3D game engine made for fun.
 
-It is cross platform and uses GLFW, OpenGL and DearImGui.
+It is cross platform and uses GLFW, OpenGL and ImGui.
 
 **Please note that there is no official release for the project, and it is unlikely that there will be any in the future**  
 I'm mainly doing this to progress in c++ and OpenGL and because I always wanted to develop my own game engine.
@@ -17,7 +17,7 @@ I'm mainly doing this to progress in c++ and OpenGL and because I always wanted 
 
 ### Building
 
-First, get the repo on your machine
+First, get the repo on your computer.
 ```bash
 git clone https://github.com/PottierLoic/Space.git
 cd Space
@@ -29,7 +29,10 @@ git submodule init
 git submodule update
 ```
 
-Build using the corresponding file
+Space comes in 3 parts: the engine, the editor, and the tests.  
+Each part has it's own folder: core, editor and tests respectively.  
+
+You can compile everything at once like this:
 ```bash
 # On Unix, you have to give permission.
 chmod +x ./build.sh
@@ -39,22 +42,20 @@ chmod +x ./build.sh
 build.bat
 ```
 
-The executable is now in the build folder.
-
-```bash
-cd build
-./space
-```
+This compiles the core folder into a library called SpaceEngine that is located in `build/core/`.  
+The editor executable can be found in `build/editor/`.  
+The tests executable can be found in `build/tests/`.  
 
 ## External libraries
 
-Space is using many libraries
+Space is using some external libraries :
 
-- GLFW - Graphic library
-- Glad - OpenGL loader
-- ImGui - C++ User interface
-- GLM - Mathematics OpenGL library
-- Assimp - 3D model loader
+- [GLFW](https://www.glfw.org/) - Graphic library.
+- [Glad](https://glad.dav1d.de/) - OpenGL loader.
+- [GLM](https://github.com/g-truc/glm) - Mathematics OpenGL library.
+- [ImGui](https://github.com/ocornut/imgui) - C++ User interface.
+- [Assimp](https://github.com/assimp/assimp) - 3D model loader.
+- [stb](https://github.com/nothings/stb) - Collection of convenient single header libraries.
 
 ## License
 

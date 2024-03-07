@@ -8,7 +8,7 @@
 
 #include "menu/menu.hpp"
 #include "shader/shader.hpp"
-#include "camera/camera.hpp" // maybe not stay here
+#include "editor_camera/editor_camera.hpp" // maybe not stay here
 #include "model/model.hpp" // maybe removed soon
 
 /* TODO: REMOVE */
@@ -30,7 +30,7 @@ using namespace SpaceEngine;
 using namespace SpaceEditor;
 
 // Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX =  1280.0f / 2.0;
 float lastY =  720.0 / 2.0;
 bool firstMouse = true;
@@ -148,7 +148,7 @@ int main() {
   ImGui_ImplOpenGL3_Init(glsl_version);
 
   // Maximize the window
-  glfwMaximizeWindow(window);
+  // glfwMaximizeWindow(window);
 
   //TODO : Remove too
   // Scene creation

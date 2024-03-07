@@ -2,8 +2,10 @@
 
 namespace SpaceEngine {
 
-Scene::Scene() { this->name = "New Scene"; }
-Scene::Scene(std::string name) { this->name = name; }
+Scene::Scene() {
+  this->name = "New Scene";
+  this->addEntity(new Entity("Default Camera"));
+}
 
 void Scene::addEntity(Entity* ent) {
   entities.push_back(ent);
