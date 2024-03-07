@@ -20,12 +20,11 @@ class Model {
 public:
   Model(const char *path);
   void draw(Shader &shader);
+  std::string directory;
 
 private:
   std::vector<Texture> textures_loaded;
-
   std::vector<Mesh> meshes;
-  std::string directory;
 
   void loadModel(std::string path);
   void processNode(aiNode *node, const aiScene *scene);

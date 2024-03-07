@@ -120,7 +120,6 @@ int main() {
   glfwSetCursorPosCallback(window, mouseCallback);
   glfwSetScrollCallback(window, scrollCallback);
 
-
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::cout << "Failed to initialize Glad" << std::endl;
@@ -135,7 +134,7 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
   // TODO: REMOVE
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -147,6 +146,9 @@ int main() {
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
+
+  // Maximize the window
+  glfwMaximizeWindow(window);
 
   //TODO : Remove too
   // Scene creation
@@ -164,7 +166,7 @@ int main() {
 
   // TODO: REMOVE TEST MODEL IMPORT
   // TODO: Find a way to use better path.
-  Model testModel("../../models/backpack/backpack.obj");
+  Model testModel("../../models/cube/WoodenBox.fbx");
 
 
   // Main loop

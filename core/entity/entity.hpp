@@ -10,7 +10,6 @@
 
 #include "component/component.hpp"
 #include "component/transform.hpp"
-#include "component/physic.hpp"
 
 namespace SpaceEngine {
 
