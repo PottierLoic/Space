@@ -17,7 +17,6 @@ namespace SpaceEngine {
  * Methods:
  * - Transform(std::string name): Default constructor: Initializes a new transform component with default values.
  * - ~Transform(): Destructor: Destroys the transform component. Note: May not have additional functionality in this case.
- * - void display(): Display the transform component properties in the inspector tab.
  */
 class Transform : public Component {
 public:

@@ -3,6 +3,7 @@ project(SpaceEngine)
 
 set(CMAKE_CXX_STANDARD 17)
 
+
 file(GLOB_RECURSE CORE_SOURCES
   "vector/*.cpp"
   "entity/*.cpp"
@@ -14,6 +15,7 @@ file(GLOB_RECURSE CORE_SOURCES
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})
+target_compile_options(SpaceEngine PRIVATE -Wall -Wextra -Werror)
 
 # Glad build
 add_library(glad "${LIBS_ROOT}/glad/src/glad.c")

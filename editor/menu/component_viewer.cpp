@@ -53,6 +53,18 @@ void Menu::initComponentViewers() {
       ImGui::Checkbox("##physic_gravity", &physic->gravity);
     }
   };
+
+  this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](Component* component) {
+    auto* modelRenderer = static_cast<ModelRenderer*>(component);
+    if (ImGui::CollapsingHeader("Component")) {
+      ImGui::Text("Model");
+      ImGui::SameLine(100);
+
+      if (modelRenderer->model != nullptr) {
+        ImGui::Text(modelRenderer->model->directory.c_str());
+      }
+    }
+  };
 }
 
 }

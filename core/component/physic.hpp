@@ -16,7 +16,6 @@ namespace SpaceEngine {
  * Methods:
  * - Physic(): Default constructor: Initializes a new Physic component with default values.
  * - ~Physic(): Destructor: Destroys the Physic component. Note: May not have additional functionality in this case.
- * - void display(): Display the Physic component properties in the inspector tab.
  */
 class Physic : public Component {
 public:

@@ -11,12 +11,15 @@
 #include "entity/entity.hpp"
 #include "component/component.hpp"
 #include "component/transform.hpp"
+#include "component/physic.hpp"
+#include "component/model_renderer.hpp"
 
 using SpaceEngine::Scene;
 using SpaceEngine::Entity;
 using SpaceEngine::Component;
 using SpaceEngine::Transform;
 using SpaceEngine::Physic;
+using SpaceEngine::ModelRenderer;
 
 namespace SpaceEditor {
 
@@ -44,10 +47,10 @@ namespace SpaceEditor {
  */
 class Menu {
 private:
-  bool showInspector = false;      // Inspector section visiblity flag.
-  bool showHierarchy = false;      // Hierarchy section visiblity flag.
-  bool showProject = false;        // Project section visiblity flag.
-  bool showScene = true;          // Scene section visiblity flag.
+  bool showInspector = true;      // Inspector section visiblity flag.
+  bool showHierarchy = true;      // Hierarchy section visiblity flag.
+  bool showProject = true;        // Project section visiblity flag.
+  bool showScene = false;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
 
   std::unordered_map<std::type_index, std::function<void(Component*)>> componentViewers;
