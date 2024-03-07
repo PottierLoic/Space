@@ -1,5 +1,5 @@
 #!/bin/bash
-cmake -DBUILD_SHARED_LIBS=OFF -G "Unix Makefiles" -B "./build" . -DFLAGS="$1"
+cmake -DBUILD_SHARED_LIBS=OFF -G "Unix Makefiles" -B "./build" .
 
 cd build
 make

@@ -3,9 +3,6 @@
 #include <cstring>
 #include <filesystem>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 extern int testVector2();
 extern int testVector3();
 extern int testProject();
@@ -57,8 +54,8 @@ int main() {
 
   // Clear previously generated files
   try {
-    std::filesystem::remove_all((sourceDir / "Generated").string());
-    std::filesystem::create_directory((sourceDir / "Generated").string());
+    std::filesystem::remove_all((sourceDir / "generated").string());
+    std::filesystem::create_directory((sourceDir / "generated").string());
   }
   catch(const std::exception& e) {
     std::cerr << e.what() << '\n';
