@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-Transform::Transform(std::string name) {
+Transform::Transform(Entity* owner, std::string name) : Component(owner) {
   this->name = name;
   this->position = Vector3();
 }

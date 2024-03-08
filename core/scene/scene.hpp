@@ -5,6 +5,7 @@
 #include "algorithm"
 
 #include "entity/entity.hpp"
+#include "component/camera.hpp"
 
 namespace SpaceEngine {
 
@@ -17,7 +18,6 @@ namespace SpaceEngine {
  *
  * Constructors:
  * - Scene(): Initializes a new empty scene with a default name.
- * - Scene(std::string name): Initializes a new scene with the specified name.
  *
  * Methods:
  * - void addEntity(Entity* obj): Adds an Entity to the scene.
@@ -30,18 +30,17 @@ public:
   // Vector of pointers to Entity contained within the scene
   std::vector<Entity*> entities;
 
-  Camera selectedCamera;
+  Camera selectedCamera = nullptr;      // Main camera component in the scene. Used to render game.
 
   Scene();                    // Initializes a new empty scene with a default name.
-  Scene(std::string name);    // Initializes a new scene with the specified name.
 
-  /*
+  /**
    * Add an Entity to the scene.
    * @param ent: Reference to the entity.
    */
   void addEntity(Entity* ent);
 
-  /*
+  /**
    * Remove an Entity from the scene.
    * @param ent: Reference to the entity.
    */

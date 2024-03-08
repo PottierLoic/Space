@@ -3,7 +3,7 @@
 namespace SpaceEngine {
 
 Entity::Entity(std::string name) {
-  this->addComponent<Transform>(new Transform(name));
+  this->addComponent<Transform>(name);
 }
 
 void Entity::addChildren(Entity* child) {

@@ -21,8 +21,9 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new empty ModelRenderer component.
+   * @param owner (Entity*): A pointer to the entity that store the component.
    */
-  ModelRenderer();
+  ModelRenderer(Entity* owner);
 
   /**
    * @brief Destructor: Destroys the ModelRenderer component. Note: May not have additional functionality in this case.

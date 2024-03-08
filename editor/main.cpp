@@ -8,7 +8,7 @@
 
 #include "menu/menu.hpp"
 #include "shader/shader.hpp"
-#include "editor_camera/editor_camera.hpp" // maybe not stay here
+// #include "editor_camera/editor_camera.hpp" // maybe not stay here
 #include "model/model.hpp" // maybe removed soon
 
 /* TODO: REMOVE */
@@ -17,6 +17,7 @@
 #include "component/component.hpp"
 #include "component/transform.hpp"
 #include "component/physic.hpp"
+#include "component/camera.hpp"
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
@@ -30,7 +31,8 @@ using namespace SpaceEngine;
 using namespace SpaceEditor;
 
 // Camera
-EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+// EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX =  1280.0f / 2.0;
 float lastY =  720.0 / 2.0;
 bool firstMouse = true;
@@ -39,18 +41,18 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-void processInput(GLFWwindow* window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.processKeyboard(FORWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.processKeyboard(BACKWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.processKeyboard(LEFT, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.processKeyboard(RIGHT, deltaTime);
-}
+// void processInput(GLFWwindow* window) {
+//   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+//     glfwSetWindowShouldClose(window, true);
+//   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+//     camera.processKeyboard(FORWARD, deltaTime);
+//   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+//     camera.processKeyboard(BACKWARD, deltaTime);
+//   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+//     camera.processKeyboard(LEFT, deltaTime);
+//   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+//     camera.processKeyboard(RIGHT, deltaTime);
+// }
 
 /* DEBUG */
 
@@ -58,25 +60,25 @@ void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-void mouseCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
-  if (firstMouse) {
-    lastX = xpos;
-    lastY = xpos;
-    firstMouse = false;
-  }
+// void mouseCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
+//   if (firstMouse) {
+//     lastX = xpos;
+//     lastY = xpos;
+//     firstMouse = false;
+//   }
 
-  float xoffset = xpos - lastX;
-  float yoffset = lastY - ypos;
+//   float xoffset = xpos - lastX;
+//   float yoffset = lastY - ypos;
 
-  lastX = xpos;
-  lastY = ypos;
+//   lastX = xpos;
+//   lastY = ypos;
 
-  camera.processMouseMovement(xoffset, yoffset);
-}
+//   camera.processMouseMovement(xoffset, yoffset);
+// }
 
-void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
-  camera.processMouseScroll(static_cast<float>(yoffset));
-}
+// void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
+//   camera.processMouseScroll(static_cast<float>(yoffset));
+// }
 
 int main() {
   // Initialize GLFW
@@ -117,8 +119,8 @@ int main() {
   glfwMakeContextCurrent(window);
   // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-  glfwSetCursorPosCallback(window, mouseCallback);
-  glfwSetScrollCallback(window, scrollCallback);
+  // glfwSetCursorPosCallback(window, mouseCallback);
+  // glfwSetScrollCallback(window, scrollCallback);
 
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
@@ -153,8 +155,7 @@ int main() {
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
-  scene.addEntity(new Entity("Test1"));
-  scene.entities[0]->addComponent<Physic>(new Physic());
+  Camera* camera = scene.entities[0]->getComponent<Camera>();
 
   // Menu creation
   Menu menu = Menu(&scene);
@@ -168,14 +169,16 @@ int main() {
   // TODO: Find a way to use better path.
   Model testModel("../../models/cube/WoodenBox.fbx");
 
-
   // Main loop
   while (!glfwWindowShouldClose(window)) {
+    scene.entities[0]->getComponent<Transform>()->position.x += 1;
+  
+
     float currentFrame = static_cast<float>(glfwGetTime());
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    processInput(window);
+    // processInput(window);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -192,9 +195,8 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     testShader.use();
-
-    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
-    glm::mat4 view = camera.getViewMatrix();
+    glm::mat4 projection = glm::perspective(glm::radians(camera->zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
+    glm::mat4 view = camera->getViewMatrix();
     testShader.setMat4("projection", projection);
     testShader.setMat4("view", view);
 

@@ -4,7 +4,9 @@ namespace SpaceEngine {
 
 Scene::Scene() {
   this->name = "New Scene";
-  this->addEntity(new Entity("Default Camera"));
+  Entity* defaultCamera = new Entity("Default Camera");
+  defaultCamera->addComponent<Camera>();
+  this->addEntity(defaultCamera);
 }
 
 void Scene::addEntity(Entity* ent) {

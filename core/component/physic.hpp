@@ -26,8 +26,9 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new Physic component with default values.
+   * @param owner (Entity*): A pointer to the entity that store the component.
    */
-  Physic();
+  Physic(Entity* owner);
 
   /**
    * @brief Destructor: Destroys the Physic component. Note: May not have additional functionality in this case.

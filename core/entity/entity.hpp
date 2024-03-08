@@ -7,6 +7,7 @@
 #include <typeinfo>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "component/component.hpp"
 #include "component/transform.hpp"
@@ -30,8 +31,9 @@ public:
    *
    * @note Declared in .hpp to avoid massive template declaration.
    */
-  template <typename T>
-  void addComponent(T* component) {
+  template <typename T, typename... Args>
+  void addComponent(Args&&... args) {
+    T* component = new T(this, std::forward<Args>(args)...);
     components[typeid(T)] = component;
   }
 

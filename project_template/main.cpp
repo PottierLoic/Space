@@ -116,7 +116,7 @@ int main() {
   // Scene creation
   Scene scene = Scene();
   scene.addEntity(new Entity("Test1"));
-  scene.entities[0]->addComponent<Physic>(new Physic());
+  scene.entities[0]->addComponent<Physic>();
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.

@@ -9,7 +9,6 @@ file(GLOB_RECURSE CORE_SOURCES
   "entity/*.cpp"
   "model/*.cpp"
   "scene/*.cpp"
-  "camera/*.cpp"
   "component/*.cpp"
   "shader/*.cpp"
 )

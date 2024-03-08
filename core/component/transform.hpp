@@ -27,9 +27,10 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new transform component with default values.
+   * @param owner (Entity*): A pointer to the entity that store the component.
    * @param name: The name of the object.
    */
-  Transform(std::string name);
+  Transform(Entity* owner, std::string name);
 
   /**
    * @brief Destructor: Destroys the transform component. Note: May not have additional functionality in this case.

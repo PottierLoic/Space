@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-Component::Component() {}
+Component::Component(Entity* owner) { this->owner = owner; }
 Component::~Component() {}
 
 }

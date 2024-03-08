@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-Physic::Physic() {
+Physic::Physic(Entity* owner) : Component(owner) {
   this->mass = 1.0;
   this->drag = 0;
   this->angularDrag = 0;

@@ -1,21 +1,20 @@
 #pragma once
 
+#include <vector>
+
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include <vector>
+#include "component/component.hpp"
+#include "component/transform.hpp"
 
 namespace SpaceEngine {
-
-const float YAW = -90.0f;
-const float PITCH = 0.0f;
-const float ZOOM = 45.0f;
 
 /*
 TODO BIG COMMENT
 */
-class Camera : Component {
+class Camera : public Component {
 public:
   glm::vec3 position;         /* The position of the camera. */
   glm::vec3 front;            /* The front direction vector of the camera. */
@@ -28,8 +27,9 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new empty Camera component.
+   * @param owner (Entity*): A pointer to the entity that store the component.
    */
-  Camera();
+  Camera(Entity* owner);
 
   /**
    * @brief Destructor: Destroys the Camera component. Note: May not have additional functionality in this case.
@@ -48,6 +48,6 @@ private:
    */
   void updateCameraVectors();
 
-}
+};
 
 }

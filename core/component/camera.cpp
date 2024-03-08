@@ -1,29 +1,22 @@
-#include "camera.hpp"
+#include "component/camera.hpp"
+#include "entity/entity.hpp" // Can only be done here to avoid circular includes.
 
 namespace SpaceEngine {
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
+Camera::Camera(Entity* owner) : Component(owner) {
   front = glm::vec3(0.0f, 0.0f, -1.0f);
-  zoom = ZOOM;
-  this->position = position;
-  worldUp = up;
-  this->yaw = yaw;
-  this->pitch = pitch;
+  zoom = 45.0f;
+  worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+  yaw = -90.0f;
+  pitch = 0.0f;
   updateCameraVectors();
 }
 
-Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) {
-  front = glm::vec3(0.0f, 0.0f, -1.0f);
-  zoom = ZOOM;
-  position = glm::vec3(posX, posY, posZ);
-  worldUp = glm::vec3(upX, upY, upZ);
-  this->yaw = yaw;
-  this->pitch = pitch;
-  updateCameraVectors();
-}
+Camera::~Camera() {}
 
 glm::mat4 Camera::getViewMatrix() {
-  return glm::lookAt(position, position + front, up);
+  Transform* tf = this->owner->getComponent<Transform>();
+  return glm::lookAt(glm::vec3(tf->position.x, tf->position.y, tf->position.z), position + front, up);
 }
 
 void Camera::updateCameraVectors() {

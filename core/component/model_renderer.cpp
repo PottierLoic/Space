@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-ModelRenderer::ModelRenderer() {
+ModelRenderer::ModelRenderer(Entity* owner) : Component(owner) {
   model = nullptr;
 }
 
