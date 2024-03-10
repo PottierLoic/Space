@@ -61,7 +61,7 @@ void Menu::initComponentViewers() {
       ImGui::SameLine(100);
 
       if (modelRenderer->model != nullptr) {
-        ImGui::Text(modelRenderer->model->directory.c_str());
+        ImGui::Text("%s", modelRenderer->model->directory.c_str());
       }
     }
   };

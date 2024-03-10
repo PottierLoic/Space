@@ -167,7 +167,7 @@ int main() {
 
   // TODO: REMOVE TEST MODEL IMPORT
   // TODO: Find a way to use better path.
-  Model testModel("../../models/cube/WoodenBox.fbx");
+  Model testModel("../../models/backpack/backpack.obj");
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
