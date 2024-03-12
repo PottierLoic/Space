@@ -1,18 +1,24 @@
 [submodule "glfw"]
 	path = libs/glfw
 	url = https://github.com/glfw/glfw
+	shallow = true
 [submodule "imgui"]
 	path = libs/imgui
 	url = https://github.com/ocornut/imgui
+	shallow = true
 [submodule "assimp"]
 	path = libs/assimp
 	url = https://github.com/assimp/assimp.git
+	shallow = true
 [submodule "stb"]
 	path = libs/stb
 	url = https://github.com/nothings/stb.git
+	shallow = true
 [submodule "glm"]
 	path = libs/glm
 	url = https://github.com/g-truc/glm.git
+	shallow = true
 [submodule "space-glad"]
 	path = libs/glad
 	url = https://github.com/PottierLoic/space-glad
+	shallow = true
