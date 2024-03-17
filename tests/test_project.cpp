@@ -4,9 +4,6 @@
 // using namespace SpaceEngine;
 
 int testProject() {
-  // std::filesystem::path currentPath = __FILE__;
-  // std::filesystem::path sourceDir = currentPath.parent_path();
-
-  // Project test((sourceDir / "Generated").string(), "test");
+  // TODO: Implement tests for Project class
   return 0;
 }

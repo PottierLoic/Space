@@ -197,14 +197,16 @@ int main() {
     testShader.setMat4("projection", projection);
     testShader.setMat4("view", view);
 
-    // Draw all models in the scene
     for (auto& entity : scene.entities) {
       ModelRenderer* modelRenderer = entity->getComponent<ModelRenderer>();
       if (modelRenderer != nullptr) {
         Transform* tf = entity->getComponent<Transform>();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(tf->position.x, tf->position.y, tf->position.z));
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(tf->scale.x, tf->scale.y, tf->scale.z));
+        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.x)), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.y)), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.z)), glm::vec3(0.0f, 0.0f, 1.0f));
         testShader.setMat4("model", model);
         modelRenderer->model->draw(testShader);
       }
