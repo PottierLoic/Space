@@ -6,7 +6,6 @@
 
 #include "shader/shader.hpp"
 #include "scene/scene.hpp"
-#include "camera/camera.hpp" // maybe not stay here
 #include "model/model.hpp" // maybe removed soon
 
 /* TODO: REMOVE */
@@ -15,6 +14,9 @@
 #include "component/component.hpp"
 #include "component/transform.hpp"
 #include "component/physic.hpp"
+#include "component/model_renderer.hpp"
+#include "component/camera.hpp"
+
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
@@ -26,53 +28,14 @@
 
 using namespace SpaceEngine;
 
-// Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX =  1280.0f / 2.0;
-float lastY =  720.0 / 2.0;
-bool firstMouse = true;
-
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-void processInput(GLFWwindow* window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.processKeyboard(FORWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.processKeyboard(BACKWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.processKeyboard(LEFT, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.processKeyboard(RIGHT, deltaTime);
-}
 
 /* DEBUG */
 
 void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
-}
-
-void mouseCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
-  if (firstMouse) {
-    lastX = xpos;
-    lastY = xpos;
-    firstMouse = false;
-  }
-
-  float xoffset = xpos - lastX;
-  float yoffset = lastY - ypos;
-
-  lastX = xpos;
-  lastY = ypos;
-
-  camera.processMouseMovement(xoffset, yoffset);
-}
-
-void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
-  camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
 int main() {
@@ -89,12 +52,10 @@ int main() {
     glfwTerminate();
     return -1;
   }
-  glfwMakeContextCurrent(window);
-  // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-  glfwSetCursorPosCallback(window, mouseCallback);
-  glfwSetScrollCallback(window, scrollCallback);
 
+  glfwMakeContextCurrent(window);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
@@ -109,23 +70,21 @@ int main() {
   stbi_set_flip_vertically_on_load(true);
 
   glEnable(GL_DEPTH_TEST);
-  // TODO: REMOVE
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
-  scene.addEntity(new Entity("Test1"));
-  scene.entities[0]->addComponent<Physic>();
+  scene.addEntity(new Entity("Backpack"));
+  scene.entities[1]->addComponent<ModelRenderer>();
+  scene.entities[1]->getComponent<ModelRenderer>()->model = new Model("../../models/backpack/backpack.obj");
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
-  Shader testShader("../../shaders/test.vs", "../../shaders/test.fs", nullptr);
+  Shader shader("../../shaders/test.vs", "../../shaders/test.fs", nullptr);
 
   // TODO: REMOVE TEST MODEL IMPORT
   // TODO: Find a way to use better path.
   Model testModel("../../models/backpack/backpack.obj");
-
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -133,28 +92,33 @@ int main() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    processInput(window);
-
-
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    testShader.use();
+    shader.use();
 
-    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
-    glm::mat4 view = camera.getViewMatrix();
-    testShader.setMat4("projection", projection);
-    testShader.setMat4("view", view);
+    glm::mat4 projection = glm::perspective(glm::radians(scene.selectedCamera->zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
+    glm::mat4 view = scene.selectedCamera->getViewMatrix();
+    shader.setMat4("projection", projection);
+    shader.setMat4("view", view);
 
-    // render model
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-    model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-    testShader.setMat4("model", model);
-    testModel.draw(testShader);
+    for (auto& entity : scene.entities) {
+      ModelRenderer* modelRenderer = entity->getComponent<ModelRenderer>();
+      if (modelRenderer != nullptr) {
+        Transform* tf = entity->getComponent<Transform>();
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(tf->position.x, tf->position.y, tf->position.z));
+        model = glm::scale(model, glm::vec3(tf->scale.x, tf->scale.y, tf->scale.z));
+        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.x)), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.y)), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.z)), glm::vec3(0.0f, 0.0f, 1.0f));
+        shader.setMat4("model", model);
+        modelRenderer->model->draw(shader);
+      }
+    }
 
     glfwSwapBuffers(window);
     glfwPollEvents();

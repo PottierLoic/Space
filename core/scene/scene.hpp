@@ -30,18 +30,22 @@ public:
   // Vector of pointers to Entity contained within the scene
   std::vector<Entity*> entities;
 
-  Camera selectedCamera = nullptr;      // Main camera component in the scene. Used to render game.
-
-  Scene();                    // Initializes a new empty scene with a default name.
+  // Main camera component in the scene. Used to render game.
+  Camera* selectedCamera = nullptr;
 
   /**
-   * Add an Entity to the scene.
+   * @brief Initialize a Scene with default name.
+   */
+  Scene();
+
+  /**
+   * @brief Add an Entity to the scene.
    * @param ent: Reference to the entity.
    */
   void addEntity(Entity* ent);
 
   /**
-   * Remove an Entity from the scene.
+   * @brief Remove an Entity from the scene.
    * @param ent: Reference to the entity.
    */
   void removeEntity(Entity* ent);

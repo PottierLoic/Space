@@ -7,6 +7,7 @@ Scene::Scene() {
   Entity* defaultCamera = new Entity("Default Camera");
   defaultCamera->addComponent<Camera>();
   this->addEntity(defaultCamera);
+  this->selectedCamera = defaultCamera->getComponent<Camera>();
 }
 
 void Scene::addEntity(Entity* ent) {

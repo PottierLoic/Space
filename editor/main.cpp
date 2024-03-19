@@ -167,7 +167,7 @@ int main() {
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
-  Shader testShader("../../shaders/test.vs", "../../shaders/test.fs", nullptr);
+  Shader shader("../../shaders/test.vs", "../../shaders/test.fs", nullptr);
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -191,11 +191,11 @@ int main() {
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    testShader.use();
+    shader.use();
     glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
     glm::mat4 view = camera.getViewMatrix();
-    testShader.setMat4("projection", projection);
-    testShader.setMat4("view", view);
+    shader.setMat4("projection", projection);
+    shader.setMat4("view", view);
 
     for (auto& entity : scene.entities) {
       ModelRenderer* modelRenderer = entity->getComponent<ModelRenderer>();
@@ -207,8 +207,8 @@ int main() {
         model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.x)), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.y)), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.z)), glm::vec3(0.0f, 0.0f, 1.0f));
-        testShader.setMat4("model", model);
-        modelRenderer->model->draw(testShader);
+        shader.setMat4("model", model);
+        modelRenderer->model->draw(shader);
       }
     }
 

@@ -1,5 +1,5 @@
 # Ignore space build
-/build
+**/build
 
 # TODO: Remove this and bring models once the default ones (cubes etc.. are done)
 /models
@@ -8,3 +8,4 @@
 .vscode/
 .idea/
 *.DS_Store
+
