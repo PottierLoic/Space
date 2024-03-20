@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 namespace SpaceEngine {
 
 class Entity; // Forward declaration of Entity class to avoid circular dependencies.
