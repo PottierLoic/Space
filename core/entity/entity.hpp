@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -14,15 +15,24 @@
 
 namespace SpaceEngine {
 
-class Entity {
+class Entity : public std::enable_shared_from_this<Entity> {
+private:
+  /* TODO CHANGE NAME NOW NOT DEFAULT
+  Default constructor: Initializes a new Entity with default values. */
+  Entity();
+
 public:
   /* Map of components an Entity has. */
-  std::map<std::type_index, Component*> components;
+  std::map<std::type_index, std::shared_ptr<Component>> components;
   /* Vector listing all the children entities. */
-  std::vector<Entity*> childs;
+  std::vector<std::shared_ptr<Entity>> children;
 
-  /* Default constructor: Initializes a new Entity with default values. */
-  Entity(std::string name);
+  /* TODO DOCUMENT */
+  static std::shared_ptr<Entity> create(std::string name) {
+    auto entity = std::shared_ptr<Entity>(new Entity());
+    entity->addComponent<Transform>(name);
+    return entity;
+  }
 
   /*
    * Add a given component to the Entity.
@@ -33,7 +43,7 @@ public:
    */
   template <typename T, typename... Args>
   void addComponent(Args&&... args) {
-    T* component = new T(this, std::forward<Args>(args)...);
+    auto component = std::make_shared<T>(shared_from_this(), std::forward<Args>(args)...);
     components[typeid(T)] = component;
   }
 
@@ -44,10 +54,10 @@ public:
    * @note Declared in .hpp to avoid massive template declaration.
    */
   template <typename T>
-  T* getComponent() const {
+  std::shared_ptr<T> getComponent() const {
     auto it = components.find(typeid(T));
     if (it != components.end()) {
-      return dynamic_cast<T*>(it->second);
+      return std::dynamic_pointer_cast<T>(it->second);
     }
     return nullptr;
   }
@@ -74,13 +84,13 @@ public:
    * Add a child to children vector of the entity.
    * @param child: A reference to an Entity.
    */
-  void addChildren(Entity* child);
+  void addChild(std::unique_ptr<Entity> child);
 
-  /*
+  /* TODO: UPDATE AND CHECK IF INDEX IS GOOD
    * Remove a child from children vector of the entity.
    * @param child: A reference to an Entity.
    */
-  void removeChildren(Entity* child);
+  void removeChild(int index);
 };
 
 }

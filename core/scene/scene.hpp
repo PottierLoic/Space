@@ -1,8 +1,9 @@
 #pragma once
 
-#include "string"
-#include "vector"
-#include "algorithm"
+#include <memory>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 #include "entity/entity.hpp"
 #include "component/camera.hpp"
@@ -28,10 +29,10 @@ public:
   std::string name;
 
   // Vector of pointers to Entity contained within the scene
-  std::vector<Entity*> entities;
+  std::vector<std::shared_ptr<Entity>> entities;
 
   // Main camera component in the scene. Used to render game.
-  Camera* selectedCamera = nullptr;
+  std::weak_ptr<Camera> selectedCamera;
 
   /**
    * @brief Initialize a Scene with default name.
@@ -42,13 +43,13 @@ public:
    * @brief Add an Entity to the scene.
    * @param ent: Reference to the entity.
    */
-  void addEntity(Entity* ent);
+  void addEntity(std::shared_ptr<Entity> ent);
 
-  /**
+  /** TODO CHECK IF INDEX IS GOOD AND REWORK IF NEEDED
    * @brief Remove an Entity from the scene.
-   * @param ent: Reference to the entity.
+   * @param index: index of the entity.
    */
-  void removeEntity(Entity* ent);
+  void removeEntity(int index);
 };
 
 }

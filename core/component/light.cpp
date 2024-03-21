@@ -2,11 +2,7 @@
 
 namespace SpaceEngine {
 
-Light::Light(Entity* owner) : Component(owner) {
-
-}
-
-Light::~Light() {
+Light::Light(std::weak_ptr<Entity> owner) : Component(owner) {
 
 }
 

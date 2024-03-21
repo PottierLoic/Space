@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-Component::Component(Entity* owner) { this->owner = owner; }
+Component::Component(std::weak_ptr<Entity> owner) { this->owner = owner; }
 Component::~Component() {}
 
 }

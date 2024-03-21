@@ -20,14 +20,10 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new Light component with default values.
-   * @param owner (Entity*): A pointer to the entity that store the component.
+   * @param owner (weak_ptr<Entity>): A pointer to the entity that store the component.
    */
-  Light(Entity* owner);
+  Light(std::weak_ptr<Entity> owner);
 
-  /**
-   * @brief Destructor: Destroys the Light component. Note: May not have additional functionality in this case.
-   */
-  ~Light();
 };
 
 }

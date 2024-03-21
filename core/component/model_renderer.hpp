@@ -17,13 +17,13 @@ namespace SpaceEngine {
  */
 class ModelRenderer : public Component {
 public:
-  Model* model = nullptr; /* The 3D model to be rendered. */
+  std::shared_ptr<Model> model; /* The 3D model to be rendered. */
 
   /**
    * @brief Default constructor: Initializes a new empty ModelRenderer component.
-   * @param owner (Entity*): A pointer to the entity that store the component.
+   * @param owner (std::weak_ptr<Entity>): A pointer to the entity that store the component.
    */
-  ModelRenderer(Entity* owner);
+  ModelRenderer(std::weak_ptr<Entity> owner);
 
   /**
    * @brief Destructor: Destroys the ModelRenderer component. Note: May not have additional functionality in this case.

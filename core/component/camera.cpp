@@ -3,7 +3,7 @@
 
 namespace SpaceEngine {
 
-Camera::Camera(Entity* owner) : Component(owner) {
+Camera::Camera(std::weak_ptr<Entity> owner) : Component(owner) {
   front = glm::vec3(0.0f, 0.0f, -1.0f);
   zoom = 45.0f;
   worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -12,11 +12,14 @@ Camera::Camera(Entity* owner) : Component(owner) {
   updateCameraVectors();
 }
 
-Camera::~Camera() {}
-
 glm::mat4 Camera::getViewMatrix() {
-  Transform* tf = this->owner->getComponent<Transform>();
-  return glm::lookAt(glm::vec3(tf->position.x, tf->position.y, tf->position.z), position + front, up);
+  auto lockedOwner = owner.lock();
+  if (!lockedOwner) {
+    return glm::mat4(1.0f);
+  } else {
+    auto tf = lockedOwner->getComponent<Transform>();
+    return glm::lookAt(glm::vec3(tf->position.x, tf->position.y, tf->position.z), position + front, up);
+  }
 }
 
 void Camera::updateCameraVectors() {

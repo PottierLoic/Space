@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
+#include <memory>
 
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_stdlib.h"
@@ -53,7 +54,7 @@ private:
   bool showScene = false;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
 
-  std::unordered_map<std::type_index, std::function<void(Component*)>> componentViewers;
+  std::unordered_map<std::type_index, std::function<void(std::shared_ptr<Component>)>> componentViewers;
 
   /* Display a transform component section. */
   void initComponentViewers();
@@ -78,16 +79,16 @@ private:
 
 public:
   /* Reference to the actual Scene. */
-  Scene* scene;
+  std::shared_ptr<Scene> scene;
 
   /* Reference to the selected Entity. */
-  Entity* selectedEntity = nullptr;
+  std::shared_ptr<Entity> selectedEntity = nullptr;
 
   /*
    * Main constructor that use default flags.
    * @param scene: Reference to a scene.
    */
-  Menu(Scene* scene);
+  Menu(std::shared_ptr<Scene> scene);
 
   /* Display the whole menu. */
   void display();

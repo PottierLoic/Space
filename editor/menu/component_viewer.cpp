@@ -3,8 +3,8 @@
 namespace SpaceEditor {
 
 void Menu::initComponentViewers() {
-  this->componentViewers[std::type_index(typeid(Transform))] = [](Component* component) {
-    auto* transform = static_cast<Transform*>(component);
+  this->componentViewers[std::type_index(typeid(Transform))] = [](std::shared_ptr<Component> component) {
+    auto transform = std::static_pointer_cast<Transform>(component);
     if (ImGui::CollapsingHeader("Transform")) {
       ImGui::Text("Name");
       ImGui::SameLine(100);
@@ -36,8 +36,8 @@ void Menu::initComponentViewers() {
     }
   };
 
-  this->componentViewers[std::type_index(typeid(Physic))] = [](Component* component) {
-    auto* physic = static_cast<Physic*>(component);
+  this->componentViewers[std::type_index(typeid(Physic))] = [](std::shared_ptr<Component> component) {
+    auto physic = std::static_pointer_cast<Physic>(component);
     if (ImGui::CollapsingHeader("Physic")) {
       ImGui::Text("Mass");
       ImGui::SameLine(100);
@@ -54,8 +54,8 @@ void Menu::initComponentViewers() {
     }
   };
 
-  this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](Component* component) {
-    auto* modelRenderer = static_cast<ModelRenderer*>(component);
+  this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](std::shared_ptr<Component> component) {
+    auto modelRenderer = std::static_pointer_cast<ModelRenderer>(component);
     if (ImGui::CollapsingHeader("Component")) {
       ImGui::Text("Model");
       ImGui::SameLine(100);

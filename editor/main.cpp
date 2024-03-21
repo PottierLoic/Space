@@ -157,12 +157,12 @@ int main() {
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
-  scene.addEntity(new Entity("Backpack"));
+  scene.addEntity(Entity::create("Backpack"));
   scene.entities[1]->addComponent<ModelRenderer>();
-  scene.entities[1]->getComponent<ModelRenderer>()->model = new Model("../../models/backpack/backpack.obj");
+  scene.entities[1]->getComponent<ModelRenderer>()->model = std::make_shared<Model>("../../models/backpack/backpack.obj");
 
   // Menu creation
-  Menu menu = Menu(&scene);
+  Menu menu = Menu(std::make_shared<Scene>());
   menu.selectedEntity = scene.entities[1];
 
   // TODO: REMOVE OPENGL TESTS
@@ -198,9 +198,9 @@ int main() {
     shader.setMat4("view", view);
 
     for (auto& entity : scene.entities) {
-      ModelRenderer* modelRenderer = entity->getComponent<ModelRenderer>();
-      if (modelRenderer != nullptr) {
-        Transform* tf = entity->getComponent<Transform>();
+      auto modelRenderer = entity->getComponent<ModelRenderer>();
+      if (modelRenderer && modelRenderer->model) {
+        auto tf = entity->getComponent<Transform>();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(tf->position.x, tf->position.y, tf->position.z));
         model = glm::scale(model, glm::vec3(tf->scale.x, tf->scale.y, tf->scale.z));
