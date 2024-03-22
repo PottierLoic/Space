@@ -17,9 +17,11 @@ namespace SpaceEngine {
 
 class Entity : public std::enable_shared_from_this<Entity> {
 private:
-  /* TODO CHANGE NAME NOW NOT DEFAULT
-  Default constructor: Initializes a new Entity with default values. */
-  Entity();
+  /**
+   * Default constructor: Initializes a new Entity.
+   * @note Only usable by Entity::create function. Should never be used somewhere else.
+   */
+  Entity() = default;
 
 public:
   /* Map of components an Entity has. */
@@ -34,7 +36,7 @@ public:
     return entity;
   }
 
-  /*
+  /**
    * Add a given component to the Entity.
    * @tparam T: Type of the component to add.
    * @param component: A pointer to the component to add.
@@ -47,7 +49,7 @@ public:
     components[typeid(T)] = component;
   }
 
-  /*
+  /**
    * Get a given component from the Entity.
    * @tparam T: Type of the component to get.
    *
@@ -62,7 +64,7 @@ public:
     return nullptr;
   }
 
-  /*
+  /**
    * Remove a given component from the Entity.
    * @tparam T: Type of the component to remove.
    *
@@ -80,13 +82,14 @@ public:
     loop on menu display  In case a children contains one of its parent, ImGui will
     never stop and crash.  Prevent this case with check !!!! */
 
-  /*
+  /**
    * Add a child to children vector of the entity.
    * @param child: A reference to an Entity.
    */
   void addChild(std::unique_ptr<Entity> child);
 
-  /* TODO: UPDATE AND CHECK IF INDEX IS GOOD
+  // TODO UPDATE AND CHECK IF INDEX IS GOOD
+  /**
    * Remove a child from children vector of the entity.
    * @param child: A reference to an Entity.
    */

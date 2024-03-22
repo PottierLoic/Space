@@ -14,6 +14,10 @@ void Scene::addEntity(std::shared_ptr<Entity> ent) {
   entities.push_back(ent);
 }
 
+void Scene::addEntity(std::string name) {
+  entities.push_back(Entity::create(name.c_str()));
+}
+
 void Scene::removeEntity(int index) {
    if (index >= 0 && static_cast<size_t>(index) < entities.size()) {
     entities.erase(entities.begin() + index);

@@ -30,7 +30,7 @@ public:
   /**
    * @brief Virtual destructor to allow proper cleanup in derived classes.
    */
-  virtual ~Component();
+  virtual ~Component() = default;
 };
 
 }

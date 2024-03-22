@@ -45,6 +45,12 @@ public:
    */
   void addEntity(std::shared_ptr<Entity> ent);
 
+  /**
+   * @brief Create an Entity in the scene.
+   * @param name: Name of the entity.
+   */
+  void addEntity(std::string name);
+
   /** TODO CHECK IF INDEX IS GOOD AND REWORK IF NEEDED
    * @brief Remove an Entity from the scene.
    * @param index: index of the entity.

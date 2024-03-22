@@ -157,9 +157,13 @@ int main() {
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
-  scene.addEntity(Entity::create("Backpack"));
-  scene.entities[1]->addComponent<ModelRenderer>();
-  scene.entities[1]->getComponent<ModelRenderer>()->model = std::make_shared<Model>("../../models/backpack/backpack.obj");
+
+  // Examples
+  auto backpack = Entity::create("Backpack");
+  backpack->addComponent<ModelRenderer>();
+  auto backpackRenderer = backpack->getComponent<ModelRenderer>();
+  backpackRenderer->setModel("../../models/backpack/backpack.obj");
+  scene.addEntity(backpack);
 
   // Menu creation
   Menu menu = Menu(std::make_shared<Scene>());

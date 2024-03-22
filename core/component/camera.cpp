@@ -23,11 +23,11 @@ glm::mat4 Camera::getViewMatrix() {
 }
 
 void Camera::updateCameraVectors() {
-  glm::vec3 tmpFront;
-  tmpFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-  tmpFront.y = sin(glm::radians(pitch));
-  tmpFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-  front = glm::normalize(tmpFront);
+  front = glm::normalize(glm::vec3(
+    cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+    sin(glm::radians(pitch)),
+    sin(glm::radians(yaw)) * cos(glm::radians(pitch))
+  ));
   right = glm::normalize(glm::cross(front, worldUp));
   up = glm::normalize(glm::cross(right, front));
 }

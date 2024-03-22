@@ -30,11 +30,6 @@ public:
    */
   Physic(std::weak_ptr<Entity> owner);
 
-  /**
-   * @brief Destructor: Destroys the Physic component. Note: May not have additional functionality in this case.
-   */
-  ~Physic();
-
 };
 
 }

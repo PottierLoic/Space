@@ -34,11 +34,6 @@ public:
    */
   Transform(std::weak_ptr<Entity> owner, std::string name);
 
-  /**
-   * @brief Destructor: Destroys the transform component. Note: May not have additional functionality in this case.
-   */
-  ~Transform();
-
 };
 
 }

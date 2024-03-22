@@ -26,9 +26,11 @@ public:
   ModelRenderer(std::weak_ptr<Entity> owner);
 
   /**
-   * @brief Destructor: Destroys the ModelRenderer component. Note: May not have additional functionality in this case.
+   * @brief Set the model used by this Model Renderer
+   * @param path (std::string): The path where the model is located.
+   * @return TODO Maybe return something ?
    */
-  ~ModelRenderer();
+  void setModel(std::string path);
 
 };
 

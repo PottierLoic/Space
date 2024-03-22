@@ -8,6 +8,4 @@ Transform::Transform(std::weak_ptr<Entity> owner, std::string name) : Component(
   this->scale = Vector3(1.0f, 1.0f, 1.0f);
 }
 
-Transform::~Transform() {}
-
 }

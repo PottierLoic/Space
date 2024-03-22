@@ -10,10 +10,13 @@
 
 #include "scene/scene.hpp"
 #include "entity/entity.hpp"
+
 #include "component/component.hpp"
 #include "component/transform.hpp"
+#include "component/camera.hpp"
 #include "component/physic.hpp"
 #include "component/model_renderer.hpp"
+#include "component/light.hpp"
 
 using SpaceEngine::Scene;
 using SpaceEngine::Entity;

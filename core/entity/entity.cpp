@@ -2,9 +2,6 @@
 
 namespace SpaceEngine {
 
-// TODO REMOVE ?
-Entity::Entity() {}
-
 void Entity::addChild(std::unique_ptr<Entity> child) {
   children.push_back(std::move(child));
 }

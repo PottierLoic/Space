@@ -6,6 +6,8 @@ ModelRenderer::ModelRenderer(std::weak_ptr<Entity> owner) : Component(owner) {
   model = nullptr;
 }
 
-ModelRenderer::~ModelRenderer() {}
+void ModelRenderer::setModel(std::string path) {
+  model = std::make_shared<Model>(path.c_str());
+}
 
 }

@@ -9,6 +9,4 @@ Physic::Physic(std::weak_ptr<Entity> owner) : Component(owner) {
   this->gravity = false;
 }
 
-Physic::~Physic() {}
-
 }
