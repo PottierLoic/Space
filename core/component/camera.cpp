@@ -18,7 +18,7 @@ glm::mat4 Camera::getViewMatrix() {
     return glm::mat4(1.0f);
   } else {
     auto tf = lockedOwner->getComponent<Transform>();
-    return glm::lookAt(glm::vec3(tf->position.x, tf->position.y, tf->position.z), position + front, up);
+    return glm::lookAt(glm::vec3(tf->position.x(), tf->position.y(), tf->position.z()), position + front, up);
   }
 }
 

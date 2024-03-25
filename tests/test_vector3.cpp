@@ -1,55 +1,56 @@
 #include "test.hpp"
-// #include "vector/vector3.hpp"
+#include "vector/vector.hpp"
 
-// using SpaceEngine::Vector3;
+using SpaceEngine::Vec3f;
 
 int testVector3() {
-  // Vector3 vec1 = Vector3(1.0, 2.0, 3.0);
-  // Vector3 vec2 = Vector3(3.0, 5.0, 7.0);
+  Vec3f vec1(1.0f, 2.0f, 3.0f);
+  Vec3f vec2(4.0f, 5.0f, 6.0f);
 
-  // /* Addition check */
-  // Vector3 add_result = vec1 + vec2;
-  // custom_assert(add_result == Vector3(4.0, 7.0, 10.0));
+  // Test addition
+  auto add_result = vec1 + vec2;
+  custom_assert(add_result.x() == 5.0f && add_result.y() == 7.0f && add_result.z() == 9.0f, "Vec3f addition failed");
 
-  // /* Subtraction check */
-  // Vector3 sub_result = vec1 - vec2;
-  // custom_assert(sub_result == Vector3(-2.0, -3.0, -4.0));
+  // Test subtraction
+  auto sub_result = vec1 - vec2;
+  custom_assert(sub_result.x() == -3.0f && sub_result.y() == -3.0f && sub_result.z() == -3.0f, "Vec3f subtraction failed");
 
-  // /* Addition assignment check */
-  // Vector3 vec3(2.0, 3.0, 4.0);
-  // vec3 += vec1;
-  // custom_assert(vec3 == Vector3(3.0, 5.0, 7.0));
+  // Test multiplication by a scalar
+  auto mul_result_scalar = vec1 * 2.0f;
+  custom_assert(mul_result_scalar.x() == 2.0f && mul_result_scalar.y() == 4.0f && mul_result_scalar.z() == 6.0f, "Vec3f scalar multiplication failed");
 
-  // /* Subtraction assignment check */
-  // Vector3 vec4(5.0, 7.0, 9.0);
-  // vec4 -= vec1;
-  // custom_assert(vec4 == Vector3(4.0, 5.0, 6.0));
+  // Test division by a scalar
+  auto div_result_scalar = vec1 / 2.0f;
+  custom_assert(div_result_scalar.x() == 0.5f && div_result_scalar.y() == 1.0f && div_result_scalar.z() == 1.5f, "Vec3f scalar division failed");
 
-  // /* Multiplication assignment check */
-  // Vector3 vec5(2.0, 4.0, 6.0);
-  // vec5 *= vec1;
-  // custom_assert(vec5 == Vector3(2.0, 8.0, 18.0));
+  // Test += with a vector
+  Vec3f vec3 = vec1;
+  vec3 += vec2;
+  custom_assert(vec3.x() == 5.0f && vec3.y() == 7.0f && vec3.z() == 9.0f, "Vec3f += failed");
 
-  // /* Division assignment check */
-  // Vector3 vec6(6.0, 8.0, 12.0);
-  // vec6 /= vec2;
-  // custom_assert(vec6 == Vector3(2.0, 1.6, 1.7142857142857142));
+  // Test -= with a vector
+  vec3 = vec1;
+  vec3 -= vec2;
+  custom_assert(vec3.x() == -3.0f && vec3.y() == -3.0f && vec3.z() == -3.0f, "Vec3f -= failed");
 
-  // /* Equality check */
-  // Vector3 vec7(3.0, 5.0, 7.0);
-  // custom_assert(vec2 == vec7);
+  // Test *= with a scalar
+  vec3 = vec1;
+  vec3 *= 2.0f;
+  custom_assert(vec3.x() == 2.0f && vec3.y() == 4.0f && vec3.z() == 6.0f, "Vec3f *= failed");
 
-  // /* Inequality check */
-  // Vector3 vec8(1.0, 7.0, 9.0);
-  // custom_assert(vec1 != vec8);
+  // Test /= with a scalar
+  vec3 = vec1;
+  vec3 /= 2.0f;
+  custom_assert(vec3.x() == 0.5f && vec3.y() == 1.0f && vec3.z() == 1.5f, "Vec3f /= failed");
 
-  // /* Distance check */
-  // double distance_result = vec1.distance(vec2);
-  // custom_assert(distance_result == sqrt(29.));
+  // Test operator[]
+  custom_assert(vec1[0] == 1.0f && vec1[1] == 2.0f && vec1[2] == 3.0f, "Vec3f operator[] failed");
 
-  // /* glm cast check */
-  // glm::vec3 glm_vec = vec1;
-  // custom_assert(glm_vec == glm::vec3(1.0, 2.0, 3.0));
+  // Test equality
+  Vec3f vec4(1.0f, 2.0f, 3.0f);
+  custom_assert(vec1 == vec4, "Vec3f equality failed");
 
+  // Test inequality
+  custom_assert(vec1 != vec2, "Vec3f inequality failed");
   return 0;
 }

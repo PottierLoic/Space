@@ -51,9 +51,6 @@ public:
   // Equality operators.
   constexpr bool operator==(const Vector& vec) const noexcept;
   constexpr bool operator!=(const Vector& vec) const noexcept;
-
-  // stdout
-  std::ostream& operator<< <>(std::ostream& stream, const Vector& vec);
 };
 
 // Aliases

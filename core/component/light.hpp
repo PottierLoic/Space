@@ -1,7 +1,7 @@
 #pragma once
 
 #include "component/component.hpp"
-#include "vector/vector3.hpp"
+#include "vector/vector.hpp"
 
 namespace SpaceEngine {
 
@@ -22,7 +22,7 @@ public:
 
   // Specific attributes
   LightType type;
-  Vector3 direction;
+  Vec3d direction;
   float spotAngle;
 
   /**

@@ -12,27 +12,27 @@ void Menu::initComponentViewers() {
       ImGui::PushItemWidth(75);
       ImGui::Text("Position");
       ImGui::SameLine(100);
-      if (ImGui::InputDouble("##transform.position.x", &transform->position.x)) {}
+      if (ImGui::InputDouble("##transform.position.x", &transform->position.x())) {}
       ImGui::SameLine(180);
-      if (ImGui::InputDouble("##transform.position.y", &transform->position.y)) {}
+      if (ImGui::InputDouble("##transform.position.y", &transform->position.y())) {}
       ImGui::SameLine(260);
-      if (ImGui::InputDouble("##transform.position.z", &transform->position.z)) {}
+      if (ImGui::InputDouble("##transform.position.z", &transform->position.z())) {}
 
       ImGui::Text("Rotation");
       ImGui::SameLine(100);
-      if (ImGui::InputDouble("##transform.rotation.x", &transform->rotation.x)) {}
+      if (ImGui::InputDouble("##transform.rotation.x", &transform->rotation.x())) {}
       ImGui::SameLine(180);
-      if (ImGui::InputDouble("##transform.rotation.y", &transform->rotation.y)) {}
+      if (ImGui::InputDouble("##transform.rotation.y", &transform->rotation.y())) {}
       ImGui::SameLine(260);
-      if (ImGui::InputDouble("##transform.rotation.z", &transform->rotation.z)) {}
+      if (ImGui::InputDouble("##transform.rotation.z", &transform->rotation.z())) {}
 
       ImGui::Text("Scale");
       ImGui::SameLine(100);
-      if (ImGui::InputDouble("##transform.scale.x", &transform->scale.x)) {}
+      if (ImGui::InputDouble("##transform.scale.x", &transform->scale.x())) {}
       ImGui::SameLine(180);
-      if (ImGui::InputDouble("##transform.scale.y", &transform->scale.y)) {}
+      if (ImGui::InputDouble("##transform.scale.y", &transform->scale.y())) {}
       ImGui::SameLine(260);
-      if (ImGui::InputDouble("##transform.scale.z", &transform->scale.z)) {}
+      if (ImGui::InputDouble("##transform.scale.z", &transform->scale.z())) {}
     }
   };
 
