@@ -38,7 +38,6 @@ const float ZOOM = 45.0f;
  *
  * Methods:
  * - EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): Constructor with vector.
- * - EditorCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch): Constructor with scalars.
  * - glm::mat4 getViewMatrix(): Get the view matrix of the camera.
  * - void processKeyboard(CameraMovement direction, float deltaTime): Process keyboard input to move the camera.
  * - void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true): Process mouse movement to update camera angles.
@@ -65,19 +64,6 @@ public:
    * @param pitch: The pitch angle of the camera.
    */
   EditorCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
-
-  /**
-   * @brief Constructor with scalars.
-   * @param posX: X-coordinate of the position.
-   * @param posY: Y-coordinate of the position.
-   * @param posZ: Z-coordinate of the position.
-   * @param upX: X-coordinate of the up direction vector.
-   * @param upY: Y-coordinate of the up direction vector.
-   * @param upZ: Z-coordinate of the up direction vector.
-   * @param yaw: The yaw angle of the camera.
-   * @param pitch: The pitch angle of the camera.
-   */
-  EditorCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
   /**
    * @brief Get the view matrix of the camera.

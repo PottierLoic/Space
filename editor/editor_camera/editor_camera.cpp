@@ -7,22 +7,10 @@ EditorCamera::EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pi
   movementSpeed = SPEED;
   mouseSensitivity = SENSITIVITY;
   zoom = ZOOM;
-  this->position = position;
+  position = position;
   worldUp = up;
-  this->yaw = yaw;
-  this->pitch = pitch;
-  updateCameraVectors();
-}
-
-EditorCamera::EditorCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) {
-  front = glm::vec3(0.0f, 0.0f, -1.0f);
-  movementSpeed = SPEED;
-  mouseSensitivity = SENSITIVITY;
-  zoom = ZOOM;
-  position = glm::vec3(posX, posY, posZ);
-  worldUp = glm::vec3(upX, upY, upZ);
-  this->yaw = yaw;
-  this->pitch = pitch;
+  yaw = yaw;
+  pitch = pitch;
   updateCameraVectors();
 }
 

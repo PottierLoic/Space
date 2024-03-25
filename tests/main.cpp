@@ -5,6 +5,7 @@
 
 extern int testVector2();
 extern int testVector3();
+extern int testVector4();
 extern int testProject();
 
 struct TestFunction {
@@ -15,6 +16,7 @@ struct TestFunction {
 TestFunction test_fn[] = {
   {"testVector2", testVector2},
   {"testVector3", testVector3},
+  {"testVector4", testVector4},
   {"testProject", testProject},
 };
 
@@ -61,7 +63,6 @@ int main() {
     std::cerr << e.what() << '\n';
   }
 
-  /* Distance check */
   run_all_tests();
   return 0;
 }
