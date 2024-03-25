@@ -1,5 +1,5 @@
 #include "test.hpp"
-#include "vector/vector.hpp"
+#include "maths/vector.hpp"
 
 using SpaceEngine::Vec3f;
 

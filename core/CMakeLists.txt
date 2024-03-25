@@ -4,7 +4,7 @@ project(SpaceEngine)
 set(CMAKE_CXX_STANDARD 17)
 
 file(GLOB_RECURSE CORE_SOURCES
-  "vector/*.cpp"
+  "maths/*.cpp"
   "entity/*.cpp"
   "model/*.cpp"
   "scene/*.cpp"

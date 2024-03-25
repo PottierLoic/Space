@@ -3,7 +3,7 @@
 #include <string>
 
 #include "component/component.hpp"
-#include "vector/vector.hpp"
+#include "maths/vector.hpp"
 
 namespace SpaceEngine {
 
