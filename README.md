@@ -14,6 +14,7 @@ I'm mainly doing this to progress in c++ and OpenGL and because I always wanted 
 - [CMake](https://cmake.org/).
 - Make
 - a C++ compiler (MSVC, g++, Clang, ...)
+- [Python](https://www.python.org/)
 
 ### Building
 
@@ -32,14 +33,9 @@ git submodule update
 Space comes in 3 parts: the engine, the editor, and the tests.  
 Each part has it's own folder: core, editor and tests respectively.  
 
-You can compile everything at once like this:
+You need python to build the project:
 ```bash
-# On Unix, you have to give permission.
-chmod +x ./build.sh
-./build.sh
-
-# Windows doesn't care.
-build.bat
+py build.py
 ```
 
 This compiles the core folder into a library called SpaceEngine that is located in `build/core/`.  
@@ -53,7 +49,7 @@ Space is using some external libraries :
 - [GLFW](https://www.glfw.org/) - Graphic library.
 - [Glad](https://glad.dav1d.de/) - OpenGL loader.
 - [GLM](https://github.com/g-truc/glm) - Mathematics OpenGL library.
-- [ImGui](https://github.com/ocornut/imgui) - C++ User interface.
+- [ImGui](https://github.com/ocornut/imgui) - C++ GUI.
 - [Assimp](https://github.com/assimp/assimp) - 3D model loader.
 - [stb](https://github.com/nothings/stb) - Collection of convenient single header libraries.
 
