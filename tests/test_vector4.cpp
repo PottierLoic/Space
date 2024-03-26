@@ -1,55 +1,53 @@
-#include "test.hpp" // Assuming this includes the custom_assert function
-// #include "vector/vector4.hpp" // Adjust path as necessary
+#include "test.hpp"
+#include "maths/vector.hpp"
+
+using SpaceEngine::Vec4f;
 
 int testVector4() {
-  // Vector4 vec1 = Vector4(1.0, 2.0, 3.0, 4.0);
-  // Vector4 vec2 = Vector4(4.0, 6.0, 8.0, 10.0);
+  Vec4f vec1(1.0f, 2.0f, 3.0f, 4.0f);
+  Vec4f vec2(4.0f, 5.0f, 6.0f, 7.0f);
 
-  // /* Addition check */
-  // Vector4 add_result = vec1 + vec2;
-  // custom_assert(add_result == Vector4(5.0, 8.0, 11.0, 14.0), "Addition failed");
+  // Test addition
+  Vec4f add_result = vec1 + vec2;
+  custom_assert(add_result.x() == 5.0f && add_result.y() == 7.0f && add_result.z() == 9.0f && add_result.w() == 11.0f, "Vec4f addition failed");
 
-  // /* Subtraction check */
-  // Vector4 sub_result = vec1 - vec2;
-  // custom_assert(sub_result == Vector4(-3.0, -4.0, -5.0, -6.0), "Subtraction failed");
+  // Test subtraction
+  Vec4f sub_result = vec1 - vec2;
+  custom_assert(sub_result.x() == -3.0f && sub_result.y() == -3.0f && sub_result.z() == -3.0f && sub_result.w() == -3.0f, "Vec4f subtraction failed");
 
-  // /* Addition assignment check */
-  // Vector4 vec3(2.0, 3.0, 4.0, 5.0);
-  // vec3 += vec1;
-  // custom_assert(vec3 == Vector4(3.0, 5.0, 7.0, 9.0), "Addition assignment failed");
+  // Test multiplication by a scalar
+  Vec4f mul_result_scalar = vec1 * 2.0f;
+  custom_assert(mul_result_scalar.x() == 2.0f && mul_result_scalar.y() == 4.0f && mul_result_scalar.z() == 6.0f && mul_result_scalar.w() == 8.0f, "Vec4f scalar multiplication failed");
 
-  // /* Subtraction assignment check */
-  // Vector4 vec4(5.0, 7.0, 9.0, 11.0);
-  // vec4 -= vec1;
-  // custom_assert(vec4 == Vector4(4.0, 5.0, 6.0, 7.0), "Subtraction assignment failed");
+  // Test division by a scalar
+  Vec4f div_result_scalar = vec1 / 2.0f;
+  custom_assert(div_result_scalar.x() == 0.5f && div_result_scalar.y() == 1.0f && div_result_scalar.z() == 1.5f && div_result_scalar.w() == 2.0f, "Vec4f scalar division failed");
 
-  // /* Multiplication assignment check */
-  // Vector4 vec5(1.0, 2.0, 3.0, 4.0);
-  // vec5 *= vec1;
-  // custom_assert(vec5 == Vector4(1.0, 4.0, 9.0, 16.0), "Multiplication assignment failed");
+  // Test addition assignment
+  Vec4f vec3 = vec1;
+  vec3 += vec2;
+  custom_assert(vec3.x() == 5.0f && vec3.y() == 7.0f && vec3.z() == 9.0f && vec3.w() == 11.0f, "Vec4f += failed");
 
-  // /* Division assignment check */
-  // Vector4 vec6(10.0, 20.0, 30.0, 40.0);
-  // vec6 /= vec2; // Assuming component-wise division
-  // custom_assert(vec6 == Vector4(2.5, 3.3333333333, 3.75, 4.0), "Division assignment failed");
+  // Test subtraction assignment
+  vec3 = vec1;
+  vec3 -= vec2;
+  custom_assert(vec3.x() == -3.0f && vec3.y() == -3.0f && vec3.z() == -3.0f && vec3.w() == -3.0f, "Vec4f -= failed");
 
-  // /* Equality check */
-  // Vector4 vec7(4.0, 6.0, 8.0, 10.0);
-  // custom_assert(vec2 == vec7, "Equality check failed");
+  // Test multiplication assignment by a scalar
+  vec3 = vec1;
+  vec3 *= 2.0f;
+  custom_assert(vec3.x() == 2.0f && vec3.y() == 4.0f && vec3.z() == 6.0f && vec3.w() == 8.0f, "Vec4f *= failed");
 
-  // /* Inequality check */
-  // Vector4 vec8(1.0, 2.0, 3.0, 5.0);
-  // custom_assert(vec1 != vec8, "Inequality check failed");
+  // Test division assignment by a scalar
+  vec3 = vec1;
+  vec3 /= 2.0f;
+  custom_assert(vec3.x() == 0.5f && vec3.y() == 1.0f && vec3.z() == 1.5f && vec3.w() == 2.0f, "Vec4f /= failed");
 
-  // /* Distance check */
-  // double distance_result = vec1.distance(vec2);
-  // custom_assert(distance_result == sqrt(120.0), "Distance calculation failed");
+  // Test equality
+  Vec4f vec4(1.0f, 2.0f, 3.0f, 4.0f);
+  custom_assert(vec1 == vec4, "Vec4f equality check failed");
 
-  // /* glm cast check (assuming you've implemented this) */
-  // glm::vec4 glm_vec = vec1.toGlm(); // Adjust method call if needed
-  // custom_assert(glm_vec == glm::vec4(1.0, 2.0, 3.0, 4.0), "GLM cast check failed");
-
+  // Test inequality
+  custom_assert(vec1 != vec2, "Vec4f inequality check failed");
   return 0;
 }
-
-// Make sure to adjust for any differences in function names or class capabilities

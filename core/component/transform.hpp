@@ -12,9 +12,9 @@ namespace SpaceEngine {
  *
  * Properties:
  * - name (std::string): The name of the object.
- * - position (Vec3d): The position of the transform in 3D space.
- * - rotation (Vec3d): The rotation of the transform in 3D space.
- * - scale (Vec3d): The scale of the transform in 3D space.
+ * - position (Vec3f): The position of the transform in 3D space.
+ * - rotation (Vec3f): The rotation of the transform in 3D space.
+ * - scale (Vec3f): The scale of the transform in 3D space.
  *
  * Methods:
  * - Transform(std::string name): Default constructor: Initializes a new transform component with default values.
@@ -23,9 +23,9 @@ namespace SpaceEngine {
 class Transform : public Component {
 public:
   std::string name;  /* The name of the object. */
-  Vec3d position;  /* The position of the transform in 3D space. */
-  Vec3d rotation;  /* The rotation of the transform in 3D space. */
-  Vec3d scale;     /* The scale of the transform in 3D space. */
+  Vec3f position;  /* The position of the transform in 3D space. */
+  Vec3f rotation;  /* The rotation of the transform in 3D space. */
+  Vec3f scale;     /* The scale of the transform in 3D space. */
 
   /**
    * @brief Default constructor: Initializes a new transform component with default values.

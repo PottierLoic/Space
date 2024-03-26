@@ -8,9 +8,9 @@ namespace SpaceEngine {
  * The Physic class represents a component defining physical properties for an object.
  *
  * Properties:
- * - mass (double): The mass of the object.
- * - drag (double): The resistance applied to the movement.
- * - angularDrag (double): The angular resistance applied to rotation.
+ * - mass (float): The mass of the object.
+ * - drag (float): The resistance applied to the movement.
+ * - angularDrag (float): The angular resistance applied to rotation.
  * - gravity (bool): Indicates whether the object is affected by gravity when enabled.
  *
  * Methods:
@@ -19,9 +19,9 @@ namespace SpaceEngine {
  */
 class Physic : public Component {
 public:
-  double mass;          /* The mass of the object. */
-  double drag;          /* The resistance applied to the movement. */
-  double angularDrag;   /* The angular resistance applied to rotation. */
+  float mass;          /* The mass of the object. */
+  float drag;          /* The resistance applied to the movement. */
+  float angularDrag;   /* The angular resistance applied to rotation. */
   bool gravity;         /* Indicates whether the object is affected by gravity when enabled. */
 
   /**

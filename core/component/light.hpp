@@ -22,7 +22,7 @@ public:
 
   // Specific attributes
   LightType type;
-  Vec3d direction;
+  Vec3f direction;
   float spotAngle;
 
   /**
