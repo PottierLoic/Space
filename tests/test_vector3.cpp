@@ -2,6 +2,7 @@
 #include "maths/vector.hpp"
 
 using SpaceEngine::Vec3f;
+using SpaceEngine::Vec4f;
 
 int testVector3() {
   Vec3f vec1(1.0f, 2.0f, 3.0f);
@@ -52,5 +53,13 @@ int testVector3() {
 
   // Test inequality
   custom_assert(vec1 != vec2, "Vec3f inequality failed");
+
+  // // Extend Vec3f to Vec4f
+  // Vec4f extendedVec = Vec4f(vec1, 4.0f);
+  // custom_assert(extendedVec.w() == 4.0f, "Vec3f to Vec4f extension failed");
+
+  // // Truncate Vec4f back to Vec3f
+  // Vec3f truncatedVec = Vec3f(extendedVec);
+  // custom_assert(truncatedVec.x() == extendedVec.x() && truncatedVec.y() == extendedVec.y() && truncatedVec.z() == extendedVec.z(), "Vec4f to Vec3f truncation failed");
   return 0;
 }
