@@ -6,6 +6,7 @@
 extern int testVector2();
 extern int testVector3();
 extern int testVector4();
+extern int testEntity();
 extern int testProject();
 
 struct TestFunction {
@@ -17,6 +18,7 @@ TestFunction test_fn[] = {
   {"testVector2", testVector2},
   {"testVector3", testVector3},
   {"testVector4", testVector4},
+  {"testEntity", testEntity},
   {"testProject", testProject},
 };
 
