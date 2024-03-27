@@ -255,4 +255,23 @@ std::ostream& operator<<(std::ostream& stream, const Vector<T, N>& vec) {
   return stream;
 }
 
+template<typename T, std::size_t N>
+constexpr float Vector<T, N>::dot(const Vector& vec) const {
+  float result = 0;
+  for (std::size_t i = 0; i < N; ++i) {
+    result += static_cast<float>(data[i] * vec[i]);
+  }
+  return result;
+}
+
+template<typename T, std::size_t N>
+constexpr Vector<T, N> Vector<T, N>::cross(const Vector& vec) const {
+  static_assert(N == 3, "Error: Cross product need 3 dimensions vectors.");
+  Vector<T, N> result;
+  result.x() = data[1] * vec.data[2] - data[2] * vec.data[1];
+  result.y() = -(data[0] * vec.data[2] - data[2] * vec.data[0]);
+  result.z() = data[0] * vec.data[1] - data[1] * vec.data[0];
+  return result;
+}
+
 }

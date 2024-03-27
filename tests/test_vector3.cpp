@@ -1,65 +1,82 @@
 #include "test.hpp"
 #include "maths/vector.hpp"
 
-using SpaceEngine::Vec3f;
-using SpaceEngine::Vec4f;
+using namespace SpaceEngine;
 
 int testVector3() {
   Vec3f vec1(1.0f, 2.0f, 3.0f);
   Vec3f vec2(4.0f, 5.0f, 6.0f);
 
-  // Test addition
-  auto add_result = vec1 + vec2;
-  custom_assert(add_result.x() == 5.0f && add_result.y() == 7.0f && add_result.z() == 9.0f, "Vec3f addition failed");
+  // Vector/Vector addition
+  custom_assert(vec1 + vec2 == Vec3f(5.0f, 7.0f, 9.0f), "Vec3f vector addition failed");
 
-  // Test subtraction
-  auto sub_result = vec1 - vec2;
-  custom_assert(sub_result.x() == -3.0f && sub_result.y() == -3.0f && sub_result.z() == -3.0f, "Vec3f subtraction failed");
+  // Vector/Scalar addition
+  custom_assert(vec1 + 3.0f == Vec3f(4.0f, 5.0f, 6.0f), "Vec3f scalar addition failed");
 
-  // Test multiplication by a scalar
-  auto mul_result_scalar = vec1 * 2.0f;
-  custom_assert(mul_result_scalar.x() == 2.0f && mul_result_scalar.y() == 4.0f && mul_result_scalar.z() == 6.0f, "Vec3f scalar multiplication failed");
+  // Vector/Vector subtraction
+  custom_assert(vec1 - vec2 == Vec3f(-3.0f, -3.0f, -3.0f), "Vec3f subtraction failed");
 
-  // Test division by a scalar
-  auto div_result_scalar = vec1 / 2.0f;
-  custom_assert(div_result_scalar.x() == 0.5f && div_result_scalar.y() == 1.0f && div_result_scalar.z() == 1.5f, "Vec3f scalar division failed");
+  // Vector/Scalar subtraction
+  custom_assert(vec2 - 3.0f == Vec3f(1.0f, 2.0f, 3.0f), "Vec3f scalar subtraction failed");
 
-  // Test += with a vector
+  // Multiplication by a scalar
+  custom_assert(vec1 * 2.0f == Vec3f(2.0f, 4.0f, 6.0f), "Vec3f scalar multiplication failed");
+
+  // Division by a scalar
+  custom_assert(vec1 / 2.0f == Vec3f(0.5f, 1.0f, 1.5f), "Vec3f scalar division failed");
+
+  // += with a vector
   Vec3f vec3 = vec1;
   vec3 += vec2;
-  custom_assert(vec3.x() == 5.0f && vec3.y() == 7.0f && vec3.z() == 9.0f, "Vec3f += failed");
+  custom_assert(vec3 == Vec3f(5.0f, 7.0f, 9.0f), "Vec3f += failed");
 
-  // Test -= with a vector
+  // += with a scalar
+  vec3 = vec1;
+  vec3 += 2.0f;
+  custom_assert(vec3 == Vec3f(3.0f, 4.0f, 5.0f), "Vec3f += scalar failed");
+
+  // -= with a vector
   vec3 = vec1;
   vec3 -= vec2;
-  custom_assert(vec3.x() == -3.0f && vec3.y() == -3.0f && vec3.z() == -3.0f, "Vec3f -= failed");
+  custom_assert(vec3 == Vec3f(-3.0f, -3.0f, -3.0f), "Vec3f -= failed");
 
-  // Test *= with a scalar
+  // -= with a scalar
+  vec3 = vec1;
+  vec3 -= 2.0f;
+  custom_assert(vec3 == Vec3f(-1.0f, 0.0f, 1.0f), "Vec3f -= scalar failed");
+
+  // *= with a scalar
   vec3 = vec1;
   vec3 *= 2.0f;
-  custom_assert(vec3.x() == 2.0f && vec3.y() == 4.0f && vec3.z() == 6.0f, "Vec3f *= failed");
+  custom_assert(vec3 == Vec3f(2.0f, 4.0f, 6.0f), "Vec3f *= failed");
 
-  // Test /= with a scalar
+  // /= with a scalar
   vec3 = vec1;
   vec3 /= 2.0f;
-  custom_assert(vec3.x() == 0.5f && vec3.y() == 1.0f && vec3.z() == 1.5f, "Vec3f /= failed");
+  custom_assert(vec3 == Vec3f(0.5f, 1.0f, 1.5f), "Vec3f /= failed");
 
-  // Test operator[]
+  // operator[]
   custom_assert(vec1[0] == 1.0f && vec1[1] == 2.0f && vec1[2] == 3.0f, "Vec3f operator[] failed");
 
-  // Test equality
-  Vec3f vec4(1.0f, 2.0f, 3.0f);
-  custom_assert(vec1 == vec4, "Vec3f equality failed");
+  // equality
+  custom_assert(vec1 == Vec3f(1.0f, 2.0f, 3.0f), "Vec3f equality failed");
 
-  // Test inequality
+  // inequality
   custom_assert(vec1 != vec2, "Vec3f inequality failed");
 
-  // // Extend Vec3f to Vec4f
-  // Vec4f extendedVec = Vec4f(vec1, 4.0f);
-  // custom_assert(extendedVec.w() == 4.0f, "Vec3f to Vec4f extension failed");
+   // extension
+  Vec4f extendedVec = Vec4f(vec1, 4.0f);
+  custom_assert(extendedVec == Vec4f(1.0f, 2.0f, 3.0f, 4.0f), "Vec3f to Vec4f extension failed");
 
-  // // Truncate Vec4f back to Vec3f
-  // Vec3f truncatedVec = Vec3f(extendedVec);
-  // custom_assert(truncatedVec.x() == extendedVec.x() && truncatedVec.y() == extendedVec.y() && truncatedVec.z() == extendedVec.z(), "Vec4f to Vec3f truncation failed");
+  // truncation
+  custom_assert(Vec3f(extendedVec) == Vec3f(1.0f, 2.0f, 3.0f), "Vec4f to Vec3f truncation failed");
+  custom_assert(Vec2f(vec1) == Vec2f(1.0f, 2.0f), "Vec3f to Vec2f truncation failed");
+
+  // dot product
+  custom_assert(vec1.dot(vec2) == 32.0f, "Vec3f dot product failed");
+
+  // Cross product (specific to Vec3f)
+  Vec3f crossProduct = vec1.cross(vec2);
+  custom_assert(crossProduct == Vec3f(-3.0f, 6.0f, -3.0f), "Vec3f cross product failed");
   return 0;
 }

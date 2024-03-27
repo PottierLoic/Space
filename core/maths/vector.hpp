@@ -62,9 +62,9 @@ public:
   constexpr bool operator!=(const Vector& vec) const;
 
   // Utils
-  // TODO : Add following functions
-  // constexpr float dot(const Vector& vec) const;
-  // constexpr Vector cross(const Vector& vec) const;
+  // TODO : Fix types
+  constexpr float dot(const Vector& vec) const;
+  constexpr Vector cross(const Vector& vec) const;
 };
 
 // Aliases
