@@ -1,41 +1,64 @@
-name: Windows build
+name: Windows Build and Test
+
+on:
+  workflow_dispatch:
 
 jobs:
-  windows-build:
+  build-and-test:
     runs-on: windows-latest
     defaults:
       run:
         working-directory: ./
+        shell: powershell
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Building with cmake/make
-        run: .\build.bat
-        shell: cmd
-      - name: Check if 'app.exe' exists
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Building with Python script
+        run: python build.py
+
+      - name: Check 'SpaceEngine' library build success
         run: |
-          if (Test-Path -Path "build\app.exe") {
-            Write-Host "App executable exists."
+          if (Test-Path build\core\libSpaceEngine.a) {
+            Write-Output "SpaceEngine library exists."
           } else {
-            Write-Host "App executable not found. Failing the CI test."
+            Write-Output "SpaceEngine library not found. Failing the CI test."
             exit 1
           }
-      - name: Check if 'test.exe' exists
+
+      - name: Check 'SpaceEditor' executable build success
         run: |
-          if (Test-Path -Path "build\test.exe") {
-            Write-Host "Test executable exists."
+          if (Test-Path build\editor\SpaceEditor.exe) {
+            Write-Output "SpaceEditor executable exists."
           } else {
-            Write-Host "Test executable not found. Failing the CI test."
+            Write-Output "SpaceEditor executable not found. Failing the CI test."
             exit 1
           }
+
+      - name: Check 'SpaceTests' executable build success
+        run: |
+          if (Test-Path build\tests\SpaceTests.exe) {
+            Write-Output "SpaceTests executable exists."
+          } else {
+            Write-Output "SpaceTests executable not found. Failing the CI test."
+            exit 1
+          }
+
       - name: Run tests
         run: |
-          cd build
-          .\test.exe | Set-Content -Path test_output.txt -Encoding utf8
+          cd build\tests
+          .\SpaceTests > test_output.txt 2>&1
 
       - name: Check test results
         run: |
-          if (Select-String -Pattern "failed" -Path build/test_output.txt) {
+          if (Select-String -Path build\tests\test_output.txt -Pattern "failed") {
             Write-Output "Tests failed."
             exit 1
           } else {

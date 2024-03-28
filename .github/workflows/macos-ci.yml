@@ -1,7 +1,10 @@
-name: MacOS build
+name: MacOS Build and Test
+
+on:
+  workflow_dispatch:
 
 jobs:
-  macos-build:
+  build-and-test:
     runs-on: macos-latest
     defaults:
       run:
@@ -9,38 +12,54 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Make file executable
-        run: chmod +x build.sh
-      - name: Building with cmake/make
-        run: bash build.sh
-      - name: Check 'app' build success
+        with:
+          submodules: 'recursive'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Building with Python script
+        run: python build.py
+
+      - name: Check 'SpaceEngine' library build success
         run: |
-          if [ -e build/app ]; then
-            echo "App executable exists."
+          if [ -e build/core/SpaceEngine ]; then
+            echo "SpaceEngine library exists."
           else
-            echo "App executable not found. Failing the CI test."
+            echo "SpaceEngine library not found. Failing the CI test."
             exit 1
           fi
-      - name: Check 'test' build success
+
+      - name: Check 'SpaceEditor' executable build success
         run: |
-          if [ -e build/test ]; then
-            echo "test executable exists."
+          if [ -e build/editor/SpaceEditor ]; then
+            echo "SpaceEditor executable exists."
           else
-            echo "test executable not found. Failing the CI test."
+            echo "SpaceEditor executable not found. Failing the CI test."
             exit 1
           fi
+
+      - name: Check 'SpaceTests' executable build success
+        run: |
+          if [ -e build/tests/SpaceTests ]; then
+            echo "SpaceTests executable exists."
+          else
+            echo "SpaceTests executable not found. Failing the CI test."
+            exit 1
+          fi
+
       - name: Run tests
         run: |
-          cd build
-          ./test > test_output.txt 2>&1
+          cd build/tests
+          ./SpaceTests > test_output.txt 2>&1
+
       - name: Check test results
         run: |
-          cd build
-          if [ -e test_output.txt ]; then
-            if grep -q "failed" test_output.txt; then
-              echo "Tests failed."
-              exit 1
-            else
-              echo "Tests passed."
-            fi
+          if grep -q "failed" build/tests/test_output.txt; then
+            echo "Tests failed."
+            exit 1
+          else
+            echo "Tests passed."
           fi
