@@ -25,7 +25,7 @@ jobs:
 
       - name: Check 'SpaceEngine' library build success
         run: |
-          if [ -e build/core/SpaceEngine ]; then
+          if [ -e build/core/libSpaceEngine.a ]; then
             echo "SpaceEngine library exists."
           else
             echo "SpaceEngine library not found. Failing the CI test."
