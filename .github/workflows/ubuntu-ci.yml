@@ -15,6 +15,14 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Install dependencies
+        run: |
+          sudo apt install libgl1-mesa-dev
+          sudo apt install libx11-dev
+          sudo apt install libxrandr-dev
+          sudo apt install libudev-dev
+          sudo apt-get install libxcursor-dev
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -23,7 +31,6 @@ jobs:
       - name: Building with Python script
         run: python build.py
 
-      # Use similar checks as macOS, adjusting paths and file names as necessary
       - name: Check 'SpaceEngine' library build success
         run: |
           if [ -e build/core/libSpaceEngine.a ]; then
