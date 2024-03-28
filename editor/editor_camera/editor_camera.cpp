@@ -3,14 +3,14 @@
 namespace SpaceEditor {
 
 EditorCamera::EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
-  front = glm::vec3(0.0f, 0.0f, -1.0f);
-  movementSpeed = SPEED;
-  mouseSensitivity = SENSITIVITY;
-  zoom = ZOOM;
-  position = position;
-  worldUp = up;
-  yaw = yaw;
-  pitch = pitch;
+  this->front = glm::vec3(0.0f, 0.0f, -1.0f);
+  this->movementSpeed = SPEED;
+  this->mouseSensitivity = SENSITIVITY;
+  this->zoom = ZOOM;
+  this->position = position;
+  this->worldUp = up;
+  this->yaw = yaw;
+  this->pitch = pitch;
   updateCameraVectors();
 }
 
