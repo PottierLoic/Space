@@ -7,9 +7,9 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "editor_gui/editor_gui.hpp"
-#include "shader/shader.hpp"
 #include "editor_camera/editor_camera.hpp" // maybe not stay here
 #include "model/model.hpp" // maybe removed soon
+#include "shader/shader.hpp"
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -19,6 +19,7 @@
 #include "component/physic.hpp"
 #include "component/camera.hpp"
 #include "component/model_renderer.hpp"
+#include "log/logger.hpp"
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
@@ -32,7 +33,6 @@ using namespace SpaceEngine;
 using namespace SpaceEditor;
 
 // Camera
-
 EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX =  1280.0f / 2.0;
 float lastY =  720.0 / 2.0;
@@ -82,6 +82,18 @@ void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) 
 }
 
 int main() {
+
+  Logger::log(LogLevel::DEBUG, LogType::Core, "Initialization", "Core subsystem initialized successfully.");
+  Logger::log(LogLevel::INFORMATION, LogType::Rendering, "Graphics", "OpenGL context created: Version 4.5");
+  Logger::log(LogLevel::WARNING, LogType::Audio, "Audio Warning", "Audio file 'background.mp3' not found, using fallback.");
+  Logger::log(LogLevel::ERROR, LogType::Scripting, "Script Error", "Undefined variable in playerMovement script.");
+  Logger::log(LogLevel::FATAL, LogType::Editor, "Crash Report", "Unhandled exception caught: Access violation.");
+  Logger::log(LogLevel::DEBUG, LogType::AssetLoading, "Asset Load", "Started loading asset bundle 'environment.pack'.");
+  Logger::log(LogLevel::INFORMATION, LogType::Input, "Input Mapping", "Custom control scheme loaded for gamepad.");
+  Logger::log(LogLevel::WARNING, LogType::AssetLoading, "Texture Load", "High-resolution texture 'forest.png' may affect performance.");
+  Logger::log(LogLevel::ERROR, LogType::Rendering, "Shader Compilation", "Failed to compile vertex shader 'basic.vert'.");
+  Logger::log(LogLevel::DEBUG, LogType::Scripting, "Script Debug", "Player script attached to entity 'PlayerCharacter'.");
+
   // Initialize GLFW
   if (!glfwInit()) {
     std::cout << "Failed to initialize GLFW" << std::endl;
@@ -162,7 +174,7 @@ int main() {
   auto backpack = Entity::create("Backpack");
   backpack->addComponent<ModelRenderer>();
   auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->setModel("../../models/backpack/backpack.obj");
+  backpackRenderer->setModel("../../models/backpack/");
   scene.addEntity(backpack);
 
   // gui creation

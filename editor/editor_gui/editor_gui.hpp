@@ -8,6 +8,8 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_stdlib.h"
 
+#include "log/logger.hpp"
+
 #include "scene/scene.hpp"
 #include "entity/entity.hpp"
 
@@ -29,14 +31,15 @@ namespace SpaceEditor {
 
 /*
  * The EditorGui class represents a user interface and control various aspects of a scene, including tools, inspector, hierarchy, and generation options.
- * It includes flags to control the visibility of different menu sections, a reference to the current scene, the selected scene object, and the current menu layout.
+ * It includes flags to control the visibility of different gui sections, a reference to the current scene, the selected scene object, and the current gui layout.
  *
  * Properties:
- * - showInspector (bool): Flag to control the visibility of the inspector section in the menu.
- * - showHierarchy (bool): Flag to control the visibility of the hierarchy section in the menu.
- * - showProject (bool): Flag to control the visibility of the project section in the menu.
- * - showScene (bool): Flag to control the visibility of the scene section in the menu.
- * - showRender (bool): Flag to control the visibility of the render section in the menu.
+ * - showInspector (bool): Flag to control the visibility of the inspector section in the gui.
+ * - showHierarchy (bool): Flag to control the visibility of the hierarchy section in the gui.
+ * - showProject (bool): Flag to control the visibility of the project section in the gui.
+ * - showScene (bool): Flag to control the visibility of the scene section in the gui.
+ * - showRender (bool): Flag to control the visibility of the render section in the gui.
+ * - showConsole (bool): Flag to control the visibility of the console section in the gui
  *
  * - scene (Scene*): Reference to the actual Scene.
  * - selectedEntity (Entity*): Reference to the selected Entity.
@@ -46,16 +49,17 @@ namespace SpaceEditor {
  *
  * Methods:
  * - void initComponentViewers(): Place all the component viewers functions inside of the componentViewers map.
- * - void display(): Displays the menu, rendering different sections based on the state of the flags.
- * - void cherryTheme(): Set the actual menu theme to cherry theme.
+ * - void display(): Displays the gui, rendering different sections based on the state of the flags.
+ * - void cherryTheme(): Set the actual gui theme to cherry theme.
  */
 class EditorGui {
 private:
   bool showInspector = true;      // Inspector section visiblity flag.
-  bool showHierarchy = true;      // Hierarchy section visiblity flag.
-  bool showProject = true;        // Project section visiblity flag.
+  bool showHierarchy = false;      // Hierarchy section visiblity flag.
+  bool showProject = false;        // Project section visiblity flag.
   bool showScene = false;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
+  bool showConsole = true;       // Console section visibility flag.
 
   std::unordered_map<std::type_index, std::function<void(std::shared_ptr<Component>)>> componentViewers;
 
@@ -79,6 +83,9 @@ private:
 
   /* Display the render section. */
   void displayRender();
+
+  /* Display the console section. */
+  void displayConsole();
 
 public:
   /* Reference to the actual Scene. */

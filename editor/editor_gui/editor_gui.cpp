@@ -1,5 +1,6 @@
 #include "editor_gui/editor_gui.hpp"
 
+using namespace SpaceEngine;
 namespace SpaceEditor {
 
 EditorGui::EditorGui(std::shared_ptr<Scene> scene) {
@@ -15,6 +16,7 @@ void EditorGui::display() {
   if (showProject) { displayProject(); }
   if (showScene) { displayScene(); }
   if (showRender) { displayRender(); }
+  if (showConsole) { displayConsole(); }
 }
 
 void EditorGui::displayBar() {
@@ -81,18 +83,14 @@ void EditorGui::displayBar() {
 
 void EditorGui::displayInspector() {
   if (ImGui::Begin("Inspector")) {
-    if (selectedEntity == nullptr) {
-      // TODO : enbable when compiling again after shared_ptr rework..
-      // ImGui::End();
-      return;
-    }
-
-    for (const auto& componentPair : selectedEntity->components) {
-      std::type_index typeIndex = componentPair.first;
-      auto component = componentPair.second;
-      auto viewerIt = componentViewers.find(typeIndex);
-      if (viewerIt != componentViewers.end()) {
-        viewerIt->second(component);
+    if (selectedEntity != nullptr) {
+      for (const auto& componentPair : selectedEntity->components) {
+        std::type_index typeIndex = componentPair.first;
+        auto component = componentPair.second;
+        auto viewerIt = componentViewers.find(typeIndex);
+        if (viewerIt != componentViewers.end()) {
+          viewerIt->second(component);
+        }
       }
     }
     ImGui::End();
@@ -127,6 +125,33 @@ void EditorGui::displayRender() {
   }
 }
 
+void EditorGui::displayConsole() {
+  if (ImGui::Begin("Console")) {
+    // TODO: enhance this (it's awfull in the editor)
+    // Filter inputs
+    for (size_t i = 0; i < logLevels.size(); ++i) {
+      if (ImGui::Selectable(logLevels[i], Logger::filter.levels.count(static_cast<LogLevel>(i)))) {
+        Logger::filter.setLogLevel(static_cast<LogLevel>(i), !Logger::filter.levels.count(static_cast<LogLevel>(i)));
+      }
+    }
+    ImGui::NewLine();
+    for (size_t i = 0; i < logTypes.size(); ++i) {
+      if (ImGui::Selectable(logTypes[i], Logger::filter.types.count(static_cast<LogType>(i)))) {
+        Logger::filter.setLogType(static_cast<LogType>(i), !Logger::filter.types.count(static_cast<LogType>(i)));
+      }
+    }
+    ImGui::NewLine();
+    ImGui::InputText("Keyword", &Logger::filter.keyword);
+
+    // Log list filtered.
+    for (const auto& log : Logger::getLogEntries()) {
+      std::string texte = log.toString();
+      ImGui::Text(texte.c_str());
+    }
+    ImGui::End();
+  }
+}
+
 void EditorGui::cherryTheme() {
   // cherry colors, 3 intensities
   #define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
@@ -141,7 +166,7 @@ void EditorGui::cherryTheme() {
   style.Colors[ImGuiCol_Text]                  = TEXT(0.78f);
   style.Colors[ImGuiCol_TextDisabled]          = TEXT(0.28f);
   style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
-  style.Colors[ImGuiCol_WindowBg]         = BG( 0.58f);
+  style.Colors[ImGuiCol_WindowBg]              = BG( 0.58f);
   style.Colors[ImGuiCol_PopupBg]               = BG( 0.9f);
   style.Colors[ImGuiCol_Border]                = ImVec4(0.31f, 0.31f, 1.00f, 0.00f);
   style.Colors[ImGuiCol_BorderShadow]          = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
