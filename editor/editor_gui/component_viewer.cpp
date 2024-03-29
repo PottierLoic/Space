@@ -1,8 +1,8 @@
-#include "menu.hpp"
+#include "editor_gui/editor_gui.hpp"
 
 namespace SpaceEditor {
 
-void Menu::initComponentViewers() {
+void EditorGui::initComponentViewers() {
   this->componentViewers[std::type_index(typeid(Transform))] = [](std::shared_ptr<Component> component) {
     auto transform = std::static_pointer_cast<Transform>(component);
     if (ImGui::CollapsingHeader("Transform")) {

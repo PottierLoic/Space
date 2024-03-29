@@ -1,15 +1,15 @@
-#include "menu.hpp"
+#include "editor_gui/editor_gui.hpp"
 
 namespace SpaceEditor {
 
-Menu::Menu(std::shared_ptr<Scene> scene) {
+EditorGui::EditorGui(std::shared_ptr<Scene> scene) {
   this->scene = scene;
   initComponentViewers();
   cherryTheme();
 }
 
-void Menu::display() {
-  displayMenuBar();
+void EditorGui::display() {
+  displayBar();
   if (showInspector) { displayInspector(); }
   if (showHierarchy) { displayHierarchy(); }
   if (showProject) { displayProject(); }
@@ -17,8 +17,8 @@ void Menu::display() {
   if (showRender) { displayRender(); }
 }
 
-void Menu::displayMenuBar() {
-  /* Main menu options (On top of the window) */
+void EditorGui::displayBar() {
+  /* Top bar options */
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
       if (ImGui::MenuItem("New", "CTRL+N")) {}
@@ -79,7 +79,7 @@ void Menu::displayMenuBar() {
   }
 }
 
-void Menu::displayInspector() {
+void EditorGui::displayInspector() {
   if (ImGui::Begin("Inspector")) {
     if (selectedEntity == nullptr) {
       // TODO : enbable when compiling again after shared_ptr rework..
@@ -99,35 +99,35 @@ void Menu::displayInspector() {
   }
 }
 
-void Menu::displayHierarchy() {
+void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
     // TODO: Render the hierarchy view.
     ImGui::End();
   }
 }
 
-void Menu::displayProject() {
+void EditorGui::displayProject() {
   if (ImGui::Begin("Project")) {
     //TODO: Render the scene view.
     ImGui::End();
   }
 }
 
-void Menu::displayScene() {
+void EditorGui::displayScene() {
   if (ImGui::Begin("Scene")) {
     //TODO: Render the game editor view (draft appearance).
     ImGui::End();
   }
 }
 
-void Menu::displayRender() {
+void EditorGui::displayRender() {
   if (ImGui::Begin("Render")) {
     //TODO: Render the game rendering view (final appearance).
     ImGui::End();
   }
 }
 
-void Menu::cherryTheme() {
+void EditorGui::cherryTheme() {
   // cherry colors, 3 intensities
   #define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
   #define MED(v)  ImVec4(0.455f, 0.198f, 0.301f, v)

@@ -6,7 +6,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-#include "menu/menu.hpp"
+#include "editor_gui/editor_gui.hpp"
 #include "shader/shader.hpp"
 #include "editor_camera/editor_camera.hpp" // maybe not stay here
 #include "model/model.hpp" // maybe removed soon
@@ -165,9 +165,9 @@ int main() {
   backpackRenderer->setModel("../../models/backpack/backpack.obj");
   scene.addEntity(backpack);
 
-  // Menu creation
-  Menu menu = Menu(std::make_shared<Scene>());
-  menu.selectedEntity = scene.entities[1];
+  // gui creation
+  EditorGui gui = EditorGui(std::make_shared<Scene>());
+  gui.selectedEntity = scene.entities[1];
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
@@ -185,7 +185,7 @@ int main() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    menu.display();
+    gui.display();
 
     ImGui::Render();
 

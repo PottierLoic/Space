@@ -28,7 +28,7 @@ using SpaceEngine::ModelRenderer;
 namespace SpaceEditor {
 
 /*
- * The Menu class represents a user interface and control various aspects of a scene, including tools, inspector, hierarchy, and generation options.
+ * The EditorGui class represents a user interface and control various aspects of a scene, including tools, inspector, hierarchy, and generation options.
  * It includes flags to control the visibility of different menu sections, a reference to the current scene, the selected scene object, and the current menu layout.
  *
  * Properties:
@@ -42,14 +42,14 @@ namespace SpaceEditor {
  * - selectedEntity (Entity*): Reference to the selected Entity.
  *
  * Constructor:
- * - Menu(): Initializes a new Menu.
+ * - EditorGui(): Initializes a new EditorGui.
  *
  * Methods:
  * - void initComponentViewers(): Place all the component viewers functions inside of the componentViewers map.
  * - void display(): Displays the menu, rendering different sections based on the state of the flags.
  * - void cherryTheme(): Set the actual menu theme to cherry theme.
  */
-class Menu {
+class EditorGui {
 private:
   bool showInspector = true;      // Inspector section visiblity flag.
   bool showHierarchy = true;      // Hierarchy section visiblity flag.
@@ -63,7 +63,7 @@ private:
   void initComponentViewers();
 
   /* Display the menu bar. */
-  void displayMenuBar();
+  void displayBar();
 
   /* Display the inspector section. */
   void displayInspector();
@@ -91,12 +91,12 @@ public:
    * Main constructor that use default flags.
    * @param scene: Reference to a scene.
    */
-  Menu(std::shared_ptr<Scene> scene);
+  EditorGui(std::shared_ptr<Scene> scene);
 
-  /* Display the whole menu. */
+  /* Display the whole EditorGui. */
   void display();
 
-  /* Menu themes */
+  /* Gui themes */
   void cherryTheme();
 };
 
