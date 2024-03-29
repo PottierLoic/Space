@@ -5,7 +5,7 @@ namespace SpaceEngine {
 Log::Log(LogLevel level, LogType type, const std::string& title, const std::string& message)
   : level(level), type(type), title(title), message(message), timestamp(std::chrono::system_clock::now()) {}
 
-std::string Log::toString() {
+std::string Log::toString() const {
   std::ostringstream stream;
   auto timeT = std::chrono::system_clock::to_time_t(timestamp);
   auto tm = *std::localtime(&timeT);
@@ -22,7 +22,7 @@ std::string Log::toString() {
 std::string Log::LogLevelToString(LogLevel level) {
   switch(level) {
     case DEBUG: return "DEBUG";
-    case INFORMATION: return "INFO";
+    case INFORMATION: return "INFORMATION";
     case WARNING: return "WARNING";
     case ERROR: return "ERROR";
     case FATAL: return "FATAL";
