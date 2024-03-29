@@ -9,6 +9,7 @@ extern int testVector4();
 extern int testEntity();
 extern int testProject();
 extern int testLog();
+extern int testLogger();
 
 struct TestFunction {
   const char* name;
@@ -22,6 +23,7 @@ TestFunction test_fn[] = {
   {"testEntity", testEntity},
   {"testProject", testProject},
   {"testLog", testLog},
+  {"testLogger", testLogger},
 };
 
 void run_all_tests() {

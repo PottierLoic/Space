@@ -174,7 +174,7 @@ int main() {
   auto backpack = Entity::create("Backpack");
   backpack->addComponent<ModelRenderer>();
   auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->setModel("../../models/backpack/");
+  backpackRenderer->setModel("../../models/backpack/backpack.obj");
   scene.addEntity(backpack);
 
   // gui creation
