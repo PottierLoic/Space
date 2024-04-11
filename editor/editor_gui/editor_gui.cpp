@@ -74,6 +74,14 @@ void EditorGui::displayBar() {
       // TODO: Add layouts
       ImGui::Separator();
       if (ImGui::MenuItem("Reset layout", "CTRL+SHIFT+R")) {}
+      ImGui::Separator();
+      if (ImGui::Checkbox("Wireframe Mode", &polygonMode)) {
+        if (polygonMode) {
+          glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        } else {
+          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+      }
       ImGui::EndMenu();
     }
 
@@ -93,63 +101,63 @@ void EditorGui::displayInspector() {
         }
       }
     }
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
     // TODO: Render the hierarchy view.
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::displayProject() {
   if (ImGui::Begin("Project")) {
     //TODO: Render the scene view.
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::displayScene() {
   if (ImGui::Begin("Scene")) {
     //TODO: Render the game editor view (draft appearance).
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::displayRender() {
   if (ImGui::Begin("Render")) {
     //TODO: Render the game rendering view (final appearance).
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::displayConsole() {
   if (ImGui::Begin("Console")) {
     // TODO: enhance this (it's awfull in the editor)
     // Filter inputs
-    for (size_t i = 0; i < logLevels.size(); ++i) {
-      if (ImGui::Selectable(logLevels[i], Logger::filter.levels.count(static_cast<LogLevel>(i)))) {
-        Logger::filter.setLogLevel(static_cast<LogLevel>(i), !Logger::filter.levels.count(static_cast<LogLevel>(i)));
-      }
-    }
-    ImGui::NewLine();
-    for (size_t i = 0; i < logTypes.size(); ++i) {
-      if (ImGui::Selectable(logTypes[i], Logger::filter.types.count(static_cast<LogType>(i)))) {
-        Logger::filter.setLogType(static_cast<LogType>(i), !Logger::filter.types.count(static_cast<LogType>(i)));
-      }
-    }
-    ImGui::NewLine();
+    // for (size_t i = 0; i < logLevels.size(); ++i) {
+    //   if (ImGui::Selectable(logLevels[i], Logger::filter.levels.count(static_cast<LogLevel>(i)))) {
+    //     Logger::filter.setLogLevel(static_cast<LogLevel>(i), !Logger::filter.levels.count(static_cast<LogLevel>(i)));
+    //   }
+    // }
+    // ImGui::NewLine();
+    // for (size_t i = 0; i < logTypes.size(); ++i) {
+    //   if (ImGui::Selectable(logTypes[i], Logger::filter.types.count(static_cast<LogType>(i)))) {
+    //     Logger::filter.setLogType(static_cast<LogType>(i), !Logger::filter.types.count(static_cast<LogType>(i)));
+    //   }
+    // }
+    // ImGui::NewLine();
     ImGui::InputText("Keyword", &Logger::filter.keyword);
 
     // Log list filtered.
     for (const auto& log : Logger::getLogEntries()) {
       std::string texte = log.toString();
-      ImGui::Text(texte.c_str());
+      ImGui::Text("%s", texte.c_str());
     }
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::cherryTheme() {

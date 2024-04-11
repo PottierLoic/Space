@@ -15,6 +15,6 @@ public:
   int add_scene(Scene* scene);
   int remove_scene(std::string name);
   Scene* get_scene(std::string name);
-}
+};
 
 }

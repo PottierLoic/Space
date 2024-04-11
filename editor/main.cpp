@@ -146,11 +146,8 @@ int main() {
     return -1;
   }
 
-  stbi_set_flip_vertically_on_load(true);
-
   glEnable(GL_DEPTH_TEST);
-  // TODO: REMOVE
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  stbi_set_flip_vertically_on_load(true);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();

@@ -60,6 +60,8 @@ private:
   bool showScene = false;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
   bool showConsole = true;       // Console section visibility flag.
+  
+  bool polygonMode = false;        // Polygon mode flag. (Draw the full model or just the wireframe) 
 
   std::unordered_map<std::type_index, std::function<void(std::shared_ptr<Component>)>> componentViewers;
 
