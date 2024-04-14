@@ -26,6 +26,7 @@ using SpaceEngine::Component;
 using SpaceEngine::Transform;
 using SpaceEngine::Physic;
 using SpaceEngine::ModelRenderer;
+using SpaceEngine::Camera;
 
 namespace SpaceEditor {
 

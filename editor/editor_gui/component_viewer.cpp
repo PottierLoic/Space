@@ -65,6 +65,13 @@ void EditorGui::initComponentViewers() {
       }
     }
   };
+
+  this->componentViewers[std::type_index(typeid(Camera))] = [](std::shared_ptr<Component> component) {
+    auto camera = std::static_pointer_cast<Camera>(component);
+    if (ImGui::CollapsingHeader("Camera")) {
+      ImGui::ColorPicker4("Skybox color", (float*)&camera->skyboxColor);
+    }
+  };
 }
 
 }

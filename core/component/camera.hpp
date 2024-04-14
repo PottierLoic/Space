@@ -6,6 +6,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "../imgui/imgui_impl_glfw.h"
+#include "../imgui/imgui_impl_opengl3.h"
+
 #include "component/component.hpp"
 #include "component/transform.hpp"
 
@@ -24,6 +27,8 @@ public:
   float yaw;                  /* The yaw angle of the camera. */
   float pitch;                /* The pitch angle of the camera. */
   float zoom;                 /* The zoom level of the camera. */
+  // TODO: Use Vec4f instead of ImGui vector type.
+  ImVec4 skyboxColor;          /* The color of the skybox. */
 
   /**
    * @brief Default constructor: Initializes a new empty Camera component.

@@ -149,15 +149,18 @@ void EditorGui::displayConsole() {
     //   }
     // }
     // ImGui::NewLine();
-    ImGui::InputText("Keyword", &Logger::filter.keyword);
+    ImGui::Text("Search: ");
+    ImGui::SameLine();
+    ImGui::InputText("##log_search", &Logger::filter.keyword);
 
     // Log list filtered.
+    ImGui::SeparatorText("Logs");
     for (const auto& log : Logger::getLogEntries()) {
       std::string texte = log.toString();
-      ImGui::Text("%s", texte.c_str());
+      ImGui::Text(texte.c_str());
     }
+    ImGui::End();
   }
-  ImGui::End();
 }
 
 void EditorGui::cherryTheme() {

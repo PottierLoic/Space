@@ -82,18 +82,6 @@ void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) 
 }
 
 int main() {
-
-  Logger::log(LogLevel::DEBUG, LogType::Core, "Initialization", "Core subsystem initialized successfully.");
-  Logger::log(LogLevel::INFORMATION, LogType::Rendering, "Graphics", "OpenGL context created: Version 4.5");
-  Logger::log(LogLevel::WARNING, LogType::Audio, "Audio Warning", "Audio file 'background.mp3' not found, using fallback.");
-  Logger::log(LogLevel::ERROR, LogType::Scripting, "Script Error", "Undefined variable in playerMovement script.");
-  Logger::log(LogLevel::FATAL, LogType::Editor, "Crash Report", "Unhandled exception caught: Access violation.");
-  Logger::log(LogLevel::DEBUG, LogType::AssetLoading, "Asset Load", "Started loading asset bundle 'environment.pack'.");
-  Logger::log(LogLevel::INFORMATION, LogType::Input, "Input Mapping", "Custom control scheme loaded for gamepad.");
-  Logger::log(LogLevel::WARNING, LogType::AssetLoading, "Texture Load", "High-resolution texture 'forest.png' may affect performance.");
-  Logger::log(LogLevel::ERROR, LogType::Rendering, "Shader Compilation", "Failed to compile vertex shader 'basic.vert'.");
-  Logger::log(LogLevel::DEBUG, LogType::Scripting, "Script Debug", "Player script attached to entity 'PlayerCharacter'.");
-
   // Initialize GLFW
   if (!glfwInit()) {
     std::cout << "Failed to initialize GLFW" << std::endl;
@@ -176,7 +164,7 @@ int main() {
 
   // gui creation
   EditorGui gui = EditorGui(std::make_shared<Scene>());
-  gui.selectedEntity = scene.entities[1];
+  gui.selectedEntity = scene.entities[0];
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
@@ -201,7 +189,10 @@ int main() {
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+    // TODO: Review this
+    std::shared_ptr<Camera> cam = scene.selectedCamera.lock();
+    glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     shader.use();
