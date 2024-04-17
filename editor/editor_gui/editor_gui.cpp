@@ -157,10 +157,10 @@ void EditorGui::displayConsole() {
     ImGui::SeparatorText("Logs");
     for (const auto& log : Logger::getLogEntries()) {
       std::string texte = log.toString();
-      ImGui::Text(texte.c_str());
+      ImGui::Text("%s", texte.c_str());
     }
-    ImGui::End();
   }
+  ImGui::End();
 }
 
 void EditorGui::cherryTheme() {

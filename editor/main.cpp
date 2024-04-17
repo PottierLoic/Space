@@ -135,7 +135,7 @@ int main() {
   }
 
   glEnable(GL_DEPTH_TEST);
-  stbi_set_flip_vertically_on_load(true);
+  stbi_set_flip_vertically_on_load(false);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -158,8 +158,9 @@ int main() {
   // Examples
   auto backpack = Entity::create("Backpack");
   backpack->addComponent<ModelRenderer>();
+  
   auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->setModel("../../models/backpack/backpack.obj");
+  backpackRenderer->setModel("./models/test/dio.fbx");
   scene.addEntity(backpack);
 
   // gui creation
@@ -168,7 +169,7 @@ int main() {
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
-  Shader shader("../../shaders/test.vs", "../../shaders/test.fs", nullptr);
+  Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
