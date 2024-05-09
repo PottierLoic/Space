@@ -22,3 +22,6 @@
 	path = libs/glad
 	url = https://github.com/PottierLoic/space-glad
 	shallow = true
+[submodule "doxygen-awesome-css"]
+	path = libs/doxygen-awesome-css
+	url = https://github.com/jothepro/doxygen-awesome-css.git

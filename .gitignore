@@ -1,7 +1,7 @@
-# Ignore space build
+# Ignore build
 **/build
 
-# TODO: Remove this and bring models once the default ones (cubes etc.. are done)
+# TODO: Remove this and bring models once the default ones (cubes etc..) are done
 /models
 
 # Editor specs
@@ -10,3 +10,6 @@
 *.DS_Store
 
 imgui.ini
+
+# Ignore documentation files
+docs/

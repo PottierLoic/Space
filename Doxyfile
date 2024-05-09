@@ -1,0 +1,16 @@
+PROJECT_NAME           = "SpaceEngine"
+OUTPUT_DIRECTORY       = ./docs
+INPUT                  = ./core ./editor
+RECURSIVE              = YES
+GENERATE_LATEX         = NO
+GENERATE_HTML          = YES
+HTML_EXTRA_FILES       = ./libs/doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js
+HTML_EXTRA_STYLESHEET  = ./libs/doxygen-awesome-css/doxygen-awesome.css \
+                         ./libs/doxygen-awesome-css/doxygen-awesome-sidebar-only.css \
+                         ./libs/doxygen-awesome-css/doxygen-awesome-sidebar-only-darkmode-toggle.css
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+HTML_COLORSTYLE        = LIGHT
+HTML_HEADER            = ./libs/doxygen-awesome-css/doxygen-custom/header.html
+
