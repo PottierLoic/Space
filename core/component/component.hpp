@@ -7,13 +7,17 @@ namespace SpaceEngine {
 class Entity; // Forward declaration of Entity class to avoid circular dependencies.
 
 /**
- * The Component class serves as a base class for components in the entity-component system.
+ * @class Component
+ * @brief Serves as a base class for components in the entity-component system.
  *
- * Attributes
- * - owner (std::weak_ptr<Entity>): A pointer to the entity owning the component.
+ * The Component class acts as a base class that other components derive from.
+ * Each component holds a weak reference to its owning entity.
+ *
+ * Attributes:
+ * - owner (std::weak_ptr<Entity>): A weak pointer to the entity owning the component.
  *
  * Methods:
- * - Component(): Default constructor.
+ * - Component(std::weak_ptr<Entity> owner): Constructor that sets the owning entity.
  * - virtual ~Component(): Virtual destructor to allow proper cleanup in derived classes.
  */
 class Component {
@@ -22,8 +26,8 @@ protected:
 
 public:
   /**
-   * @brief Default constructor.
-   * @param owner (std::weak_ptr<Entity>): A pointer to the entity that store the component.
+   * @brief Constructor that sets the owning entity.
+   * @param owner A weak pointer to the entity that stores the component.
    */
   Component(std::weak_ptr<Entity> owner);
 
