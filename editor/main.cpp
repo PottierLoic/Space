@@ -34,9 +34,10 @@ using namespace SpaceEditor;
 
 // Camera
 EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX =  1280.0f / 2.0;
-float lastY =  720.0 / 2.0;
+float lastX =  1920.0f / 2.0;
+float lastY =  1080.0 / 2.0;
 bool firstMouse = true;
+bool inspectorFocus = false;
 
 // timing
 float deltaTime = 0.0f;
@@ -61,20 +62,28 @@ void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-void mouseCallback(GLFWwindow* /*window*/, double xpos, double ypos) {
-  if (firstMouse) {
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+  if (inspectorFocus) {
+    if (firstMouse) {
+      lastX = xpos;
+      lastY = ypos;
+      firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+
     lastX = xpos;
-    lastY = xpos;
-    firstMouse = false;
+    lastY = ypos;
+
+    camera.processMouseMovement(xoffset, yoffset);
+
+    int display_w, display_h;
+    glfwGetWindowSize(window, &display_w, &display_h);
+    glfwSetCursorPos(window, display_w / 2.0, display_h / 2.0);
+    lastX = display_w / 2.0;
+    lastY = display_h / 2.0;
   }
-
-  float xoffset = xpos - lastX;
-  float yoffset = lastY - ypos;
-
-  lastX = xpos;
-  lastY = ypos;
-
-  camera.processMouseMovement(xoffset, yoffset);
 }
 
 void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
@@ -111,7 +120,7 @@ int main() {
 #endif
 
   // Create a window with graphic context
-  GLFWwindow* window = glfwCreateWindow(1280, 720, "Space Engine", nullptr, nullptr);
+  GLFWwindow* window = glfwCreateWindow(1920, 1080, "Space Engine", nullptr, nullptr);
   if (window == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
@@ -135,7 +144,30 @@ int main() {
   }
 
   glEnable(GL_DEPTH_TEST);
-  stbi_set_flip_vertically_on_load(false);
+  // stbi_set_flip_vertically_on_load(false);
+
+  // test framebuffer
+  unsigned int fbo;
+  glGenFramebuffers(1, &fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+  unsigned int textureColorbuffer;
+  glGenTextures(1, &textureColorbuffer);
+  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
+  unsigned int rbo;
+  glGenRenderbuffers(1, &rbo);
+  glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -158,9 +190,9 @@ int main() {
   // Examples
   auto backpack = Entity::create("Backpack");
   backpack->addComponent<ModelRenderer>();
-  
+
   auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->setModel("./models/test/dio.fbx");
+  backpackRenderer->setModel("./models/dio/dio.fbx");
   scene.addEntity(backpack);
 
   // gui creation
@@ -179,29 +211,19 @@ int main() {
 
     processInput(window);
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glEnable(GL_DEPTH_TEST);
+    glViewport(0, 0, 1920, 1080);
 
-    gui.display();
-
-    ImGui::Render();
-
-    int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    // TODO: Review this
     std::shared_ptr<Camera> cam = scene.selectedCamera.lock();
     glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     shader.use();
-    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
+    projection[1][1] *= -1;
     glm::mat4 view = camera.getViewMatrix();
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
-
     for (auto& entity : scene.entities) {
       auto modelRenderer = entity->getComponent<ModelRenderer>();
       if (modelRenderer && modelRenderer->model) {
@@ -217,10 +239,50 @@ int main() {
       }
     }
 
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("Scene");
+
+    if (!inspectorFocus && ImGui::IsWindowHovered() && io.MouseDown[1]) {
+      inspectorFocus = true;
+      glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    } else if (inspectorFocus && !io.MouseDown[1]) {
+      inspectorFocus = false;
+      glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+      firstMouse = true;
+    }
+
+    ImVec2 window_size = ImGui::GetContentRegionAvail();
+    float aspect_ratio = 1920.0f / 1080.0f;
+    float window_aspect_ratio = window_size.x / window_size.y;
+
+    ImVec2 image_size;
+    if (window_aspect_ratio > aspect_ratio) {
+      image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+    } else {
+      image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+    }
+
+    ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
+    ImGui::End();
+
+    gui.display();
+    ImGui::Render();
+
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
     glfwPollEvents();
+
   }
 
   // Cleanup ImGui
