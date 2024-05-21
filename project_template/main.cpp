@@ -74,17 +74,13 @@ int main() {
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
-  scene.addEntity(new Entity("Backpack"));
+  scene.addEntity(Entity::create("Test"));
   scene.entities[1]->addComponent<ModelRenderer>();
-  scene.entities[1]->getComponent<ModelRenderer>()->model = new Model("../../models/backpack/backpack.obj");
+  scene.entities[1]->getComponent<ModelRenderer>()->setModel("./models/dio/dio.fbx");
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
-  Shader shader("../../shaders/test.vs", "../../shaders/test.fs", nullptr);
-
-  // TODO: REMOVE TEST MODEL IMPORT
-  // TODO: Find a way to use better path.
-  Model testModel("../../models/backpack/backpack.obj");
+  Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -98,23 +94,25 @@ int main() {
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    std::shared_ptr<Camera> cam = scene.selectedCamera.lock();
+    glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.use();
-
-    glm::mat4 projection = glm::perspective(glm::radians(scene.selectedCamera->zoom), 1280.0f / 720.0f, 0.1f, 100.0f);
-    glm::mat4 view = scene.selectedCamera->getViewMatrix();
+    glm::mat4 projection = glm::perspective(glm::radians(cam->zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
+    projection[1][1] *= -1;
+    glm::mat4 view = cam->getViewMatrix();
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
-
     for (auto& entity : scene.entities) {
-      ModelRenderer* modelRenderer = entity->getComponent<ModelRenderer>();
+      auto modelRenderer = entity->getComponent<ModelRenderer>();
       if (modelRenderer != nullptr) {
-        Transform* tf = entity->getComponent<Transform>();
+        auto tf = entity->getComponent<Transform>();
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(tf->position.x, tf->position.y, tf->position.z));
-        model = glm::scale(model, glm::vec3(tf->scale.x, tf->scale.y, tf->scale.z));
-        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.x)), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.y)), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, static_cast<float>(glm::radians(tf->rotation.z)), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::translate(model, glm::vec3(tf->position.x(), tf->position.y(), tf->position.z()));
+        model = glm::scale(model, glm::vec3(tf->scale.x(), tf->scale.y(), tf->scale.z()));
+        model = glm::rotate(model, glm::radians(tf->rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(tf->rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(tf->rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
         shader.setMat4("model", model);
         modelRenderer->model->draw(shader);
       }
