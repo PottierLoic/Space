@@ -14,7 +14,6 @@ void EditorGui::display() {
   if (showInspector) { displayInspector(); }
   if (showHierarchy) { displayHierarchy(); }
   if (showProject) { displayProject(); }
-  if (showScene) { displayScene(); }
   if (showRender) { displayRender(); }
   if (showConsole) { displayConsole(); }
 }
@@ -119,13 +118,6 @@ void EditorGui::displayProject() {
   ImGui::End();
 }
 
-void EditorGui::displayScene() {
-  if (ImGui::Begin("Scene")) {
-    //TODO: Render the game editor view (draft appearance).
-  }
-  ImGui::End();
-}
-
 void EditorGui::displayRender() {
   if (ImGui::Begin("Render")) {
     //TODO: Render the game rendering view (final appearance).
@@ -135,25 +127,9 @@ void EditorGui::displayRender() {
 
 void EditorGui::displayConsole() {
   if (ImGui::Begin("Console")) {
-    // TODO: enhance this (it's awfull in the editor)
-    // Filter inputs
-    // for (size_t i = 0; i < logLevels.size(); ++i) {
-    //   if (ImGui::Selectable(logLevels[i], Logger::filter.levels.count(static_cast<LogLevel>(i)))) {
-    //     Logger::filter.setLogLevel(static_cast<LogLevel>(i), !Logger::filter.levels.count(static_cast<LogLevel>(i)));
-    //   }
-    // }
-    // ImGui::NewLine();
-    // for (size_t i = 0; i < logTypes.size(); ++i) {
-    //   if (ImGui::Selectable(logTypes[i], Logger::filter.types.count(static_cast<LogType>(i)))) {
-    //     Logger::filter.setLogType(static_cast<LogType>(i), !Logger::filter.types.count(static_cast<LogType>(i)));
-    //   }
-    // }
-    // ImGui::NewLine();
     ImGui::Text("Search: ");
     ImGui::SameLine();
     ImGui::InputText("##log_search", &Logger::filter.keyword);
-
-    // Log list filtered.
     ImGui::SeparatorText("Logs");
     for (const auto& log : Logger::getLogEntries()) {
       std::string texte = log.toString();
@@ -233,6 +209,28 @@ void EditorGui::cherryTheme() {
   style.Colors[ImGuiCol_Border] = ImVec4(0.539f, 0.479f, 0.255f, 0.162f);
   style.FrameBorderSize = 0.0f;
   style.WindowBorderSize = 1.0f;
+}
+
+void EditorGui::displayScene(unsigned int textureColorbuffer) {
+  if (showScene) {
+    ImGui::Begin("Scene");
+
+    sceneHovered = ImGui::IsWindowHovered();
+
+    ImVec2 window_size = ImGui::GetContentRegionAvail();
+    float aspect_ratio = 1920.0f / 1080.0f;
+    float window_aspect_ratio = window_size.x / window_size.y;
+
+    ImVec2 image_size;
+    if (window_aspect_ratio > aspect_ratio) {
+      image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+    } else {
+      image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+    }
+
+    ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
+    ImGui::End();
+  }
 }
 
 }

@@ -37,7 +37,7 @@ EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX =  1920.0f / 2.0;
 float lastY =  1080.0 / 2.0;
 bool firstMouse = true;
-bool inspectorFocus = false;
+bool inspectorFocus = false; // TODO: move in the inspector ?
 
 // timing
 float deltaTime = 0.0f;
@@ -250,9 +250,7 @@ int main() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::Begin("Scene");
-
-    if (!inspectorFocus && ImGui::IsWindowHovered() && io.MouseDown[1]) {
+    if (!inspectorFocus && gui.sceneHovered && io.MouseDown[1]) {
       inspectorFocus = true;
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     } else if (inspectorFocus && !io.MouseDown[1]) {
@@ -261,21 +259,8 @@ int main() {
       firstMouse = true;
     }
 
-    ImVec2 window_size = ImGui::GetContentRegionAvail();
-    float aspect_ratio = 1920.0f / 1080.0f;
-    float window_aspect_ratio = window_size.x / window_size.y;
-
-    ImVec2 image_size;
-    if (window_aspect_ratio > aspect_ratio) {
-      image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
-    } else {
-      image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
-    }
-
-    ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
-    ImGui::End();
-
     gui.display();
+    gui.displayScene(textureColorbuffer);
     ImGui::Render();
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

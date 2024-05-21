@@ -61,32 +61,25 @@ private:
   bool showScene = false;          // Scene section visiblity flag.
   bool showRender = false;         // Render section visiblity flag.
   bool showConsole = true;       // Console section visibility flag.
-  
-  bool polygonMode = false;        // Polygon mode flag. (Draw the full model or just the wireframe) 
+
+  bool polygonMode = false;        // Polygon mode flag. (Draw the full model or just the wireframe)
 
   std::unordered_map<std::type_index, std::function<void(std::shared_ptr<Component>)>> componentViewers;
 
   /* Display a transform component section. */
   void initComponentViewers();
-
   /* Display the menu bar. */
   void displayBar();
-
   /* Display the inspector section. */
   void displayInspector();
-
   /* Display the hierarchy section. */
   void displayHierarchy();
-
   /* Display the project section. */
   void displayProject();
-
   /* Display the scene section. */
   void displayScene();
-
   /* Display the render section. */
   void displayRender();
-
   /* Display the console section. */
   void displayConsole();
 
@@ -97,6 +90,8 @@ public:
   /* Reference to the selected Entity. */
   std::shared_ptr<Entity> selectedEntity = nullptr;
 
+  bool sceneHovered = false;
+
   /*
    * Main constructor that use default flags.
    * @param scene: Reference to a scene.
@@ -105,6 +100,8 @@ public:
 
   /* Display the whole EditorGui. */
   void display();
+
+  void displayScene(unsigned int textureColorbuffer);
 
   /* Gui themes */
   void cherryTheme();
