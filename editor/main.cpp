@@ -29,6 +29,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "input/input_manager.hpp"
+
 using namespace SpaceEngine;
 using namespace SpaceEditor;
 
@@ -42,19 +44,6 @@ bool inspectorFocus = false; // TODO: move in the inspector ?
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-void processInput(GLFWwindow* window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.processKeyboard(FORWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.processKeyboard(BACKWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.processKeyboard(LEFT, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.processKeyboard(RIGHT, deltaTime);
-}
 
 /* DEBUG */
 
@@ -128,7 +117,6 @@ int main() {
   }
 
   glfwMakeContextCurrent(window);
-  // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
   glfwSetCursorPosCallback(window, mouseCallback);
   glfwSetScrollCallback(window, scrollCallback);
@@ -180,6 +168,16 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
+  // Input Manager initialization
+  auto& inputManager = InputManager::getInstance();
+  inputManager.initialize(window);
+
+  // basic camera control callback functions
+  inputManager.registerKeyCallback(GLFW_KEY_W, [](float dt) { camera.processKeyboard(FORWARD, dt); });
+  inputManager.registerKeyCallback(GLFW_KEY_S, [](float dt) { camera.processKeyboard(BACKWARD, dt); });
+  inputManager.registerKeyCallback(GLFW_KEY_A, [](float dt) { camera.processKeyboard(LEFT, dt); });
+  inputManager.registerKeyCallback(GLFW_KEY_D, [](float dt) { camera.processKeyboard(RIGHT, dt); });
+
   // Maximize the window
   // glfwMaximizeWindow(window);
 
@@ -209,7 +207,7 @@ int main() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    processInput(window);
+    inputManager.processInput(deltaTime);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glEnable(GL_DEPTH_TEST);
