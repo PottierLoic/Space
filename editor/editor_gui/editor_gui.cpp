@@ -3,8 +3,9 @@
 using namespace SpaceEngine;
 namespace SpaceEditor {
 
-EditorGui::EditorGui(std::shared_ptr<Scene> scene) {
+EditorGui::EditorGui(std::shared_ptr<Scene> scene, unsigned int textureColorbuffer) {
   this->scene = scene;
+  this->textureColorbuffer = textureColorbuffer;
   initComponentViewers();
   cherryTheme();
 }
@@ -16,6 +17,7 @@ void EditorGui::display() {
   if (showProject) { displayProject(); }
   if (showRender) { displayRender(); }
   if (showConsole) { displayConsole(); }
+  if (showScene) { displayScene(); }
 }
 
 void EditorGui::displayBar() {
@@ -139,6 +141,28 @@ void EditorGui::displayConsole() {
   ImGui::End();
 }
 
+void EditorGui::displayScene() {
+  if (showScene) {
+    ImGui::Begin("Scene");
+
+    sceneHovered = ImGui::IsWindowHovered();
+
+    ImVec2 window_size = ImGui::GetContentRegionAvail();
+    float aspect_ratio = 1920.0f / 1080.0f;
+    float window_aspect_ratio = window_size.x / window_size.y;
+
+    ImVec2 image_size;
+    if (window_aspect_ratio > aspect_ratio) {
+      image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+    } else {
+      image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+    }
+
+    ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
+    ImGui::End();
+  }
+}
+
 void EditorGui::cherryTheme() {
   // cherry colors, 3 intensities
   #define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
@@ -177,7 +201,6 @@ void EditorGui::cherryTheme() {
   style.Colors[ImGuiCol_Header]                = MED( 0.76f);
   style.Colors[ImGuiCol_HeaderHovered]         = MED( 0.86f);
   style.Colors[ImGuiCol_HeaderActive]          = HI( 1.00f);
-  // style.Colors[ImGuiCol_COUNT]                = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
   style.Colors[ImGuiCol_ButtonHovered]         = MED( 0.78f);
   style.Colors[ImGuiCol_ButtonActive]          = MED( 1.00f);
   style.Colors[ImGuiCol_ResizeGrip]            = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);
@@ -188,7 +211,6 @@ void EditorGui::cherryTheme() {
   style.Colors[ImGuiCol_PlotHistogram]         = TEXT(0.63f);
   style.Colors[ImGuiCol_PlotHistogramHovered]  = MED( 1.00f);
   style.Colors[ImGuiCol_TextSelectedBg]        = MED( 0.43f);
-  // [...]
   style.Colors[ImGuiCol_ModalWindowDimBg]  = BG( 0.73f);
 
   style.WindowPadding            = ImVec2(6, 4);
@@ -209,28 +231,6 @@ void EditorGui::cherryTheme() {
   style.Colors[ImGuiCol_Border] = ImVec4(0.539f, 0.479f, 0.255f, 0.162f);
   style.FrameBorderSize = 0.0f;
   style.WindowBorderSize = 1.0f;
-}
-
-void EditorGui::displayScene(unsigned int textureColorbuffer) {
-  if (showScene) {
-    ImGui::Begin("Scene");
-
-    sceneHovered = ImGui::IsWindowHovered();
-
-    ImVec2 window_size = ImGui::GetContentRegionAvail();
-    float aspect_ratio = 1920.0f / 1080.0f;
-    float window_aspect_ratio = window_size.x / window_size.y;
-
-    ImVec2 image_size;
-    if (window_aspect_ratio > aspect_ratio) {
-      image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
-    } else {
-      image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
-    }
-
-    ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
-    ImGui::End();
-  }
 }
 
 }

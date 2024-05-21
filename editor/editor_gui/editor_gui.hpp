@@ -56,13 +56,14 @@ namespace SpaceEditor {
 class EditorGui {
 private:
   bool showInspector = true;      // Inspector section visiblity flag.
-  bool showHierarchy = false;      // Hierarchy section visiblity flag.
-  bool showProject = false;        // Project section visiblity flag.
-  bool showScene = false;          // Scene section visiblity flag.
-  bool showRender = false;         // Render section visiblity flag.
+  bool showHierarchy = true;      // Hierarchy section visiblity flag.
+  bool showProject = true;        // Project section visiblity flag.
+  bool showScene = true;          // Scene section visiblity flag.
+  bool showRender = true;         // Render section visiblity flag.
   bool showConsole = true;       // Console section visibility flag.
 
-  bool polygonMode = false;        // Polygon mode flag. (Draw the full model or just the wireframe)
+  bool polygonMode = true;        // Polygon mode flag. (Draw the full model or just the wireframe)
+  unsigned int textureColorbuffer;
 
   std::unordered_map<std::type_index, std::function<void(std::shared_ptr<Component>)>> componentViewers;
 
@@ -96,12 +97,10 @@ public:
    * Main constructor that use default flags.
    * @param scene: Reference to a scene.
    */
-  EditorGui(std::shared_ptr<Scene> scene);
+  EditorGui(std::shared_ptr<Scene> scene, unsigned int textureColorbuffer);
 
   /* Display the whole EditorGui. */
   void display();
-
-  void displayScene(unsigned int textureColorbuffer);
 
   /* Gui themes */
   void cherryTheme();

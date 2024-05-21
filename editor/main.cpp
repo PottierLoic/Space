@@ -196,7 +196,7 @@ int main() {
   scene.addEntity(backpack);
 
   // gui creation
-  EditorGui gui = EditorGui(std::make_shared<Scene>());
+  EditorGui gui = EditorGui(std::make_shared<Scene>(), textureColorbuffer);
   gui.selectedEntity = scene.entities[0];
 
   // TODO: REMOVE OPENGL TESTS
@@ -260,7 +260,6 @@ int main() {
     }
 
     gui.display();
-    gui.displayScene(textureColorbuffer);
     ImGui::Render();
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
