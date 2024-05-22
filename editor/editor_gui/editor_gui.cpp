@@ -108,7 +108,14 @@ void EditorGui::displayInspector() {
 
 void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
-    // TODO: Render the hierarchy view.
+    int index = 0;
+    for (auto& entity : scene->entities) {
+      std::string uniqueLabel = entity->getComponent<Transform>()->name + "##" + std::to_string(index);
+      if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
+        selectedEntity = entity;
+      }
+      index++;
+    }
   }
   ImGui::End();
 }

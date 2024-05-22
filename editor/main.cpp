@@ -57,7 +57,6 @@ void processInput(GLFWwindow* window) {
 }
 
 /* DEBUG */
-
 void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
 }
@@ -98,28 +97,22 @@ int main() {
   }
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
-  // GL ES 2.0 + GLSL 100
   const char* glsl_version = "#version 100";
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 #elif defined(__APPLE__)
-  // GL 3.2 + GLSL 150
   const char* glsl_version = "#version 150";
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #else
-  // GL 3.0 + GLSL 130
   const char* glsl_version = "#version 130";
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-  //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
-  // Create a window with graphic context
   GLFWwindow* window = glfwCreateWindow(1920, 1080, "Space Engine", nullptr, nullptr);
   if (window == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
@@ -128,7 +121,6 @@ int main() {
   }
 
   glfwMakeContextCurrent(window);
-  // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
   glfwSetCursorPosCallback(window, mouseCallback);
   glfwSetScrollCallback(window, scrollCallback);
@@ -144,9 +136,8 @@ int main() {
   }
 
   glEnable(GL_DEPTH_TEST);
-  // stbi_set_flip_vertically_on_load(false);
 
-  // test framebuffer
+  // create framebuffer for scene texture
   unsigned int fbo;
   glGenFramebuffers(1, &fbo);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -173,35 +164,40 @@ int main() {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO(); (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
-
-  // Maximize the window
-  // glfwMaximizeWindow(window);
 
   //TODO : Remove too
   // Scene creation
   Scene scene = Scene();
 
   // Examples
-  auto backpack = Entity::create("Backpack");
-  backpack->addComponent<ModelRenderer>();
+  auto test = Entity::create("test");
+  test->addComponent<ModelRenderer>();
+  auto testRenderer = test->getComponent<ModelRenderer>();
+  testRenderer->setModel("./models/dio/dio.fbx");
+  scene.addEntity(test);
 
+  auto backpack = Entity::create("backpack");
+  backpack->addComponent<ModelRenderer>();
   auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->setModel("./models/dio/dio.fbx");
+  backpackRenderer->setModel("./models/backpack/backpack.obj");
   scene.addEntity(backpack);
 
   // gui creation
-  EditorGui gui = EditorGui(std::make_shared<Scene>(), textureColorbuffer);
+  EditorGui gui = EditorGui(std::make_shared<Scene>(scene), textureColorbuffer);
   gui.selectedEntity = scene.entities[0];
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
   Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
+
+  Logger::log(LogLevel::INFORMATION, LogType::Core, "Test Log", "This is a test log message");
+  Logger::log(LogLevel::DEBUG, LogType::Editor, "Editor Log", "Editor is coool !");
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
