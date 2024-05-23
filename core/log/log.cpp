@@ -2,8 +2,8 @@
 
 namespace SpaceEngine {
 
-Log::Log(LogLevel level, LogType type, const std::string& title, const std::string& message)
-  : level(level), type(type), title(title), message(message), timestamp(std::chrono::system_clock::now()) {}
+Log::Log(LogLevel level, LogType type, const std::string& message)
+  : level(level), type(type), message(message), timestamp(std::chrono::system_clock::now()) {}
 
 std::string Log::toString() const {
   std::ostringstream stream;
@@ -11,10 +11,7 @@ std::string Log::toString() const {
   auto tm = *std::localtime(&timeT);
   stream << "[" << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "] ";
   stream << "[" << LogLevelToString(level) << "] ";
-  stream << "[" << LogTypeToString(type) << "] ";
-  if (!title.empty()) {
-    stream << title << " - ";
-  }
+  stream << "[" << LogTypeToString(type) << "] - ";
   stream << message;
   return stream.str();
 }

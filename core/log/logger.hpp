@@ -17,10 +17,14 @@ public:
    *
    * @param level The log level of the message.
    * @param type The type of the log entry.
-   * @param title The title of the log entry.
    * @param message The message of the log entry.
    */
-  static void log(LogLevel level, LogType type, const std::string& title, const std::string& message);
+  static void log(LogLevel level, LogType type, const std::string& message);
+  static void debug(const std::string& message);
+  static void info(const std::string& message);
+  static void warn(const std::string& message);
+  static void error(const std::string& message);
+  static void fatal(const std::string& message);
 
   static std::vector<Log> getLogEntries();
 

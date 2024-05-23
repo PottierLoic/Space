@@ -196,8 +196,8 @@ int main() {
   // TODO: Find a way to use better path.
   Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
 
-  Logger::log(LogLevel::INFORMATION, LogType::Core, "Test Log", "This is a test log message");
-  Logger::log(LogLevel::DEBUG, LogType::Editor, "Editor Log", "Editor is coool !");
+  Logger::debug("Starting SpaceEditor");
+  Logger::log(LogLevel::DEBUG, LogType::Editor, "Editor is coool !");
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {

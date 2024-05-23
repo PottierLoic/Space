@@ -17,6 +17,7 @@ enum LogLevel {
 };
 
 enum LogType {
+  None,
   Core,
   Rendering,
   Audio,
@@ -30,8 +31,8 @@ inline constexpr std::array<const char*, 5> logLevels = {
   "DEBUG", "INFORMATION", "WARNING", "ERROR", "FATAL"
 };
 
-inline constexpr std::array<const char*, 7> logTypes = {
-  "Core", "Rendering", "Audio", "Input", "Editor", "Scripting", "AssetLoading"
+inline constexpr std::array<const char*, 8> logTypes = {
+  "None", "Core", "Rendering", "Audio", "Input", "Editor", "Scripting", "AssetLoading"
 };
 
 /**
@@ -49,10 +50,9 @@ public:
    * @brief Constructor for Log class.
    * @param level The log level.
    * @param type The log type.
-   * @param title The log title.
    * @param message The log message.
    */
-  Log(LogLevel level, LogType type, const std::string& title, const std::string& message);
+  Log(LogLevel level, LogType type, const std::string& message);
 
   /**
    * @brief Converts the log entry to a string representation.

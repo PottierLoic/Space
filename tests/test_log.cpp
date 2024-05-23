@@ -5,16 +5,13 @@ using namespace SpaceEngine;
 
 int testLog() {
   // Create a log entry
-  Log log(LogLevel::INFORMATION, LogType::Core, "Test Log", "This is a test log message");
+  Log log(LogLevel::INFORMATION, LogType::Core, "This is a test log message");
 
   // Test log level
   custom_assert(log.level == LogLevel::INFORMATION, "Log level incorrect");
 
   // Test log type
   custom_assert(log.type == LogType::Core, "Log type incorrect");
-
-  // Test log title
-  custom_assert(log.title == "Test Log", "Log title incorrect");
 
   // Test log message
   custom_assert(log.message == "This is a test log message", "Log message incorrect");
