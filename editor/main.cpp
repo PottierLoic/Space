@@ -261,20 +261,15 @@ int main() {
     ImGui::Render();
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
     glfwSwapBuffers(window);
     glfwPollEvents();
-
   }
-
   // Cleanup ImGui
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
-
   // Cleanup GLFW
   glfwDestroyWindow(window);
   glfwTerminate();
-
   return 0;
 }

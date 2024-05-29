@@ -18,6 +18,11 @@ if os.path.exists(generated_tests_path):
   shutil.rmtree(generated_tests_path)
 
 if os.name == 'nt':
-  subprocess.run(['build.bat'])
+  cmake_command = 'cmake -DBUILD_SHARED_LIBS=OFF -G "MinGW Makefiles" -B "./build" .'
+  make_command = 'mingw32-make -C ./build'
 else:
-  subprocess.run(['./build.sh'], shell=True)
+  cmake_command = 'cmake -DBUILD_SHARED_LIBS=OFF -G "Unix Makefiles" -B "./build" .'
+  make_command = 'make -C ./build'
+
+subprocess.run(cmake_command)
+subprocess.run(make_command)
