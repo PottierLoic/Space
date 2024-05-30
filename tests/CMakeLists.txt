@@ -7,4 +7,4 @@ file(GLOB_RECURSE TEST_SOURCES "./*.cpp")
 
 add_executable(SpaceTests ${TEST_SOURCES})
 target_compile_options(SpaceTests PRIVATE -Wall -Wextra -Werror)
-target_link_libraries(SpaceTests SpaceEngine)
+target_link_libraries(SpaceTests SpaceEngine SpaceEditor)
