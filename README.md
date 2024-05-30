@@ -52,6 +52,7 @@ Space is using some external libraries :
 - [ImGui](https://github.com/ocornut/imgui) - C++ GUI.
 - [Assimp](https://github.com/assimp/assimp) - 3D model loader.
 - [stb](https://github.com/nothings/stb) - Collection of convenient single header libraries.
+- [nlohmann/json](https://github.com/nlohmann/json) - JSON for Modern C++.
 
 ## License
 

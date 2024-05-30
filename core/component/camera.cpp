@@ -3,7 +3,7 @@
 
 namespace SpaceEngine {
 
-Camera::Camera(std::weak_ptr<Entity> owner) : Component(owner) {
+Camera::Camera() {
   front = glm::vec3(0.0f, 0.0f, -1.0f);
   zoom = 45.0f;
   worldUp = glm::vec3(0.0f, 1.0f, 0.0f);

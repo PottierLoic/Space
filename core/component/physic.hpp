@@ -26,9 +26,8 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new Physic component with default values.
-   * @param owner (std::weak_ptr<Entity>): A pointer to the entity that store the component.
    */
-  Physic(std::weak_ptr<Entity> owner);
+  Physic();
 
 };
 

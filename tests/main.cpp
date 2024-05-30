@@ -10,6 +10,7 @@ extern int testEntity();
 extern int testProject();
 extern int testLog();
 extern int testLogger();
+extern int testSerializeComponent();
 
 struct TestFunction {
   const char* name;
@@ -24,6 +25,7 @@ TestFunction test_fn[] = {
   {"testProject", testProject},
   {"testLog", testLog},
   {"testLogger", testLogger},
+  {"testSerializeComponent", testSerializeComponent},
 };
 
 void run_all_tests() {

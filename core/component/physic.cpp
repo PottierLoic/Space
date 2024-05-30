@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-Physic::Physic(std::weak_ptr<Entity> owner) : Component(owner) {
+Physic::Physic() {
   this->mass = 1.0;
   this->drag = 0;
   this->angularDrag = 0;

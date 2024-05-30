@@ -58,7 +58,8 @@ public:
       return false;
     }
 
-    auto component = std::make_shared<T>(shared_from_this(), std::forward<Args>(args)...);
+    std::shared_ptr<T> component = std::make_shared<T>(std::forward<Args>(args)...);
+    component->setOwner(shared_from_this());
     components[typeIndex] = component;
     return true;
   }

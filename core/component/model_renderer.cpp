@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-ModelRenderer::ModelRenderer(std::weak_ptr<Entity> owner) : Component(owner) {
+ModelRenderer::ModelRenderer() {
   model = nullptr;
 }
 

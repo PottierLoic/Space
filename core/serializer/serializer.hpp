@@ -11,10 +11,8 @@ namespace SpaceEngine {
 
 class Serializer {
 public:
-  static json serialize(const Transform& transform);
-  static json serialize(const Camera& camera);
-
-  static void deserialize(const json&, Transform& transform);
+  static json serialize(const std::shared_ptr<Transform> transform);
+  static void deserialize(const json&, std::shared_ptr<Transform> transform);
 };
 
 }

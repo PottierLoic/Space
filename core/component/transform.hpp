@@ -29,11 +29,9 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new transform component with default values.
-   * @param owner (std::weak_ptr<Entity>): A pointer to the entity that store the component.
    * @param name: The name of the object.
    */
-  Transform(std::weak_ptr<Entity> owner, std::string name);
-
+  Transform(std::string name);
 };
 
 }

@@ -13,7 +13,7 @@ public:
   // if not enabled, update functions will not be called.
   bool enabled = true;
 
-  Script(std::weak_ptr<Entity> owner);
+  Script();
   virtual ~Script() = default;
 
   virtual void awake();

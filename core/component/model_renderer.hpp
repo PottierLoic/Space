@@ -21,9 +21,8 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new empty ModelRenderer component.
-   * @param owner (std::weak_ptr<Entity>): A pointer to the entity that store the component.
    */
-  ModelRenderer(std::weak_ptr<Entity> owner);
+  ModelRenderer();
 
   /**
    * @brief Set the model used by this Model Renderer

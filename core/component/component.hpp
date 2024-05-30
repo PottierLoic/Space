@@ -27,14 +27,18 @@ protected:
 public:
   /**
    * @brief Constructor that sets the owning entity.
-   * @param owner A weak pointer to the entity that stores the component.
    */
-  Component(std::weak_ptr<Entity> owner);
+  Component();
 
   /**
    * @brief Virtual destructor to allow proper cleanup in derived classes.
    */
   virtual ~Component() = default;
+
+  /**
+   * @brief Set the owner of the component.
+   */
+  void setOwner(std::weak_ptr<Entity> owner);
 };
 
 }

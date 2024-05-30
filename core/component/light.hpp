@@ -27,9 +27,8 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new Light component with default values.
-   * @param owner (weak_ptr<Entity>): A pointer to the entity that store the component.
    */
-  Light(std::weak_ptr<Entity> owner);
+  Light();
 
 };
 

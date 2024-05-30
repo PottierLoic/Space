@@ -32,9 +32,8 @@ public:
 
   /**
    * @brief Default constructor: Initializes a new empty Camera component.
-   * @param owner (std::weak_ptr<Entity>): A pointer to the entity that store the component.
    */
-  Camera(std::weak_ptr<Entity> owner);
+  Camera();
 
   /**
    * @brief Get the view matrix of the camera.
