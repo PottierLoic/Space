@@ -2,7 +2,7 @@
 
 namespace SpaceEditor {
 
-Project::Project(std::string path, std::string name) {
+Project::Project(const std::string path, const std::string name) {
   if (std::filesystem::exists(path + "/" + name)) {
     std::cerr << "Error: Project directory already exists." << std::endl;
   }

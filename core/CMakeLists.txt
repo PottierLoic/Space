@@ -11,6 +11,7 @@ file(GLOB_RECURSE CORE_SOURCES
   "component/*.cpp"
   "shader/*.cpp"
   "log/*.cpp"
+  "serializer/*.cpp"
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})
@@ -45,6 +46,7 @@ target_include_directories(SpaceEngine PUBLIC
   "${LIBS_ROOT}/glfw/include"
   "${LIBS_ROOT}/glm"
   "${LIBS_ROOT}/stb"
+  "${LIBS_ROOT}/json/include"
 )
 
 target_link_libraries(SpaceEngine

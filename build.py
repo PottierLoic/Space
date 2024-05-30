@@ -13,7 +13,7 @@ shutil.copy2('./libs/imgui/backends/imgui_impl_opengl3_loader.h', './libs/imgui'
 shutil.copy2('./libs/imgui/misc/cpp/imgui_stdlib.cpp', './libs/imgui')
 shutil.copy2('./libs/imgui/misc/cpp/imgui_stdlib.h', './libs/imgui')
 
-generated_tests_path = './tests/Generated'
+generated_tests_path = './tests/generated'
 if os.path.exists(generated_tests_path):
   shutil.rmtree(generated_tests_path)
 

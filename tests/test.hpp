@@ -1,6 +1,5 @@
 #pragma once
 
-
 #define custom_assert(expression, message) \
   if (!(expression)) { \
     std::cout << "\033[1;31mAssertion Failed: " << message << "\033[0m" << std::endl; \
