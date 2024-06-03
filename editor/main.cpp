@@ -10,6 +10,7 @@
 #include "editor_camera/editor_camera.hpp" // maybe not stay here
 #include "model/model.hpp" // maybe removed soon
 #include "shader/shader.hpp"
+#include "space/space.hpp"
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -44,16 +45,18 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 void processInput(GLFWwindow* window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.processKeyboard(FORWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.processKeyboard(BACKWARD, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.processKeyboard(LEFT, deltaTime);
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.processKeyboard(RIGHT, deltaTime);
+  if (inspectorFocus) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      camera.processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      camera.processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      camera.processKeyboard(RIGHT, deltaTime);
+  }
 }
 
 /* DEBUG */
@@ -173,8 +176,8 @@ int main() {
   ImGui_ImplOpenGL3_Init(glsl_version);
 
   //TODO : Remove too
-  // Scene creation
-  Scene scene = Scene();
+  auto space = std::make_shared<Space>("./", "test_space");
+  auto scene = space->currentScene;
 
   // Examples
   auto test = Entity::create("test");
@@ -182,25 +185,17 @@ int main() {
   auto testRenderer = test->getComponent<ModelRenderer>();
   testRenderer->path = "./models/dio/dio.fbx";
   testRenderer->setModel();
-  scene.addEntity(test);
-
-  auto backpack = Entity::create("backpack");
-  backpack->addComponent<ModelRenderer>();
-  auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->path = "./models/backpack/backpack.obj";
-  backpackRenderer->setModel();
-  scene.addEntity(backpack);
+  scene->addEntity(test);
 
   // gui creation
-  EditorGui gui = EditorGui(std::make_shared<Scene>(scene), textureColorbuffer);
-  gui.selectedEntity = scene.entities[0];
+  EditorGui gui = EditorGui(scene, textureColorbuffer);
+  gui.selectedEntity = scene->entities[0];
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
   Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
 
-  Logger::debug("Starting SpaceEditor");
-  Logger::log(LogLevel::DEBUG, LogType::Editor, "Editor is coool !");
+  Logger::log(LogLevel::INFORMATION, LogType::Editor, "Starting SpaceEditor");
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -214,7 +209,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, 1920, 1080);
 
-    std::shared_ptr<Camera> cam = scene.selectedCamera.lock();
+    std::shared_ptr<Camera> cam = scene->selectedCamera.lock();
     glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader.use();
@@ -223,7 +218,7 @@ int main() {
     glm::mat4 view = camera.getViewMatrix();
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
-    for (auto& entity : scene.entities) {
+    for (auto& entity : scene->entities) {
       auto modelRenderer = entity->getComponent<ModelRenderer>();
       if (modelRenderer && modelRenderer->model) {
         auto tf = entity->getComponent<Transform>();

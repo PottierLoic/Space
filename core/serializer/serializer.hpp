@@ -9,6 +9,7 @@
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
+#include "space/space.hpp"
 #include "scene/scene.hpp"
 #include "entity/entity.hpp"
 #include "component/transform.hpp"
@@ -19,6 +20,7 @@ namespace SpaceEngine {
 
 class Serializer {
 public:
+  static json serialize(const std::shared_ptr<Space> space);
   static json serialize(const std::shared_ptr<Scene> scene);
   static json serialize(const std::shared_ptr<Entity> entity);
   static json serialize(const std::shared_ptr<Component> component);

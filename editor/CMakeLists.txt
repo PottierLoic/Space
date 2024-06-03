@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 file(GLOB_RECURSE EDITOR_SOURCES
   "editor_gui/*.cpp"
   "editor_camera/*.cpp"
-  "project/*.cpp"
 )
 
 file(GLOB IMGUI_SOURCES "${LIBS_ROOT}/imgui/*.cpp" "${LIBS_ROOT}/imgui/*.h")

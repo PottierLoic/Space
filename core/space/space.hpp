@@ -10,10 +10,9 @@
 
 #include "scene/scene.hpp"
 
-using SpaceEngine::Scene;
-namespace SpaceEditor {
+namespace SpaceEngine {
 
-class Project {
+class Space {
 public:
   std::string name;
   std::string path;
@@ -25,7 +24,7 @@ public:
   std::shared_ptr<Scene> currentScene;
   std::vector<std::shared_ptr<Scene>> scenes;
 
-  Project(const std::string path, const std::string name);
+  Space(const std::string path, const std::string name);
 };
 
 }

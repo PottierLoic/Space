@@ -7,7 +7,7 @@ extern int testVector2();
 extern int testVector3();
 extern int testVector4();
 extern int testEntity();
-extern int testProject();
+extern int testSpace();
 extern int testLog();
 extern int testLogger();
 extern int testSerialize();
@@ -23,7 +23,7 @@ TestFunction test_fn[] = {
   {"testVector3", testVector3},
   {"testVector4", testVector4},
   {"testEntity", testEntity},
-  {"testProject", testProject},
+  {"testSpace", testSpace},
   {"testLog", testLog},
   {"testLogger", testLogger},
   {"testSerialize", testSerialize},
