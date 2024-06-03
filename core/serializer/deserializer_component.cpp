@@ -23,6 +23,12 @@ std::unordered_map<std::string, std::function<std::shared_ptr<Component>(const j
     cam->skyboxColor = ImVec4(j["skyboxColor"][0], j["skyboxColor"][1], j["skyboxColor"][2], j["skyboxColor"][3]);
     return cam;
   };
+  m["ModelRenderer"] = [](const json& j) -> std::shared_ptr<Component> {
+    auto modelRenderer = std::make_shared<ModelRenderer>();
+    modelRenderer->path = j["path"];
+    modelRenderer->setModel();
+    return modelRenderer;
+  };
   // TODO: Add other deserializers for all components.
   return m;
 }();

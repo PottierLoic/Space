@@ -180,13 +180,15 @@ int main() {
   auto test = Entity::create("test");
   test->addComponent<ModelRenderer>();
   auto testRenderer = test->getComponent<ModelRenderer>();
-  testRenderer->setModel("./models/dio/dio.fbx");
+  testRenderer->path = "./models/dio/dio.fbx";
+  testRenderer->setModel();
   scene.addEntity(test);
 
   auto backpack = Entity::create("backpack");
   backpack->addComponent<ModelRenderer>();
   auto backpackRenderer = backpack->getComponent<ModelRenderer>();
-  backpackRenderer->setModel("./models/backpack/backpack.obj");
+  backpackRenderer->path = "./models/backpack/backpack.obj";
+  backpackRenderer->setModel();
   scene.addEntity(backpack);
 
   // gui creation

@@ -13,6 +13,7 @@ using json = nlohmann::json;
 #include "entity/entity.hpp"
 #include "component/transform.hpp"
 #include "component/camera.hpp"
+#include "component/model_renderer.hpp"
 
 namespace SpaceEngine {
 

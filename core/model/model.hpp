@@ -2,12 +2,14 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 #include "stb_image.h"
 
+#include "log/logger.hpp"
 #include "model/mesh.hpp"
 #include "model/texture.hpp"
 #include "shader/shader.hpp"

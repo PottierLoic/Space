@@ -57,11 +57,12 @@ void EditorGui::initComponentViewers() {
   this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](std::shared_ptr<Component> component) {
     auto modelRenderer = std::static_pointer_cast<ModelRenderer>(component);
     if (ImGui::CollapsingHeader("Model Renderer")) {
-      ImGui::Text("Model");
-      ImGui::SameLine(100);
-
-      if (modelRenderer->model != nullptr) {
-        ImGui::Text("%s", modelRenderer->model->directory.c_str());
+      ImGui::Text("Model path");
+      ImGui::SameLine();
+      ImGui::InputText("##modelrenderer.path", &modelRenderer->path);
+      ImGui::SameLine();
+      if (ImGui::Button("Load Model")) {
+        modelRenderer->setModel();
       }
     }
   };

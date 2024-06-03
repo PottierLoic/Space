@@ -18,6 +18,7 @@ namespace SpaceEngine {
 class ModelRenderer : public Component {
 public:
   std::shared_ptr<Model> model; /* The 3D model to be rendered. */
+  std::string path;
 
   /**
    * @brief Default constructor: Initializes a new empty ModelRenderer component.
@@ -25,11 +26,10 @@ public:
   ModelRenderer();
 
   /**
-   * @brief Set the model used by this Model Renderer
-   * @param path (std::string): The path where the model is located.
+   * @brief Load the model using path attribute
    * @return TODO Maybe return something ?
    */
-  void setModel(std::string path);
+  void setModel();
 
 };
 

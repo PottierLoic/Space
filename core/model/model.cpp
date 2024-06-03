@@ -17,7 +17,9 @@ void Model::loadModel(std::string path) {
   const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
   if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-    std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+    std::ostringstream msg;
+    msg << "ERROR::ASSIMP:: " << import.GetErrorString();
+    Logger::error(msg.str());
     return;
   }
 
@@ -154,7 +156,9 @@ unsigned int textureFromFile(const char *path, const std::string &directory, boo
 
     stbi_image_free(data);
   } else {
-    std::cout << "Texture failed to load at path: " << path << std::endl;
+    std::ostringstream msg;
+    msg << "Texture failed to load at path: " << path;
+    Logger::error(msg.str());
     stbi_image_free(data);
   }
   return textureID;
