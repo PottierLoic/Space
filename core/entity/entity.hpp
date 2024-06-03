@@ -33,7 +33,7 @@ public:
   std::vector<std::shared_ptr<Entity>> children;
 
   /**
-   * Entity only constructor.
+   * Entity constructor.
    * @param name: (string) the name of the Entity.
    *
    * @return A shared pointer to the Entity created.
@@ -45,9 +45,20 @@ public:
   }
 
   /**
+   * Entity constructor.
+   * Return a no-component Entity. Used for deserialization
+   * @note Should only be used in the engine/editor and not in games.
+   *
+   * @return A shared pointer to the Entity created.
+   */
+  static std::shared_ptr<Entity> createEmpty() {
+    auto entity = std::shared_ptr<Entity>(new Entity());
+    return entity;
+  }
+
+  /**
    * Add a given component to the Entity.
    * @tparam T: Type of the component to add.
-   * @param component: A pointer to the component to add.
    *
    * @return True if the component is added successfully, false otherwise.
    */

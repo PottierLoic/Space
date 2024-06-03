@@ -19,7 +19,6 @@ TODO BIG COMMENT
 */
 class Camera : public Component {
 public:
-  glm::vec3 position;         /* The position of the camera. */
   glm::vec3 front;            /* The front direction vector of the camera. */
   glm::vec3 up;               /* The up direction vector of the camera. */
   glm::vec3 right;            /* The right direction vector of the camera. */

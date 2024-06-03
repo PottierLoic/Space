@@ -10,6 +10,7 @@ extern int testEntity();
 extern int testProject();
 extern int testLog();
 extern int testLogger();
+extern int testSerialize();
 extern int testSerializeComponent();
 
 struct TestFunction {
@@ -25,6 +26,7 @@ TestFunction test_fn[] = {
   {"testProject", testProject},
   {"testLog", testLog},
   {"testLogger", testLogger},
+  {"testSerialize", testSerialize},
   {"testSerializeComponent", testSerializeComponent},
 };
 
