@@ -4,11 +4,18 @@ namespace SpaceEngine {
 
 std::shared_ptr<Scene> Serializer::deserializeScene(const json& j) {
   std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+  scene->entities.pop_back();
   scene->name = j["name"];
   for (const auto& entityJson : j["entities"]) {
     auto entity = deserializeEntity(entityJson);
     if (entity) {
       scene->entities.push_back(entity);
+    }
+  }
+  for (const auto& entity : scene->entities) {
+    if (entity->getComponent<Camera>()) {
+      scene->selectedCamera = entity->getComponent<Camera>();
+      break;
     }
   }
   return scene;

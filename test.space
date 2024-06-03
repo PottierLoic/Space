@@ -1,0 +1,87 @@
+{
+  "entities": [
+    {
+      "components": [
+        {
+          "front": [
+            -4.371138828673793e-08,
+            0.0,
+            -1.0
+          ],
+          "pitch": 0.0,
+          "right": [
+            1.0,
+            0.0,
+            -4.371138828673793e-08
+          ],
+          "skyboxColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "type": "Camera",
+          "up": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "worldUp": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "yaw": -90.0,
+          "zoom": 45.0
+        },
+        {
+          "name": "Default Camera",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "type": "Transform"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "path": "./models/dio/dio.fbx",
+          "type": "ModelRenderer"
+        },
+        {
+          "name": "test",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "type": "Transform"
+        }
+      ]
+    }
+  ],
+  "name": "New Scene"
+}

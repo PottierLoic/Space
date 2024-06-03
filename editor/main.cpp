@@ -21,6 +21,7 @@
 #include "component/camera.hpp"
 #include "component/model_renderer.hpp"
 #include "log/logger.hpp"
+#include "serializer/serializer.hpp"
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
@@ -175,6 +176,8 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
+  Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
+
   EditorGui gui = EditorGui(textureColorbuffer);
 
   //TODO : Remove too
@@ -189,12 +192,15 @@ int main() {
   testRenderer->setModel();
   space->currentScene->addEntity(test);
 
-
-  // TODO: REMOVE OPENGL TESTS
-  // TODO: Find a way to use better path.
-  Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
-
-  Logger::log(LogLevel::INFORMATION, LogType::Editor, "Starting SpaceEditor");
+  // read content from test file
+  // std::ifstream file("./test.space");
+  // if (file.is_open()) {
+  //   json j;
+  //   file >> j;
+  //   file.close();
+  //   auto scene = Serializer::deserializeScene(j);
+  //   space->currentScene = scene;
+  // }
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -208,7 +214,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, 1920, 1080);
 
-    if (space->currentScene != nullptr) {
+    if (space->currentScene != nullptr && space->currentScene->selectedCamera.lock() != nullptr) {
       std::shared_ptr<Camera> cam = space->currentScene->selectedCamera.lock();
       glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
