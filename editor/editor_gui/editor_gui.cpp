@@ -1,10 +1,8 @@
 #include "editor_gui/editor_gui.hpp"
 
-using namespace SpaceEngine;
 namespace SpaceEditor {
 
-EditorGui::EditorGui(std::shared_ptr<Scene> scene, unsigned int textureColorbuffer) {
-  this->scene = scene;
+EditorGui::EditorGui(unsigned int textureColorbuffer) {
   this->textureColorbuffer = textureColorbuffer;
   initComponentViewers();
   cherryTheme();
@@ -108,13 +106,15 @@ void EditorGui::displayInspector() {
 
 void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
-    int index = 0;
-    for (auto& entity : scene->entities) {
-      std::string uniqueLabel = entity->getComponent<Transform>()->name + "##" + std::to_string(index);
-      if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
-        selectedEntity = entity;
+    if (space != nullptr && space->currentScene != nullptr) {
+      int index = 0;
+      for (auto& entity : space->currentScene->entities) {
+        std::string uniqueLabel = entity->getComponent<Transform>()->name + "##" + std::to_string(index);
+        if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
+          selectedEntity = entity;
+        }
+        index++;
       }
-      index++;
     }
   }
   ImGui::End();
@@ -122,14 +122,18 @@ void EditorGui::displayHierarchy() {
 
 void EditorGui::displayProject() {
   if (ImGui::Begin("Project")) {
-    //TODO: Render the scene view.
+    if (space != nullptr) {
+      // TODO: Render the project folder.
+    }
   }
   ImGui::End();
 }
 
 void EditorGui::displayRender() {
   if (ImGui::Begin("Render")) {
-    //TODO: Render the game rendering view (final appearance).
+    if (space != nullptr && space->currentScene != nullptr) {
+      // TODO: Render the game rendering view (final appearance).
+    }
   }
   ImGui::End();
 }
@@ -151,21 +155,22 @@ void EditorGui::displayConsole() {
 void EditorGui::displayScene() {
   if (showScene) {
     ImGui::Begin("Scene");
+    if (space != nullptr && space->currentScene != nullptr) {
+      sceneHovered = ImGui::IsWindowHovered();
 
-    sceneHovered = ImGui::IsWindowHovered();
+      ImVec2 window_size = ImGui::GetContentRegionAvail();
+      float aspect_ratio = 1920.0f / 1080.0f;
+      float window_aspect_ratio = window_size.x / window_size.y;
 
-    ImVec2 window_size = ImGui::GetContentRegionAvail();
-    float aspect_ratio = 1920.0f / 1080.0f;
-    float window_aspect_ratio = window_size.x / window_size.y;
+      ImVec2 image_size;
+      if (window_aspect_ratio > aspect_ratio) {
+        image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+      } else {
+        image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+      }
 
-    ImVec2 image_size;
-    if (window_aspect_ratio > aspect_ratio) {
-      image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
-    } else {
-      image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+      ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
     }
-
-    ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
     ImGui::End();
   }
 }

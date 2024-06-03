@@ -9,7 +9,7 @@
 #include "imgui/imgui_stdlib.h"
 
 #include "log/logger.hpp"
-
+#include "space/space.hpp"
 #include "scene/scene.hpp"
 #include "entity/entity.hpp"
 
@@ -20,6 +20,7 @@
 #include "component/model_renderer.hpp"
 #include "component/light.hpp"
 
+using SpaceEngine::Space;
 using SpaceEngine::Scene;
 using SpaceEngine::Entity;
 using SpaceEngine::Component;
@@ -27,6 +28,7 @@ using SpaceEngine::Transform;
 using SpaceEngine::Physic;
 using SpaceEngine::ModelRenderer;
 using SpaceEngine::Camera;
+using SpaceEngine::Logger;
 
 namespace SpaceEditor {
 
@@ -85,8 +87,8 @@ private:
   void displayConsole();
 
 public:
-  /* Reference to the actual Scene. */
-  std::shared_ptr<Scene> scene;
+  /* Reference to the actual Space */
+  std::shared_ptr<Space> space = nullptr;
 
   /* Reference to the selected Entity. */
   std::shared_ptr<Entity> selectedEntity = nullptr;
@@ -95,9 +97,8 @@ public:
 
   /*
    * Main constructor that use default flags.
-   * @param scene: Reference to a scene.
    */
-  EditorGui(std::shared_ptr<Scene> scene, unsigned int textureColorbuffer);
+  EditorGui(unsigned int textureColorbuffer);
 
   /* Display the whole EditorGui. */
   void display();

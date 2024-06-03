@@ -175,9 +175,11 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
+  EditorGui gui = EditorGui(textureColorbuffer);
+
   //TODO : Remove too
   auto space = std::make_shared<Space>("./", "test_space");
-  auto scene = space->currentScene;
+  gui.space = space;
 
   // Examples
   auto test = Entity::create("test");
@@ -185,11 +187,8 @@ int main() {
   auto testRenderer = test->getComponent<ModelRenderer>();
   testRenderer->path = "./models/dio/dio.fbx";
   testRenderer->setModel();
-  scene->addEntity(test);
+  space->currentScene->addEntity(test);
 
-  // gui creation
-  EditorGui gui = EditorGui(scene, textureColorbuffer);
-  gui.selectedEntity = scene->entities[0];
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
@@ -209,27 +208,29 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, 1920, 1080);
 
-    std::shared_ptr<Camera> cam = scene->selectedCamera.lock();
-    glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shader.use();
-    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
-    projection[1][1] *= -1;
-    glm::mat4 view = camera.getViewMatrix();
-    shader.setMat4("projection", projection);
-    shader.setMat4("view", view);
-    for (auto& entity : scene->entities) {
-      auto modelRenderer = entity->getComponent<ModelRenderer>();
-      if (modelRenderer && modelRenderer->model) {
-        auto tf = entity->getComponent<Transform>();
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(tf->position.x(), tf->position.y(), tf->position.z()));
-        model = glm::scale(model, glm::vec3(tf->scale.x(), tf->scale.y(), tf->scale.z()));
-        model = glm::rotate(model, glm::radians(tf->rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(tf->rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(tf->rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
-        shader.setMat4("model", model);
-        modelRenderer->model->draw(shader);
+    if (space->currentScene != nullptr) {
+      std::shared_ptr<Camera> cam = space->currentScene->selectedCamera.lock();
+      glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      shader.use();
+      glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
+      projection[1][1] *= -1;
+      glm::mat4 view = camera.getViewMatrix();
+      shader.setMat4("projection", projection);
+      shader.setMat4("view", view);
+      for (auto& entity : space->currentScene->entities) {
+        auto modelRenderer = entity->getComponent<ModelRenderer>();
+        if (modelRenderer && modelRenderer->model) {
+          auto tf = entity->getComponent<Transform>();
+          glm::mat4 model = glm::mat4(1.0f);
+          model = glm::translate(model, glm::vec3(tf->position.x(), tf->position.y(), tf->position.z()));
+          model = glm::scale(model, glm::vec3(tf->scale.x(), tf->scale.y(), tf->scale.z()));
+          model = glm::rotate(model, glm::radians(tf->rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
+          model = glm::rotate(model, glm::radians(tf->rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
+          model = glm::rotate(model, glm::radians(tf->rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
+          shader.setMat4("model", model);
+          modelRenderer->model->draw(shader);
+        }
       }
     }
 
