@@ -22,7 +22,10 @@ void EditorGui::displayBar() {
   /* Top bar options */
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
-      if (ImGui::MenuItem("New", "CTRL+N")) {}
+      if (ImGui::MenuItem("New", "CTRL+N")) {
+        space->currentScene = std::make_shared<Scene>(); // working
+        space = std::make_shared<Space>("test", "test");
+      }
       if (ImGui::MenuItem("Open", "CTRL+O")) {}
       if (ImGui::MenuItem("Save", "CTRL+S")) {}
       if (ImGui::MenuItem("Save as", "CTRL+SHIFT+S")) {}
@@ -45,7 +48,12 @@ void EditorGui::displayBar() {
     }
 
     if (ImGui::BeginMenu("Add")) {
-      if (ImGui::MenuItem("Empty", "??")) {}
+      if (ImGui::MenuItem("Empty", "??")) {
+        if (space && space->currentScene) {
+          auto ent = Entity::create("New entity");
+          space->currentScene->entities.push_back(ent);
+        }
+      }
       ImGui::Separator();
       // 2D Forms
       if (ImGui::MenuItem("Circle", "??")) {}
@@ -90,7 +98,7 @@ void EditorGui::displayBar() {
 
 void EditorGui::displayInspector() {
   if (ImGui::Begin("Inspector")) {
-    if (selectedEntity != nullptr) {
+    if (selectedEntity) {
       for (const auto& componentPair : selectedEntity->components) {
         std::type_index typeIndex = componentPair.first;
         auto component = componentPair.second;
@@ -106,7 +114,7 @@ void EditorGui::displayInspector() {
 
 void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
-    if (space != nullptr && space->currentScene != nullptr) {
+    if (space && space->currentScene) {
       int index = 0;
       for (auto& entity : space->currentScene->entities) {
         std::string uniqueLabel = entity->getComponent<Transform>()->name + "##" + std::to_string(index);
@@ -122,7 +130,7 @@ void EditorGui::displayHierarchy() {
 
 void EditorGui::displayProject() {
   if (ImGui::Begin("Project")) {
-    if (space != nullptr) {
+    if (space) {
       // TODO: Render the project folder.
     }
   }
@@ -131,7 +139,7 @@ void EditorGui::displayProject() {
 
 void EditorGui::displayRender() {
   if (ImGui::Begin("Render")) {
-    if (space != nullptr && space->currentScene != nullptr) {
+    if (space && space->currentScene) {
       // TODO: Render the game rendering view (final appearance).
     }
   }
@@ -155,7 +163,7 @@ void EditorGui::displayConsole() {
 void EditorGui::displayScene() {
   if (showScene) {
     ImGui::Begin("Scene");
-    if (space != nullptr && space->currentScene != nullptr) {
+    if (space && space->currentScene) {
       sceneHovered = ImGui::IsWindowHovered();
 
       ImVec2 window_size = ImGui::GetContentRegionAvail();

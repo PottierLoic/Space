@@ -171,6 +171,7 @@ int main() {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -214,7 +215,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, 1920, 1080);
 
-    if (space->currentScene != nullptr && space->currentScene->selectedCamera.lock() != nullptr) {
+    if (space && space->currentScene && space->currentScene->selectedCamera.lock()) {
       std::shared_ptr<Camera> cam = space->currentScene->selectedCamera.lock();
       glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -263,6 +264,10 @@ int main() {
 
     gui.display();
     ImGui::Render();
+    GLFWwindow* backup_current_context = glfwGetCurrentContext();
+    ImGui::UpdatePlatformWindows();
+    ImGui::RenderPlatformWindowsDefault();
+    glfwMakeContextCurrent(backup_current_context);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);
