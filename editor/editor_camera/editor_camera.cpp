@@ -4,18 +4,11 @@ namespace SpaceEditor {
 
 EditorCamera::EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) {
   this->front = glm::vec3(0.0f, 0.0f, -1.0f);
-  this->movementSpeed = SPEED;
-  this->mouseSensitivity = SENSITIVITY;
-  this->zoom = ZOOM;
   this->position = position;
   this->worldUp = up;
   this->yaw = yaw;
   this->pitch = pitch;
   updateCameraVectors();
-}
-
-glm::mat4 EditorCamera::getViewMatrix() {
-  return glm::lookAt(position, position + front, up);
 }
 
 void EditorCamera::processKeyboard(CameraMovement direction, float deltaTime) {
@@ -52,19 +45,28 @@ void EditorCamera::processMouseMovement(float xoffset, float yoffset, bool const
 }
 
 void EditorCamera::processMouseScroll(float yoffset) {
-  zoom -= yoffset;
-  if (zoom < 1.0f ) { zoom = 1.0f; }
-  if (zoom > 45.0f ) { zoom = 45.0f; }
+  fieldOfView -= yoffset;
+  if (fieldOfView < 1.0f ) { fieldOfView = 1.0f; }
+  if (fieldOfView > 179.0f ) { fieldOfView = 179.0f; }
 }
 
-void EditorCamera::updateCameraVectors() {
-  glm::vec3 tmpFront;
-  tmpFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-  tmpFront.y = sin(glm::radians(pitch));
-  tmpFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-  front = glm::normalize(tmpFront);
-  right = glm::normalize(glm::cross(front, worldUp));
-  up = glm::normalize(glm::cross(right, front));
+glm::mat4 EditorCamera::getEditorViewMatrix() {
+  glm::vec3 lookTarget = position + front;
+  return glm::lookAt(position, lookTarget, up);
+}
+
+glm::mat4 EditorCamera::getEditorProjectionMatrix() {
+  if (projectionType == ProjectionType::PERSPECTIVE) {
+    glm::mat4 projection = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
+    projection[1][1] *= -1; // Flip Y for Vulkan-style coordinate system
+    return projection;
+  } else {
+    float width = orthographicSize * aspectRatio;
+    float height = orthographicSize;
+    glm::mat4 projection = glm::ortho(-width, width, -height, height, nearPlane, farPlane);
+    projection[1][1] *= -1; // Flip Y for Vulkan-style coordinate system
+    return projection;
+  }
 }
 
 }

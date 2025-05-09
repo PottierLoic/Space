@@ -204,17 +204,11 @@ int main() {
 
     processInput(window);
 
-    // Render scene view using editor camera
-    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
-    projection[1][1] *= -1;
-    glm::mat4 view = camera.getViewMatrix();
-    sceneRenderer->render(view, projection, space->currentScene);
-
-    // Render view using scene camera
+    // Rendering scene and render view in editor
+    sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), space->currentScene);
     if (space->currentScene && space->currentScene->selectedCamera.lock()) {
       auto sceneCamera = space->currentScene->selectedCamera.lock();
-      glm::mat4 projection = sceneCamera->getProjectionMatrix();
-      renderViewRenderer->render(sceneCamera->getViewMatrix(), projection, space->currentScene);
+      renderViewRenderer->render(sceneCamera->getViewMatrix(), sceneCamera->getProjectionMatrix(), space->currentScene);
     }
 
     // Clear the main framebuffer

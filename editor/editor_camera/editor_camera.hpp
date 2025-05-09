@@ -6,6 +6,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "component/camera.hpp"
+
 namespace SpaceEditor {
 
 enum CameraMovement {
@@ -15,14 +17,12 @@ enum CameraMovement {
   RIGHT
 };
 
-const float YAW = -90.0f;
-const float PITCH = 0.0f;
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
-const float ZOOM = 45.0f;
-
+// TODO: edit this summary
 /**
  * The EditorCamera class represents a 3D camera in a virtual scene.
+ * It is based on the Camera component defined in core.
  *
  * Properties:
  * - position (glm::vec3): The position of the camera.
@@ -43,18 +43,11 @@ const float ZOOM = 45.0f;
  * - void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true): Process mouse movement to update camera angles.
  * - void processMouseScroll(float yoffset): Process mouse scroll to update zoom level.
  */
-class EditorCamera {
+class EditorCamera : public SpaceEngine::Camera {
 public:
   glm::vec3 position;         /* The position of the camera. */
-  glm::vec3 front;            /* The front direction vector of the camera. */
-  glm::vec3 up;               /* The up direction vector of the camera. */
-  glm::vec3 right;            /* The right direction vector of the camera. */
-  glm::vec3 worldUp;          /* The world up direction vector. */
-  float yaw;                  /* The yaw angle of the camera. */
-  float pitch;                /* The pitch angle of the camera. */
-  float movementSpeed;        /* The speed at which the camera moves. */
-  float mouseSensitivity;     /* The sensitivity of the mouse movement. */
-  float zoom;                 /* The zoom level of the camera. */
+  float movementSpeed = SPEED;        /* The speed at which the camera moves. */
+  float mouseSensitivity = SENSITIVITY;     /* The sensitivity of the mouse movement. */
 
   /**
    * @brief Constructor with vector.
@@ -62,14 +55,10 @@ public:
    * @param up: The up direction vector of the camera.
    * @param yaw: The yaw angle of the camera.
    * @param pitch: The pitch angle of the camera.
+   *
+   * @todo maybe remove the parameters, not sure if it would become usefull.
    */
   EditorCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
-
-  /**
-   * @brief Get the view matrix of the camera.
-   * @return The view matrix.
-   */
-  glm::mat4 getViewMatrix();
 
   /**
    * @brief Process keyboard input to move the camera.
@@ -92,11 +81,17 @@ public:
    */
   void processMouseScroll(float yoffset);
 
-private:
-  /**
-   * @brief Update camera direction vectors based on yaw and pitch angles.
+    /**
+   * @brief Get the view matrix of the camera.
+   * @return The view matrix.
    */
-  void updateCameraVectors();
+  glm::mat4 getEditorViewMatrix();
+
+  /**
+   * @brief Get the projection matrix of the camera.
+   * @return The projection matrix.
+   */
+  glm::mat4 getEditorProjectionMatrix();
 };
 
 }
