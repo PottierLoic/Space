@@ -8,6 +8,7 @@
 .vscode/
 .idea/
 *.DS_Store
+.cache/
 
 imgui.ini
 
