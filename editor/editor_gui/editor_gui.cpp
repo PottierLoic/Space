@@ -2,8 +2,9 @@
 
 namespace SpaceEditor {
 
-EditorGui::EditorGui(unsigned int textureColorbuffer) {
-  this->textureColorbuffer = textureColorbuffer;
+EditorGui::EditorGui(unsigned int sceneTexture, unsigned int renderTexture) {
+  this->sceneTexture = sceneTexture;
+  this->renderTexture = renderTexture;
   initComponentViewers();
   cherryTheme();
 }
@@ -140,7 +141,18 @@ void EditorGui::displayProject() {
 void EditorGui::displayRender() {
   if (ImGui::Begin("Render")) {
     if (space && space->currentScene) {
-      // TODO: Render the game rendering view (final appearance).
+      ImVec2 window_size = ImGui::GetContentRegionAvail();
+      float aspect_ratio = 1920.0f / 1080.0f;
+      float window_aspect_ratio = window_size.x / window_size.y;
+
+      ImVec2 image_size;
+      if (window_aspect_ratio > aspect_ratio) {
+        image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+      } else {
+        image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+      }
+
+      ImGui::Image((void*)(intptr_t)renderTexture, image_size);
     }
   }
   ImGui::End();
@@ -177,7 +189,7 @@ void EditorGui::displayScene() {
         image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
       }
 
-      ImGui::Image((void*)(intptr_t)textureColorbuffer, image_size);
+      ImGui::Image((void*)(intptr_t)sceneTexture, image_size);
     }
     ImGui::End();
   }

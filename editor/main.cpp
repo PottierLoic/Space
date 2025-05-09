@@ -1,8 +1,6 @@
 #include <string>
 #include <iostream>
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
@@ -11,6 +9,7 @@
 #include "model/model.hpp" // maybe removed soon
 #include "shader/shader.hpp"
 #include "space/space.hpp"
+#include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -45,6 +44,10 @@ bool inspectorFocus = false; // TODO: move in the inspector ?
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+// Renderers
+std::unique_ptr<Renderer> sceneRenderer;
+std::unique_ptr<Renderer> renderViewRenderer;
+
 void processInput(GLFWwindow* window) {
   if (inspectorFocus) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -63,6 +66,12 @@ void processInput(GLFWwindow* window) {
 /* DEBUG */
 void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   glViewport(0, 0, width, height);
+  if (sceneRenderer) {
+    sceneRenderer->resize(width, height);
+  }
+  if (renderViewRenderer) {
+    renderViewRenderer->resize(width, height);
+  }
 }
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
@@ -141,28 +150,14 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  // create framebuffer for scene texture
-  unsigned int fbo;
-  glGenFramebuffers(1, &fbo);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-  unsigned int textureColorbuffer;
-  glGenTextures(1, &textureColorbuffer);
-  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-
-  unsigned int rbo;
-  glGenRenderbuffers(1, &rbo);
-  glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // Initialize renderers
+    sceneRenderer = std::make_unique<Renderer>();
+    renderViewRenderer = std::make_unique<Renderer>();
+    
+    if (!sceneRenderer->initialize(1920, 1080) || !renderViewRenderer->initialize(1920, 1080)) {
+      std::cout << "Failed to initialize renderers" << std::endl;
+      return -1;
+    }
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
@@ -177,9 +172,7 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  Shader shader("./shaders/test.vs", "./shaders/test.fs", nullptr);
-
-  EditorGui gui = EditorGui(textureColorbuffer);
+  EditorGui gui = EditorGui(sceneRenderer->getRenderedTexture(), renderViewRenderer->getRenderedTexture());
 
   //TODO : Remove too
   auto space = std::make_shared<Space>("./", "test_space");
@@ -211,37 +204,20 @@ int main() {
 
     processInput(window);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, 1920, 1080);
+    // Render scene view using editor camera
+    glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
+    projection[1][1] *= -1;
+    glm::mat4 view = camera.getViewMatrix();
+    sceneRenderer->render(view, projection, space->currentScene);
 
-    if (space && space->currentScene && space->currentScene->selectedCamera.lock()) {
-      std::shared_ptr<Camera> cam = space->currentScene->selectedCamera.lock();
-      glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      shader.use();
-      glm::mat4 projection = glm::perspective(glm::radians(camera.zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
-      projection[1][1] *= -1;
-      glm::mat4 view = camera.getViewMatrix();
-      shader.setMat4("projection", projection);
-      shader.setMat4("view", view);
-      for (auto& entity : space->currentScene->entities) {
-        auto modelRenderer = entity->getComponent<ModelRenderer>();
-        if (modelRenderer && modelRenderer->model) {
-          auto tf = entity->getComponent<Transform>();
-          glm::mat4 model = glm::mat4(1.0f);
-          model = glm::translate(model, glm::vec3(tf->position.x(), tf->position.y(), tf->position.z()));
-          model = glm::scale(model, glm::vec3(tf->scale.x(), tf->scale.y(), tf->scale.z()));
-          model = glm::rotate(model, glm::radians(tf->rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
-          model = glm::rotate(model, glm::radians(tf->rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
-          model = glm::rotate(model, glm::radians(tf->rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
-          shader.setMat4("model", model);
-          modelRenderer->model->draw(shader);
-        }
-      }
+    // Render view using scene camera
+    if (space->currentScene && space->currentScene->selectedCamera.lock()) {
+      auto sceneCamera = space->currentScene->selectedCamera.lock();
+      glm::mat4 projection = sceneCamera->getProjectionMatrix();
+      renderViewRenderer->render(sceneCamera->getViewMatrix(), projection, space->currentScene);
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // Clear the main framebuffer
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);

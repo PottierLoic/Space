@@ -65,7 +65,8 @@ private:
   bool showConsole = true;       // Console section visibility flag.
 
   bool polygonMode = true;        // Polygon mode flag. (Draw the full model or just the wireframe)
-  unsigned int textureColorbuffer;
+  unsigned int sceneTexture;      // Scene view texture
+  unsigned int renderTexture;     // Render view texture
 
   std::unordered_map<std::type_index, std::function<void(std::shared_ptr<Component>)>> componentViewers;
 
@@ -95,10 +96,8 @@ public:
 
   bool sceneHovered = false;
 
-  /*
-   * Main constructor that use default flags.
-   */
-  EditorGui(unsigned int textureColorbuffer);
+  /* Main constructor that use default flags. */
+  EditorGui(unsigned int sceneTexture, unsigned int renderTexture);
 
   /* Display the whole EditorGui. */
   void display();
