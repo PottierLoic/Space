@@ -27,7 +27,7 @@ int testSerializeComponent() {
   cam->worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
   cam->yaw = -90.0f;
   cam->pitch = 0.0f;
-  cam->zoom = 45.0f;
+  cam->fieldOfView = 45.0f;
   cam->skyboxColor = ImVec4(0.1f, 0.2f, 0.3f, 1.0f);
   json camJson = Serializer::serialize(cam);
   std::shared_ptr<Camera> cam2 = std::dynamic_pointer_cast<Camera>(Serializer::deserializeComponent(camJson));
@@ -37,7 +37,7 @@ int testSerializeComponent() {
   custom_assert(cam->worldUp == cam2->worldUp, "Camera worldUp serialization/deserialization failed");
   custom_assert(cam->yaw == cam2->yaw, "Camera yaw serialization/deserialization failed");
   custom_assert(cam->pitch == cam2->pitch, "Camera pitch serialization/deserialization failed");
-  custom_assert(cam->zoom == cam2->zoom, "Camera zoom serialization/deserialization failed");
+  custom_assert(cam->fieldOfView == cam2->fieldOfView, "Camera fieldOfView serialization/deserialization failed");
   custom_assert(cam->skyboxColor.x == cam2->skyboxColor.x && cam->skyboxColor.y == cam2->skyboxColor.y &&
                 cam->skyboxColor.z == cam2->skyboxColor.z && cam->skyboxColor.w == cam2->skyboxColor.w,
                 "Camera skyboxColor serialization/deserialization failed");

@@ -33,7 +33,7 @@ std::unordered_map<std::type_index,
         j["worldUp"] = {cam->worldUp.x, cam->worldUp.y, cam->worldUp.z};
         j["yaw"] = cam->yaw;
         j["pitch"] = cam->pitch;
-        j["zoom"] = cam->zoom;
+        j["fieldOfView"] = cam->fieldOfView;
         j["skyboxColor"] = {cam->skyboxColor.x, cam->skyboxColor.y,
                             cam->skyboxColor.z, cam->skyboxColor.w};
         return j;

@@ -70,7 +70,60 @@ void EditorGui::initComponentViewers() {
   this->componentViewers[std::type_index(typeid(Camera))] = [](std::shared_ptr<Component> component) {
     auto camera = std::static_pointer_cast<Camera>(component);
     if (ImGui::CollapsingHeader("Camera")) {
+      // Projection Type
+      ImGui::Text("Projection Type");
+      ImGui::SameLine(100);
+      const char* projectionTypes[] = { "Perspective", "Orthographic" };
+      int currentType = static_cast<int>(camera->projectionType);
+      if (ImGui::Combo("##camera.projectionType", &currentType, projectionTypes, IM_ARRAYSIZE(projectionTypes))) {
+        camera->projectionType = static_cast<Camera::ProjectionType>(currentType);
+      }
+
+      // Common projection settings
+      ImGui::Text("Aspect Ratio");
+      ImGui::SameLine(100);
+      ImGui::InputFloat("##camera.aspectRatio", &camera->aspectRatio, 0.1f, 1.0f, "%.2f");
+
+      ImGui::Text("Near Plane");
+      ImGui::SameLine(100);
+      ImGui::InputFloat("##camera.nearPlane", &camera->nearPlane, 0.1f, 1.0f, "%.2f");
+
+      ImGui::Text("Far Plane");
+      ImGui::SameLine(100);
+      ImGui::InputFloat("##camera.farPlane", &camera->farPlane, 1.0f, 10.0f, "%.2f");
+
+      // Perspective-specific settings
+      if (camera->projectionType == Camera::ProjectionType::PERSPECTIVE) {
+        ImGui::Text("Field of View");
+        ImGui::SameLine(100);
+        ImGui::SliderFloat("##camera.fieldOfView", &camera->fieldOfView, 1.0f, 179.0f, "%.1f");
+      }
+      // Orthographic-specific settings
+      else {
+        ImGui::Text("Orthographic Size");
+        ImGui::SameLine(100);
+        ImGui::InputFloat("##camera.orthographicSize", &camera->orthographicSize, 0.1f, 1.0f, "%.2f");
+      }
+
+      // Camera orientation
+      ImGui::Separator();
+      ImGui::Text("Orientation");
+      ImGui::Text("Yaw");
+      ImGui::SameLine(100);
+      if (ImGui::SliderFloat("##camera.yaw", &camera->yaw, -180.0f, 180.0f, "%.1f")) {
+        camera->updateCameraVectors();
+      }
+
+      ImGui::Text("Pitch");
+      ImGui::SameLine(100);
+      if (ImGui::SliderFloat("##camera.pitch", &camera->pitch, -89.0f, 89.0f, "%.1f")) {
+        camera->updateCameraVectors();
+      }
+
+      // Visual settings
+      ImGui::Separator();
       ImGui::SetNextItemWidth(200);
+      ImGui::Text("Visual Settings");
       ImGui::ColorPicker4("Skybox color", (float*)&camera->skyboxColor);
     }
   };

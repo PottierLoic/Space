@@ -19,7 +19,7 @@ std::unordered_map<std::string, std::function<std::shared_ptr<Component>(const j
     cam->worldUp = glm::vec3(j["worldUp"][0], j["worldUp"][1], j["worldUp"][2]);
     cam->yaw = j["yaw"].get<float>();
     cam->pitch = j["pitch"].get<float>();
-    cam->zoom = j["zoom"].get<float>();
+    cam->fieldOfView = j["fieldOfView"].get<float>();
     cam->skyboxColor = ImVec4(j["skyboxColor"][0], j["skyboxColor"][1], j["skyboxColor"][2], j["skyboxColor"][3]);
     return cam;
   };
