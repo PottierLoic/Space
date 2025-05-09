@@ -21,15 +21,15 @@ public:
   ~Renderer();
 
   bool initialize(int width, int height);
-  void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Scene>& scene);
-  unsigned int getRenderedTexture() const { return textureColorbuffer; }
+  void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Scene>& scene) const;
+  [[nodiscard]] unsigned int getRenderedTexture() const { return textureColorBuffer; }
   void resize(int width, int height);
 
 private:
   void setupFramebuffer(int width, int height);
 
   unsigned int fbo;
-  unsigned int textureColorbuffer;
+  unsigned int textureColorBuffer;
   unsigned int rbo;
   std::unique_ptr<Shader> shader;
   int viewportWidth;

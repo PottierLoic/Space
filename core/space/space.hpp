@@ -24,7 +24,7 @@ public:
   std::shared_ptr<Scene> currentScene;
   std::vector<std::shared_ptr<Scene>> scenes;
 
-  Space(const std::string path, const std::string name);
+  Space(const std::string& path, const std::string &name);
 };
 
 }

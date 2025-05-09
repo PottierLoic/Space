@@ -2,21 +2,21 @@
 
 namespace SpaceEngine {
 
-Renderer::Renderer() : fbo(0), textureColorbuffer(0), rbo(0), viewportWidth(0), viewportHeight(0) {}
+Renderer::Renderer() : fbo(0), textureColorBuffer(0), rbo(0), viewportWidth(0), viewportHeight(0) {}
 
 Renderer::~Renderer() {
   if (fbo != 0) {
     glDeleteFramebuffers(1, &fbo);
   }
-  if (textureColorbuffer != 0) {
-    glDeleteTextures(1, &textureColorbuffer);
+  if (textureColorBuffer != 0) {
+    glDeleteTextures(1, &textureColorBuffer);
   }
   if (rbo != 0) {
     glDeleteRenderbuffers(1, &rbo);
   }
 }
 
-bool Renderer::initialize(int width, int height) {
+bool Renderer::initialize(const int width, const int height) {
   viewportWidth = width;
   viewportHeight = height;
   shader = std::make_unique<Shader>("./shaders/test.vs", "./shaders/test.fs", nullptr);
@@ -24,18 +24,18 @@ bool Renderer::initialize(int width, int height) {
   return true;
 }
 
-void Renderer::setupFramebuffer(int width, int height) {
+void Renderer::setupFramebuffer(const int width, const int height) {
   // Create framebuffer
   glGenFramebuffers(1, &fbo);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
   // Create color texture
-  glGenTextures(1, &textureColorbuffer);
-  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+  glGenTextures(1, &textureColorBuffer);
+  glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
 
   // Create renderbuffer for depth and stencil
   glGenRenderbuffers(1, &rbo);
@@ -49,20 +49,20 @@ void Renderer::setupFramebuffer(int width, int height) {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::resize(int width, int height) {
+void Renderer::resize(const int width, const int height) {
   viewportWidth = width;
   viewportHeight = height;
 
   // Resize color texture
-  glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+  glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
   // Resize renderbuffer
   glBindRenderbuffer(GL_RENDERBUFFER, rbo);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 }
 
-void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Scene>& scene) {
+void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Scene>& scene) const {
   if (!scene) {
     return;
   }
@@ -71,28 +71,24 @@ void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
   glEnable(GL_DEPTH_TEST);
   glViewport(0, 0, viewportWidth, viewportHeight);
 
-  // Get the camera's skybox color
   glm::vec4 clearColor(0.1f, 0.1f, 0.1f, 1.0f);
   if (scene->selectedCamera.lock()) {
-    auto camera = scene->selectedCamera.lock();
+    const auto camera = scene->selectedCamera.lock();
     clearColor = glm::vec4(camera->skyboxColor.x, camera->skyboxColor.y, camera->skyboxColor.z, camera->skyboxColor.w);
   }
 
-  // Clear the framebuffer with the camera's skybox color
   glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // Use shader
   shader->use();
   shader->setMat4("projection", projectionMatrix);
   shader->setMat4("view", viewMatrix);
 
   // Render all entities with model renderers
   for (const auto& entity : scene->entities) {
-    auto modelRenderer = entity->getComponent<ModelRenderer>();
-    if (modelRenderer && modelRenderer->model) {
-      auto transform = entity->getComponent<Transform>();
-      glm::mat4 model = glm::mat4(1.0f);
+    if (const auto modelRenderer = entity->getComponent<ModelRenderer>(); modelRenderer && modelRenderer->model) {
+      const auto transform = entity->getComponent<Transform>();
+      auto model = glm::mat4(1.0f);
       // Apply transformations
       model = glm::translate(model, glm::vec3(transform->position.x(),
                                               transform->position.y(),

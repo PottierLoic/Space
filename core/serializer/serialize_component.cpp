@@ -2,17 +2,12 @@
 
 namespace SpaceEngine {
 
-std::unordered_map<std::type_index,
-                   std::function<json(const std::shared_ptr<Component> &)>>
+std::unordered_map<std::type_index, std::function<json(const std::shared_ptr<Component> &)>>
     Serializer::serializers = []() {
-      std::unordered_map<
-          std::type_index,
-          std::function<json(const std::shared_ptr<Component> &)>>
-          m;
+      std::unordered_map<std::type_index, std::function<json(const std::shared_ptr<Component> &)>> m;
       // Transform
-      m[std::type_index(typeid(Transform))] =
-          [](const std::shared_ptr<Component> &comp) -> json {
-        auto tf = std::static_pointer_cast<Transform>(comp);
+      m[std::type_index(typeid(Transform))] = [](const std::shared_ptr<Component> &comp) -> json {
+        const auto tf = std::static_pointer_cast<Transform>(comp);
         json j;
         j["type"] = "Transform";
         j["name"] = tf->name;
@@ -22,9 +17,8 @@ std::unordered_map<std::type_index,
         return j;
       };
       // Camera
-      m[std::type_index(typeid(Camera))] =
-          [](const std::shared_ptr<Component> &comp) -> json {
-        auto cam = std::static_pointer_cast<Camera>(comp);
+      m[std::type_index(typeid(Camera))] = [](const std::shared_ptr<Component> &comp) -> json {
+        const auto cam = std::static_pointer_cast<Camera>(comp);
         json j;
         j["type"] = "Camera";
         j["front"] = {cam->front.x, cam->front.y, cam->front.z};
@@ -39,9 +33,8 @@ std::unordered_map<std::type_index,
         return j;
       };
       // ModelRenderer
-      m[std::type_index(typeid(ModelRenderer))] =
-          [](const std::shared_ptr<Component> &comp) -> json {
-        auto modelRenderer = std::static_pointer_cast<ModelRenderer>(comp);
+      m[std::type_index(typeid(ModelRenderer))] = [](const std::shared_ptr<Component> &comp) -> json {
+        const auto modelRenderer = std::static_pointer_cast<ModelRenderer>(comp);
         json j;
         j["type"] = "ModelRenderer";
         j["path"] = modelRenderer->path;
@@ -51,11 +44,10 @@ std::unordered_map<std::type_index,
       return m;
     }();
 
-json Serializer::serialize(const std::shared_ptr<Component> component) {
+json Serializer::serialize(const std::shared_ptr<Component>& component) {
   auto &dereferencedComponent = *component;
-  auto typeIndex = std::type_index(typeid(dereferencedComponent));
-  auto it = serializers.find(typeIndex);
-  if (it != serializers.end()) {
+  const auto typeIndex = std::type_index(typeid(dereferencedComponent));
+  if (const auto it = serializers.find(typeIndex); it != serializers.end()) {
     return it->second(component);
   }
   return json{};

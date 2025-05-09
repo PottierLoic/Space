@@ -2,14 +2,14 @@
 
 namespace SpaceEngine {
 
-json Serializer::serialize(std::shared_ptr<Space> space) {
+json Serializer::serialize(const std::shared_ptr<Space> &space) {
   json j;
   j["name"] = space->name;
   j["path"] = space->path;
   return j;
 }
 
-json Serializer::serialize(std::shared_ptr<Scene> scene) {
+json Serializer::serialize(const std::shared_ptr<Scene>& scene) {
   json j;
   j["name"] = scene->name;
   j["entities"] = json::array();
@@ -19,7 +19,7 @@ json Serializer::serialize(std::shared_ptr<Scene> scene) {
   return j;
 }
 
-json Serializer::serialize(std::shared_ptr<Entity> entity) {
+json Serializer::serialize(const std::shared_ptr<Entity>& entity) {
   json j;
   j["components"] = json::array();
   for (const auto& [type, component] : entity->components) {

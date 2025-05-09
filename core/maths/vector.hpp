@@ -3,7 +3,6 @@
 #include <array>
 #include <cmath>
 #include <iostream>
-#include <cstdint>
 
 namespace SpaceEngine {
 
@@ -18,7 +17,7 @@ public:
   template <typename... Args, typename = std::enable_if_t<sizeof...(Args) == N>>
   constexpr explicit Vector(Args&&... args);
 
-  // Dimensionality adjustements
+  // Dimensionality adjustments
   constexpr explicit Vector(const Vector<T, N + 1>& vec);
   constexpr Vector(const Vector<T, N - 1>& vec, T val);
 
@@ -43,7 +42,7 @@ public:
   constexpr Vector operator/(const Vector& vec) const;
   constexpr Vector operator/(T val) const;
 
-  // Assignement operations.
+  // Assignment operations.
   constexpr Vector& operator+=(const Vector& vec);
   constexpr Vector& operator+=(T val);
   constexpr Vector& operator-=(const Vector& vec);

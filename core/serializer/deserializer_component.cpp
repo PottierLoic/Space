@@ -34,9 +34,8 @@ std::unordered_map<std::string, std::function<std::shared_ptr<Component>(const j
 }();
 
 std::shared_ptr<Component> Serializer::deserializeComponent(const json& j) {
-  std::string type = j["type"];
-  auto it = deserializers.find(type);
-  if (it != deserializers.end()) {
+  const std::string type = j["type"];
+  if (const auto it = deserializers.find(type); it != deserializers.end()) {
     return it->second(j);
   } else {
     // TODO: create a log entry maybe ?

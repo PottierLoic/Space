@@ -51,17 +51,17 @@ namespace SpaceEditor {
  * - EditorGui(): Initializes a new EditorGui.
  *
  * Methods:
- * - void initComponentViewers(): Place all the component viewers functions inside of the componentViewers map.
+ * - void initComponentViewers(): Place all the component viewers functions inside the componentViewers map.
  * - void display(): Displays the gui, rendering different sections based on the state of the flags.
  * - void cherryTheme(): Set the actual gui theme to cherry theme.
  */
 class EditorGui {
 private:
-  bool showInspector = true;      // Inspector section visiblity flag.
-  bool showHierarchy = true;      // Hierarchy section visiblity flag.
-  bool showProject = true;        // Project section visiblity flag.
-  bool showScene = true;          // Scene section visiblity flag.
-  bool showRender = true;         // Render section visiblity flag.
+  bool showInspector = true;      // Inspector section visibility flag.
+  bool showHierarchy = true;      // Hierarchy section visibility flag.
+  bool showProject = true;        // Project section visibility flag.
+  bool showScene = true;          // Scene section visibility flag.
+  bool showRender = true;         // Render section visibility flag.
   bool showConsole = true;       // Console section visibility flag.
 
   bool polygonMode = true;        // Polygon mode flag. (Draw the full model or just the wireframe)
@@ -79,13 +79,13 @@ private:
   /* Display the hierarchy section. */
   void displayHierarchy();
   /* Display the project section. */
-  void displayProject();
+  void displayProject() const;
   /* Display the scene section. */
   void displayScene();
   /* Display the render section. */
-  void displayRender();
+  void displayRender() const;
   /* Display the console section. */
-  void displayConsole();
+  static void displayConsole();
 
 public:
   /* Reference to the actual Space */
@@ -103,7 +103,7 @@ public:
   void display();
 
   /* Gui themes */
-  void cherryTheme();
+  static void cherryTheme();
 };
 
 }

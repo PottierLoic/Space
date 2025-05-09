@@ -50,7 +50,7 @@ public:
   /**
    * @brief activate the shader for rendering.
    */
-  void use();
+  void use() const;
 
   /**
    * @brief Set a boolean uniform value in the shader.
@@ -147,7 +147,7 @@ public:
    * @param shader: ID of the shader to check.
    * @param type: Type of the shader (vertex, fragment, geometry).
    */
-  void checkCompileErrors(GLuint shader, std::string type);
+  static void checkCompileErrors(GLuint shader, const std::string& type);
 };
 
 }

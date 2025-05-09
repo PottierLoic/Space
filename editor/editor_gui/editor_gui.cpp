@@ -2,7 +2,7 @@
 
 namespace SpaceEditor {
 
-EditorGui::EditorGui(unsigned int sceneTexture, unsigned int renderTexture) {
+EditorGui::EditorGui(const unsigned int sceneTexture, const unsigned int renderTexture) {
   this->sceneTexture = sceneTexture;
   this->renderTexture = renderTexture;
   initComponentViewers();
@@ -51,7 +51,7 @@ void EditorGui::displayBar() {
     if (ImGui::BeginMenu("Add")) {
       if (ImGui::MenuItem("Empty", "??")) {
         if (space && space->currentScene) {
-          auto ent = Entity::create("New entity");
+          const auto ent = Entity::create("New entity");
           space->currentScene->entities.push_back(ent);
         }
       }
@@ -100,11 +100,10 @@ void EditorGui::displayBar() {
 void EditorGui::displayInspector() {
   if (ImGui::Begin("Inspector")) {
     if (selectedEntity) {
-      for (const auto& componentPair : selectedEntity->components) {
-        std::type_index typeIndex = componentPair.first;
-        auto component = componentPair.second;
-        auto viewerIt = componentViewers.find(typeIndex);
-        if (viewerIt != componentViewers.end()) {
+      for (const auto&[fst, snd] : selectedEntity->components) {
+        std::type_index typeIndex = fst;
+        const auto component = snd;
+        if (auto viewerIt = componentViewers.find(typeIndex); viewerIt != componentViewers.end()) {
           viewerIt->second(component);
         }
       }
@@ -129,7 +128,7 @@ void EditorGui::displayHierarchy() {
   ImGui::End();
 }
 
-void EditorGui::displayProject() {
+void EditorGui::displayProject() const {
   if (ImGui::Begin("Project")) {
     if (space) {
       // TODO: Render the project folder.
@@ -138,12 +137,12 @@ void EditorGui::displayProject() {
   ImGui::End();
 }
 
-void EditorGui::displayRender() {
+void EditorGui::displayRender() const {
   if (ImGui::Begin("Render")) {
     if (space && space->currentScene) {
-      ImVec2 window_size = ImGui::GetContentRegionAvail();
-      float aspect_ratio = 1920.0f / 1080.0f;
-      float window_aspect_ratio = window_size.x / window_size.y;
+      const ImVec2 window_size = ImGui::GetContentRegionAvail();
+      constexpr float aspect_ratio = 1920.0f / 1080.0f;
+      const float window_aspect_ratio = window_size.x / window_size.y;
 
       ImVec2 image_size;
       if (window_aspect_ratio > aspect_ratio) {
@@ -152,7 +151,7 @@ void EditorGui::displayRender() {
         image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
       }
 
-      ImGui::Image((void*)(intptr_t)renderTexture, image_size);
+      ImGui::Image(reinterpret_cast<void *>(renderTexture), image_size);
     }
   }
   ImGui::End();
@@ -165,8 +164,8 @@ void EditorGui::displayConsole() {
     ImGui::InputText("##log_search", &Logger::filter.keyword);
     ImGui::SeparatorText("Logs");
     for (const auto& log : Logger::getLogEntries()) {
-      std::string texte = log.toString();
-      ImGui::Text("%s", texte.c_str());
+      std::string text = log.toString();
+      ImGui::Text("%s", text.c_str());
     }
   }
   ImGui::End();
@@ -178,9 +177,9 @@ void EditorGui::displayScene() {
     if (space && space->currentScene) {
       sceneHovered = ImGui::IsWindowHovered();
 
-      ImVec2 window_size = ImGui::GetContentRegionAvail();
-      float aspect_ratio = 1920.0f / 1080.0f;
-      float window_aspect_ratio = window_size.x / window_size.y;
+      const ImVec2 window_size = ImGui::GetContentRegionAvail();
+      constexpr float aspect_ratio = 1920.0f / 1080.0f;
+      const float window_aspect_ratio = window_size.x / window_size.y;
 
       ImVec2 image_size;
       if (window_aspect_ratio > aspect_ratio) {
@@ -189,7 +188,7 @@ void EditorGui::displayScene() {
         image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
       }
 
-      ImGui::Image((void*)(intptr_t)sceneTexture, image_size);
+      ImGui::Image(reinterpret_cast<void *>(sceneTexture), image_size);
     }
     ImGui::End();
   }

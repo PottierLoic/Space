@@ -20,7 +20,7 @@ unsigned int textureFromFile(const char *path, const std::string &directory, boo
 
 class Model {
 public:
-  Model(const char *path);
+  explicit Model(const char *path);
   void draw(Shader &shader);
   std::string directory;
 
@@ -28,10 +28,10 @@ private:
   std::vector<Texture> textures_loaded;
   std::vector<Mesh> meshes;
 
-  void loadModel(std::string path);
-  void processNode(aiNode *node, const aiScene *scene);
+  void loadModel(const std::string& path);
+  void processNode(const aiNode *node, const aiScene *scene);
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-  std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+  std::vector<Texture> loadMaterialTextures(const aiMaterial *mat, aiTextureType type, const std::string& typeName);
 };
 
 }

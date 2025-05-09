@@ -20,10 +20,10 @@ namespace SpaceEngine {
 
 class Serializer {
 public:
-  static json serialize(const std::shared_ptr<Space> space);
-  static json serialize(const std::shared_ptr<Scene> scene);
-  static json serialize(const std::shared_ptr<Entity> entity);
-  static json serialize(const std::shared_ptr<Component> component);
+  static json serialize(const std::shared_ptr<Space> &space);
+  static json serialize(const std::shared_ptr<Scene>& scene);
+  static json serialize(const std::shared_ptr<Entity>& entity);
+  static json serialize(const std::shared_ptr<Component>& component);
 
   static std::shared_ptr<Scene> deserializeScene(const json& j);
   static std::shared_ptr<Entity> deserializeEntity(const json& j);

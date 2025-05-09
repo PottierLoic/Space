@@ -17,8 +17,8 @@ enum CameraMovement {
   RIGHT
 };
 
-const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
+constexpr float SPEED = 2.5f;
+constexpr float SENSITIVITY = 0.1f;
 // TODO: edit this summary
 /**
  * The EditorCamera class represents a 3D camera in a virtual scene.
@@ -43,22 +43,16 @@ const float SENSITIVITY = 0.1f;
  * - void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true): Process mouse movement to update camera angles.
  * - void processMouseScroll(float yoffset): Process mouse scroll to update zoom level.
  */
-class EditorCamera : public SpaceEngine::Camera {
+class EditorCamera final : public SpaceEngine::Camera {
 public:
-  glm::vec3 position;         /* The position of the camera. */
+  glm::vec3 position{};         /* The position of the camera. */
   float movementSpeed = SPEED;        /* The speed at which the camera moves. */
   float mouseSensitivity = SENSITIVITY;     /* The sensitivity of the mouse movement. */
 
   /**
    * @brief Constructor with vector.
-   * @param position: The position of the camera.
-   * @param up: The up direction vector of the camera.
-   * @param yaw: The yaw angle of the camera.
-   * @param pitch: The pitch angle of the camera.
-   *
-   * @todo maybe remove the parameters, not sure if it would become usefull.
    */
-  EditorCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
+  explicit EditorCamera();
 
   /**
    * @brief Process keyboard input to move the camera.
@@ -69,29 +63,29 @@ public:
 
   /**
    * @brief Process mouse movement to update camera angles.
-   * @param xoffset: Horizontal offset of the mouse movement.
-   * @param yoffset: Vertical offset of the mouse movement.
+   * @param xOffset: Horizontal offset of the mouse movement.
+   * @param yOffset: Vertical offset of the mouse movement.
    * @param constrainPitch: Whether to constrain the pitch angle.
    */
-  void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
+  void processMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
 
   /**
    * @brief Process mouse scroll to update zoom level.
-   * @param yoffset: Vertical offset of the mouse scroll.
+   * @param yOffset: Vertical offset of the mouse scroll.
    */
-  void processMouseScroll(float yoffset);
+  void processMouseScroll(float yOffset);
 
     /**
    * @brief Get the view matrix of the camera.
    * @return The view matrix.
    */
-  glm::mat4 getEditorViewMatrix();
+  [[nodiscard]] glm::mat4 getEditorViewMatrix() const;
 
   /**
    * @brief Get the projection matrix of the camera.
    * @return The projection matrix.
    */
-  glm::mat4 getEditorProjectionMatrix();
+  [[nodiscard]] glm::mat4 getEditorProjectionMatrix() const;
 };
 
 }

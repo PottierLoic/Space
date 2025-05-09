@@ -3,8 +3,8 @@
 namespace SpaceEditor {
 
 void EditorGui::initComponentViewers() {
-  this->componentViewers[std::type_index(typeid(Transform))] = [](std::shared_ptr<Component> component) {
-    auto transform = std::static_pointer_cast<Transform>(component);
+  this->componentViewers[std::type_index(typeid(Transform))] = [](const std::shared_ptr<Component>& component) {
+    const auto transform = std::static_pointer_cast<Transform>(component);
     if (ImGui::CollapsingHeader("Transform")) {
       ImGui::Text("Name");
       ImGui::SameLine(100);
@@ -36,8 +36,8 @@ void EditorGui::initComponentViewers() {
     }
   };
 
-  this->componentViewers[std::type_index(typeid(Physic))] = [](std::shared_ptr<Component> component) {
-    auto physic = std::static_pointer_cast<Physic>(component);
+  this->componentViewers[std::type_index(typeid(Physic))] = [](const std::shared_ptr<Component>& component) {
+    const auto physic = std::static_pointer_cast<Physic>(component);
     if (ImGui::CollapsingHeader("Physic")) {
       ImGui::Text("Mass");
       ImGui::SameLine(100);
@@ -54,12 +54,12 @@ void EditorGui::initComponentViewers() {
     }
   };
 
-  this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](std::shared_ptr<Component> component) {
-    auto modelRenderer = std::static_pointer_cast<ModelRenderer>(component);
+  this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](const std::shared_ptr<Component>& component) {
+    const auto modelRenderer = std::static_pointer_cast<ModelRenderer>(component);
     if (ImGui::CollapsingHeader("Model Renderer")) {
       ImGui::Text("Model path");
       ImGui::SameLine();
-      ImGui::InputText("##modelrenderer.path", &modelRenderer->path);
+      ImGui::InputText("##model_renderer.path", &modelRenderer->path);
       ImGui::SameLine();
       if (ImGui::Button("Load Model")) {
         modelRenderer->setModel();
@@ -67,8 +67,8 @@ void EditorGui::initComponentViewers() {
     }
   };
 
-  this->componentViewers[std::type_index(typeid(Camera))] = [](std::shared_ptr<Component> component) {
-    auto camera = std::static_pointer_cast<Camera>(component);
+  this->componentViewers[std::type_index(typeid(Camera))] = [](const std::shared_ptr<Component>& component) {
+    const auto camera = std::static_pointer_cast<Camera>(component);
     if (ImGui::CollapsingHeader("Camera")) {
       // Projection Type
       ImGui::Text("Projection Type");
@@ -124,7 +124,7 @@ void EditorGui::initComponentViewers() {
       ImGui::Separator();
       ImGui::SetNextItemWidth(200);
       ImGui::Text("Visual Settings");
-      ImGui::ColorPicker4("Skybox color", (float*)&camera->skyboxColor);
+      ImGui::ColorPicker4("Skybox color", reinterpret_cast<float *>(&camera->skyboxColor));
     }
   };
 }

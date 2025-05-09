@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-Space::Space(const std::string path, const std::string name) {
+Space::Space(const std::string& path, const std::string &name) {
   // TODO: Maybe make a create function for this and certainly not in the constructor
   if (std::filesystem::exists(path + "/" + name)) {
     // TODO: Load the projects

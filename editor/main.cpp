@@ -5,18 +5,14 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "editor_gui/editor_gui.hpp"
-#include "editor_camera/editor_camera.hpp" // maybe not stay here
-#include "model/model.hpp" // maybe removed soon
+#include "editor_camera/editor_camera.hpp"
 #include "shader/shader.hpp"
 #include "space/space.hpp"
 #include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
-/* DEBUG */
 #include "entity/entity.hpp"
-#include "component/component.hpp"
-#include "component/transform.hpp"
-#include "component/physic.hpp"
+
 #include "component/camera.hpp"
 #include "component/model_renderer.hpp"
 #include "log/logger.hpp"
@@ -26,15 +22,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 using namespace SpaceEngine;
 using namespace SpaceEditor;
 
 // Camera
-EditorCamera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+EditorCamera camera;
 float lastX =  1920.0f / 2.0;
 float lastY =  1080.0 / 2.0;
 bool firstMouse = true;
@@ -64,7 +56,7 @@ void processInput(GLFWwindow* window) {
 }
 
 /* DEBUG */
-void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
+void framebufferSizeCallback(GLFWwindow* /*window*/, const int width, const int height) {
   glViewport(0, 0, width, height);
   if (sceneRenderer) {
     sceneRenderer->resize(width, height);
@@ -74,32 +66,34 @@ void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
   }
 }
 
-void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+void mouseCallback(GLFWwindow* window, const double px, const double py) {
   if (inspectorFocus) {
+    const auto x = static_cast<float>(px);
+    const auto y = static_cast<float>(py);
     if (firstMouse) {
-      lastX = xpos;
-      lastY = ypos;
+      lastX = x;
+      lastY = y;
       firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    const float xOffset = x - lastX;
+    const float yOffset = lastY - y;
 
-    lastX = xpos;
-    lastY = ypos;
+    lastX = x;
+    lastY = y;
 
-    camera.processMouseMovement(xoffset, yoffset);
+    camera.processMouseMovement(xOffset, yOffset);
 
     int display_w, display_h;
     glfwGetWindowSize(window, &display_w, &display_h);
     glfwSetCursorPos(window, display_w / 2.0, display_h / 2.0);
-    lastX = display_w / 2.0;
-    lastY = display_h / 2.0;
+    lastX = static_cast<float>(display_w) / 2.0f;
+    lastY = static_cast<float>(display_h) / 2.0f;
   }
 }
 
-void scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
-  camera.processMouseScroll(static_cast<float>(yoffset));
+void scrollCallback(GLFWwindow* /*window*/, double /*xOffset*/, const double yOffset) {
+  camera.processMouseScroll(static_cast<float>(yOffset));
 }
 
 int main() {
@@ -110,24 +104,24 @@ int main() {
   }
 
   #if defined(IMGUI_IMPL_OPENGL_ES2)
-    const char* glsl_version = "#version 100";
+    auto glsl_version = "#version 100";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
   #elif defined(__APPLE__)
-    const char* glsl_version = "#version 150";
+    auto glsl_version = "#version 150";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
   #else
-    const char* glsl_version = "#version 130";
+    auto glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   #endif
 
   GLFWwindow* window = glfwCreateWindow(1920, 1080, "Space Engine", nullptr, nullptr);
-  if (window == NULL) {
+  if (window == nullptr) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
     return -1;
@@ -141,7 +135,7 @@ int main() {
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
     std::cout << "Failed to initialize Glad" << std::endl;
-    int error = glGetError();
+    const int error = glGetError();
     std::cout << "OpenGL Error: " << error << std::endl;
     glfwDestroyWindow(window);
     glfwTerminate();
@@ -172,7 +166,7 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  EditorGui gui = EditorGui(sceneRenderer->getRenderedTexture(), renderViewRenderer->getRenderedTexture());
+  auto gui = EditorGui(sceneRenderer->getRenderedTexture(), renderViewRenderer->getRenderedTexture());
 
   //TODO : Remove too
   auto space = std::make_shared<Space>("./", "test_space");
@@ -187,8 +181,7 @@ int main() {
   space->currentScene->addEntity(test);
 
   // read content from test file
-  // std::ifstream file("./test.space");
-  // if (file.is_open()) {
+  // if (std::ifstream file("./test.space"); file.is_open()) {
   //   json j;
   //   file >> j;
   //   file.close();
@@ -198,7 +191,7 @@ int main() {
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
-    float currentFrame = static_cast<float>(glfwGetTime());
+    const auto currentFrame = static_cast<float>(glfwGetTime());
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
@@ -207,7 +200,7 @@ int main() {
     // Rendering scene and render view in editor
     sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), space->currentScene);
     if (space->currentScene && space->currentScene->selectedCamera.lock()) {
-      auto sceneCamera = space->currentScene->selectedCamera.lock();
+      const auto sceneCamera = space->currentScene->selectedCamera.lock();
       renderViewRenderer->render(sceneCamera->getViewMatrix(), sceneCamera->getProjectionMatrix(), space->currentScene);
     }
 
