@@ -1,12 +1,11 @@
 #include <string>
 #include <iostream>
 
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-
 #include "shader/shader.hpp"
 #include "scene/scene.hpp"
+#include "space/space.hpp"
 #include "model/model.hpp" // maybe removed soon
+#include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
 /* DEBUG */
@@ -32,6 +31,8 @@ using namespace SpaceEngine;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+std::unique_ptr<Renderer> renderer;
+
 /* DEBUG */
 
 void framebufferSizeCallback(GLFWwindow* /*window*/, int width, int height) {
@@ -44,6 +45,24 @@ int main() {
     std::cout << "Failed to initialize GLFW" << std::endl;
     return -1;
   }
+
+
+  #if defined(IMGUI_IMPL_OPENGL_ES2)
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+  #elif defined(__APPLE__)
+    const char* glsl_version = "#version 150";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  #else
+    const char* glsl_version = "#version 130";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  #endif
 
   // Create a window with graphic context
   GLFWwindow* window = glfwCreateWindow(1280, 720, "Space Engine", nullptr, nullptr);
@@ -71,12 +90,22 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-  //TODO : Remove too
+  // Initialize renderer
+  renderer = std::make_unique<Renderer>();
+  if (!renderer->initialize(1920, 1080)) { // TODO: Not hardcode resolution
+    std::cout << "Failed to initialize renderer" << std::endl;
+    return -1;
+  }
+
+  // TODO : Remove too NOT SURE NOW
   // Scene creation
-  Scene scene = Scene();
-  scene.addEntity(Entity::create("Test"));
-  scene.entities[1]->addComponent<ModelRenderer>();
-  scene.entities[1]->getComponent<ModelRenderer>()->setModel("./models/dio/dio.fbx");
+  auto space = std::make_shared<Space>("./", "template_space");
+  auto test = Entity::create("test");
+  test->addComponent<ModelRenderer>();
+  auto testRenderer = test->getComponent<ModelRenderer>();
+  testRenderer->path = "./models/dio/dio.fbx";
+  testRenderer->setModel();
+  space->currentScene->addEntity(test);
 
   // TODO: REMOVE OPENGL TESTS
   // TODO: Find a way to use better path.
@@ -88,35 +117,18 @@ int main() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
+    // TODO: should be processing inputs around here using a new core Class
+
+    if (space->currentScene && space->currentScene->selectedCamera.lock()) {
+      auto camera = space->currentScene->selectedCamera.lock();
+      renderer->render(camera->getViewMatrix(), camera->getProjectionMatrix(), space->currentScene);
+    }
+
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    std::shared_ptr<Camera> cam = scene.selectedCamera.lock();
-    glClearColor(cam->skyboxColor.x, cam->skyboxColor.y, cam->skyboxColor.z, cam->skyboxColor.w);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shader.use();
-    glm::mat4 projection = glm::perspective(glm::radians(cam->zoom), 1920.0f / 1080.0f, 0.1f, 100.0f);
-    projection[1][1] *= -1;
-    glm::mat4 view = cam->getViewMatrix();
-    shader.setMat4("projection", projection);
-    shader.setMat4("view", view);
-    for (auto& entity : scene.entities) {
-      auto modelRenderer = entity->getComponent<ModelRenderer>();
-      if (modelRenderer != nullptr) {
-        auto tf = entity->getComponent<Transform>();
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(tf->position.x(), tf->position.y(), tf->position.z()));
-        model = glm::scale(model, glm::vec3(tf->scale.x(), tf->scale.y(), tf->scale.z()));
-        model = glm::rotate(model, glm::radians(tf->rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(tf->rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(tf->rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
-        shader.setMat4("model", model);
-        modelRenderer->model->draw(shader);
-      }
-    }
 
     glfwSwapBuffers(window);
     glfwPollEvents();
