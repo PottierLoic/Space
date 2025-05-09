@@ -109,22 +109,22 @@ int main() {
     return -1;
   }
 
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-  const char* glsl_version = "#version 100";
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#elif defined(__APPLE__)
-  const char* glsl_version = "#version 150";
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#else
-  const char* glsl_version = "#version 130";
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#endif
+  #if defined(IMGUI_IMPL_OPENGL_ES2)
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+  #elif defined(__APPLE__)
+    const char* glsl_version = "#version 150";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  #else
+    const char* glsl_version = "#version 130";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  #endif
 
   GLFWwindow* window = glfwCreateWindow(1920, 1080, "Space Engine", nullptr, nullptr);
   if (window == NULL) {
@@ -150,14 +150,14 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
-    // Initialize renderers
-    sceneRenderer = std::make_unique<Renderer>();
-    renderViewRenderer = std::make_unique<Renderer>();
-    
-    if (!sceneRenderer->initialize(1920, 1080) || !renderViewRenderer->initialize(1920, 1080)) {
-      std::cout << "Failed to initialize renderers" << std::endl;
-      return -1;
-    }
+  // Initialize renderers
+  sceneRenderer = std::make_unique<Renderer>();
+  renderViewRenderer = std::make_unique<Renderer>();
+  
+  if (!sceneRenderer->initialize(1920, 1080) || !renderViewRenderer->initialize(1920, 1080)) {
+    std::cout << "Failed to initialize renderers" << std::endl;
+    return -1;
+  }
 
   // Setup ImGui context
   IMGUI_CHECKVERSION();
