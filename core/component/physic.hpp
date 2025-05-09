@@ -17,7 +17,7 @@ namespace SpaceEngine {
  * - Physic(): Default constructor: Initializes a new Physic component with default values.
  * - ~Physic(): Destructor: Destroys the Physic component. Note: May not have additional functionality in this case.
  */
-class Physic : public Component {
+class Physic final : public Component {
 public:
   float mass;          /* The mass of the object. */
   float drag;          /* The resistance applied to the movement. */

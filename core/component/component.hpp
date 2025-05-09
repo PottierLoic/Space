@@ -38,7 +38,7 @@ public:
   /**
    * @brief Set the owner of the component.
    */
-  void setOwner(std::weak_ptr<Entity> owner);
+  void setOwner(const std::weak_ptr<Entity> &owner);
 };
 
 }

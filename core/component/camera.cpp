@@ -12,28 +12,27 @@ Camera::Camera() {
   updateCameraVectors();
 }
 
-glm::mat4 Camera::getViewMatrix() {
-  auto lockedOwner = owner.lock();
-  if (!lockedOwner) {
+glm::mat4 Camera::getViewMatrix() const {
+  if (const auto lockedOwner = owner.lock(); !lockedOwner) {
     return glm::mat4(1.0f);
   } else {
-    auto tf = lockedOwner->getComponent<Transform>();
-    glm::vec3 positionVec = glm::vec3(tf->position.x(), tf->position.y(), tf->position.z());
-    glm::vec3 lookTarget = positionVec + front;
+    const auto tf = lockedOwner->getComponent<Transform>();
+    const auto positionVec = glm::vec3(tf->position.x(), tf->position.y(), tf->position.z());
+    const glm::vec3 lookTarget = positionVec + front;
     return glm::lookAt(positionVec, lookTarget, up);
   }
 }
 
-glm::mat4 Camera::getProjectionMatrix() {
+glm::mat4 Camera::getProjectionMatrix() const {
   if (projectionType == ProjectionType::PERSPECTIVE) {
     glm::mat4 projection = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
-    projection[1][1] *= -1; // Flip Y for Vulkan-style coordinate system
+    projection[1][1] *= -1;
     return projection;
   } else {
-    float width = orthographicSize * aspectRatio;
-    float height = orthographicSize;
+    const float width = orthographicSize * aspectRatio;
+    const float height = orthographicSize;
     glm::mat4 projection = glm::ortho(-width, width, -height, height, nearPlane, farPlane);
-    projection[1][1] *= -1; // Flip Y for Vulkan-style coordinate system
+    projection[1][1] *= -1;
     return projection;
   }
 }

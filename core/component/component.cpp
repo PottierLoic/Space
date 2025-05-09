@@ -2,9 +2,9 @@
 
 namespace SpaceEngine {
 
-Component::Component() {}
+Component::Component() = default;
 
-void Component::setOwner(std::weak_ptr<Entity> owner) {
+void Component::setOwner(const std::weak_ptr<Entity> &owner) {
   this->owner = owner;
 }
 

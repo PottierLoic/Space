@@ -20,7 +20,7 @@ namespace SpaceEngine {
  * - Transform(std::string name): Default constructor: Initializes a new transform component with default values.
  * - ~Transform(): Destructor: Destroys the transform component. Note: May not have additional functionality in this case.
  */
-class Transform : public Component {
+class Transform final : public Component {
 public:
   std::string name;  /* The name of the object. */
   Vec3f position;  /* The position of the transform in 3D space. */
@@ -31,7 +31,7 @@ public:
    * @brief Default constructor: Initializes a new transform component with default values.
    * @param name: The name of the object.
    */
-  Transform(std::string name);
+  explicit Transform(const std::string &name);
 };
 
 }

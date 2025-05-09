@@ -1,16 +1,12 @@
 #pragma once
 
-#include <vector>
 
-#include "glad/glad.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
 
 #include "component/component.hpp"
-#include "component/transform.hpp"
 
 namespace SpaceEngine {
 
@@ -25,10 +21,10 @@ public:
   };
 
   // Camera orientation
-  glm::vec3 front;            /* The front direction vector of the camera. */
-  glm::vec3 up;               /* The up direction vector of the camera. */
-  glm::vec3 right;            /* The right direction vector of the camera. */
-  glm::vec3 worldUp;          /* The world up direction vector. */
+  glm::vec3 front{};            /* The front direction vector of the camera. */
+  glm::vec3 up{};               /* The up direction vector of the camera. */
+  glm::vec3 right{};            /* The right direction vector of the camera. */
+  glm::vec3 worldUp{};          /* The world up direction vector. */
   float yaw;                  /* The yaw angle of the camera. */
   float pitch;                /* The pitch angle of the camera. */
 
@@ -54,13 +50,13 @@ public:
    * @brief Get the view matrix of the camera.
    * @return The view matrix.
    */
-  glm::mat4 getViewMatrix();
+  [[nodiscard]] glm::mat4 getViewMatrix() const;
 
   /**
    * @brief Get the projection matrix of the camera.
    * @return The projection matrix.
    */
-  glm::mat4 getProjectionMatrix();
+  [[nodiscard]] glm::mat4 getProjectionMatrix() const;
 
   /**
    * @brief Update camera direction vectors based on yaw and pitch angles.

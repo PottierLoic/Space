@@ -11,7 +11,7 @@ enum LightType {
   SPOT
 };
 
-class Light : public Component {
+class Light final : public Component {
 public:
   // General attributes
   float intensity = 1.0f;
@@ -23,7 +23,7 @@ public:
   // Specific attributes
   LightType type;
   Vec3f direction;
-  float spotAngle;
+  float spotAngle{};
 
   /**
    * @brief Default constructor: Initializes a new Light component with default values.

@@ -2,6 +2,6 @@
 
 namespace SpaceEngine {
 
-Script::Script() {}
+Script::Script() = default;
 
 }
