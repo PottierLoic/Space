@@ -10,7 +10,11 @@ file(GLOB_RECURSE EDITOR_SOURCES
 file(GLOB IMGUI_SOURCES "${LIBS_ROOT}/imgui/*.cpp" "${LIBS_ROOT}/imgui/*.h")
 
 add_library(SpaceEditor STATIC ${EDITOR_SOURCES} ${IMGUI_SOURCES})
-target_compile_options(SpaceEditor PRIVATE -Wall -Wextra -Werror)
+if (MSVC)
+    target_compile_options(SpaceEditor PRIVATE /W4 /WX)
+else()
+    target_compile_options(SpaceEditor PRIVATE -Wall -Wextra -Werror)
+endif()
 target_include_directories(SpaceEditor PUBLIC ${SpaceEngine_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} "${LIBS_ROOT}")
 target_link_libraries(SpaceEditor PRIVATE SpaceEngine)
 

@@ -2,8 +2,7 @@ import os
 import shutil
 import subprocess
 
-# subprocess.run(['git', 'submodule', 'init'])
-# subprocess.run(['git', 'submodule', 'update'])
+subprocess.run(['git', 'submodule', 'update', '--init', '--recursive'])
 
 shutil.copy2('./libs/imgui/backends/imgui_impl_glfw.cpp', './libs/imgui')
 shutil.copy2('./libs/imgui/backends/imgui_impl_glfw.h', './libs/imgui')

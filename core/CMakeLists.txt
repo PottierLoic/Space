@@ -17,7 +17,11 @@ file(GLOB_RECURSE CORE_SOURCES
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})
-target_compile_options(SpaceEngine PRIVATE -Wall -Wextra -Werror)
+if (MSVC)
+    target_compile_options(SpaceEngine PRIVATE /W4 /WX)
+else()
+    target_compile_options(SpaceEngine PRIVATE -Wall -Wextra -Werror)
+endif()
 
 # Glad build
 add_library(glad "${LIBS_ROOT}/glad/src/glad.c")
