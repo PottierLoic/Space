@@ -38,7 +38,7 @@ public:
    *
    * @return A shared pointer to the Entity created.
    */
-  static std::shared_ptr<Entity> create(std::string name) {
+  static std::shared_ptr<Entity> create(const std::string& name) {
     auto entity = std::shared_ptr<Entity>(new Entity());
     entity->addComponent<Transform>(name);
     return entity;
@@ -64,7 +64,7 @@ public:
    */
   template <typename T, typename... Args>
   bool addComponent(Args&&... args) {
-    std::type_index typeIndex(typeid(T));
+    const std::type_index typeIndex(typeid(T));
     if (components.find(typeIndex) != components.end()) {
       return false;
     }
@@ -83,8 +83,7 @@ public:
    */
   template <typename T>
   std::shared_ptr<T> getComponent() const {
-    auto it = components.find(typeid(T));
-    if (it != components.end()) {
+    if (const auto it = components.find(typeid(T)); it != components.end()) {
       return std::dynamic_pointer_cast<T>(it->second);
     }
     return nullptr;
@@ -96,8 +95,7 @@ public:
    */
   template <typename T>
   void removeComponent() {
-    auto it = components.find(typeid(T));
-    if (it != components.end()) {
+    if (const auto it = components.find(typeid(T)); it != components.end()) {
       components.erase(it);
     }
   }
@@ -113,13 +111,13 @@ public:
    * @param name: (string) The name of the entity to find.
    * @return shared_ptr<Entity>: A shared pointer to the found entity, a nullptr otherwise
   */
-  std::shared_ptr<Entity> findChild(std::string name);
+  std::shared_ptr<Entity> findChild(const std::string& name) const;
 
   /**
    * Remove a child from the entity children vector.
    * @param name: (string) The name of the entity to remove.
    */
-  void removeChild(std::string name);
+  void removeChild(const std::string& name);
 };
 
 }
