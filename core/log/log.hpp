@@ -2,7 +2,6 @@
 
 #include <string>
 #include <chrono>
-#include <sstream>
 #include <iomanip>
 #include <array>
 
@@ -52,13 +51,13 @@ public:
    * @param type The log type.
    * @param message The log message.
    */
-  Log(LogLevel level, LogType type, const std::string& message);
+  Log(LogLevel level, LogType type, std::string  message);
 
   /**
    * @brief Converts the log entry to a string representation.
    * @return The log entry as a string.
    */
-  std::string toString() const;
+  [[nodiscard]] std::string toString() const;
 
   /**
    * @brief Converts a log level to its string representation.

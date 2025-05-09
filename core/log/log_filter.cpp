@@ -2,7 +2,7 @@
 
 namespace SpaceEngine {
 
-void LogFilter::setLogLevel(LogLevel level, bool enable) {
+void LogFilter::setLogLevel(const LogLevel level, const bool enable) {
   if (enable) {
     levels.insert(level);
   } else {
@@ -10,7 +10,7 @@ void LogFilter::setLogLevel(LogLevel level, bool enable) {
   }
 }
 
-void LogFilter::setLogType(LogType type, bool enable) {
+void LogFilter::setLogType(const LogType type, const bool enable) {
   if (enable) {
     types.insert(type);
   } else {
@@ -19,10 +19,9 @@ void LogFilter::setLogType(LogType type, bool enable) {
 }
 
 bool LogFilter::matches(const Log& log) const {
-  bool matchesLevel = levels.empty() || levels.find(log.level) != levels.end();
-  bool matchesType = types.empty() || types.find(log.type) != types.end();
-  bool matchesKeyword = keyword.empty() ||
-                        log.toString().find(keyword) != std::string::npos;
+  const bool matchesLevel = levels.empty() || levels.find(log.level) != levels.end();
+  const bool matchesType = types.empty() || types.find(log.type) != types.end();
+  const bool matchesKeyword = keyword.empty() || log.toString().find(keyword) != std::string::npos;
   return matchesLevel && matchesType && matchesKeyword;
 }
 

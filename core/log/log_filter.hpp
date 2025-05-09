@@ -2,7 +2,6 @@
 
 #include <string>
 #include <set>
-#include <vector>
 
 #include "log/log.hpp"
 
@@ -16,7 +15,7 @@ public:
 
   void setLogLevel(LogLevel level, bool enable);
   void setLogType(LogType type, bool enable);
-  bool matches(const Log& log) const;
+  [[nodiscard]] bool matches(const Log& log) const;
 };
 
 }
