@@ -13,6 +13,7 @@ file(GLOB_RECURSE CORE_SOURCES
   "log/*.cpp"
   "serializer/*.cpp"
   "space/*.cpp"
+  "renderer/*.cpp"
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})
