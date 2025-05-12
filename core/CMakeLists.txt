@@ -14,6 +14,7 @@ file(GLOB_RECURSE CORE_SOURCES
   "serializer/*.cpp"
   "space/*.cpp"
   "renderer/*.cpp"
+  "time/*.cpp"
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})

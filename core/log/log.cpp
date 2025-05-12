@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "log/log.hpp"
 
 namespace SpaceEngine {
@@ -24,27 +22,11 @@ std::string Log::toString() const {
 }
 
 std::string Log::LogLevelToString(const LogLevel level) {
- switch(level) {
-   case DEBUG: return "DEBUG";
-   case INFORMATION: return "INFORMATION";
-   case WARNING: return "WARNING";
-   case ERROR: return "ERROR";
-   case FATAL: return "FATAL";
-   default: return "UNKNOWN";
- }
+ return logLevels[static_cast<int>(level)];
 }
 
 std::string Log::LogTypeToString(const LogType type) {
- switch(type) {
-   case Core: return "Core";
-   case Rendering: return "Rendering";
-   case Audio: return "Audio";
-   case Input: return "Input";
-   case Editor: return "Editor";
-   case Scripting: return "Scripting";
-   case AssetLoading: return "AssetLoading";
-   default: return "Unknown";
- }
+ return logTypes[static_cast<int>(type)];
 }
 
 }

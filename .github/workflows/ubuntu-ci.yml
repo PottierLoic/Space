@@ -1,6 +1,10 @@
 name: Linux Build and Test
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -28,7 +32,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.12'
 
       - name: Building with Python script
         run: python build.py
@@ -44,7 +48,7 @@ jobs:
 
       - name: Check 'SpaceEditor' executable build success
         run: |
-          if [ -e build/editor/SpaceEditor ]; then
+          if [ -e build/editor/Space ]; then
             echo "SpaceEditor executable exists."
           else
             echo "SpaceEditor executable not found. Failing the CI test."
@@ -63,7 +67,7 @@ jobs:
       - name: Run tests
         run: |
           cd build/tests
-          ./SpaceTests > test_output.txt 2>&1
+          ./SpaceTests | tee test_output.txt
 
       - name: Check test results
         run: |

@@ -5,10 +5,10 @@
 using namespace SpaceEngine;
 
 int testEntity() {
-  auto ent1 = Entity::create("ent1");
-  auto ent2 = Entity::create("ent2");
+  const auto ent1 = Entity::create("ent1");
+  const auto ent2 = Entity::create("ent2");
 
-  auto tf1 = ent1->getComponent<Transform>();
+  const auto tf1 = ent1->getComponent<Transform>();
   custom_assert(tf1 != nullptr, "Entity getComponent failed.");
 
   custom_assert(ent1->addComponent<Transform>("test") == false, "Entity adding duplicate component prevention failed.");

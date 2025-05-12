@@ -1,6 +1,10 @@
 name: Windows Build and Test
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -19,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.12'
 
       - name: Building with Python script
         run: python build.py
@@ -35,7 +39,7 @@ jobs:
 
       - name: Check 'SpaceEditor' executable build success
         run: |
-          if (Test-Path build\editor\SpaceEditor.exe) {
+          if (Test-Path build\editor\Space.exe) {
             Write-Output "SpaceEditor executable exists."
           } else {
             Write-Output "SpaceEditor executable not found. Failing the CI test."
@@ -54,7 +58,7 @@ jobs:
       - name: Run tests
         run: |
           cd build\tests
-          .\SpaceTests > test_output.txt 2>&1
+          ./SpaceTests.exe | Tee-Object -FilePath test_output.txt
 
       - name: Check test results
         run: |

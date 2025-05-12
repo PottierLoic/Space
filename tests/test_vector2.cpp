@@ -5,7 +5,7 @@ using namespace SpaceEngine;
 
 int testVector2() {
   Vec2f vec1(1.0f, 2.0f);
-  Vec2f vec2(3.0f, 5.0f);
+  constexpr Vec2f vec2(3.0f, 5.0f);
 
   // Vector/Vector addition
   custom_assert(vec1 + vec2 == Vec2f(4.0f, 7.0f), "Vec2f vector addition failed");
@@ -65,7 +65,7 @@ int testVector2() {
   custom_assert(vec1 != vec2, "Vec2f inequality failed");
 
   // extension
-  Vec3f extendedVec = Vec3f(vec1, 3.0f);
+  const auto extendedVec = Vec3f(vec1, 3.0f);
   custom_assert(extendedVec == Vec3f(1.0f, 2.0f, 3.0f), "Vec2f to Vec3f extension failed");
 
   // truncation

@@ -5,7 +5,7 @@ using namespace SpaceEngine;
 
 int testVector4() {
   Vec4f vec1(1.0f, 2.0f, 3.0f, 4.0f);
-  Vec4f vec2(5.0f, 6.0f, 7.0f, 8.0f);
+  constexpr Vec4f vec2(5.0f, 6.0f, 7.0f, 8.0f);
 
   // Vector/Vector addition
   custom_assert(vec1 + vec2 == Vec4f(6.0f, 8.0f, 10.0f, 12.0f), "Vec4f vector addition failed");
