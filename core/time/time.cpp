@@ -21,8 +21,8 @@ void Time::update() {
   const auto now = std::chrono::steady_clock::now();
   s_unscaledDeltaTime = std::chrono::duration<float>(now - s_lastFrameTime).count();
   s_deltaTime = s_unscaledDeltaTime * s_timeScale;
-  s_lastFrameTime = now;
   s_time += s_deltaTime;
+  s_lastFrameTime = now;
 }
 
 float Time::deltaTime() {

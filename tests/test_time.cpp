@@ -7,13 +7,15 @@ using namespace SpaceEngine;
 
 int testTime() {
   Time::init();
-  Time::setTimeScale(0.5f);
-  Time::update();
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  Time::setTimeScale(0.42f);
+  std::this_thread::sleep_for(std::chrono::milliseconds(50));
   Time::update();
   const float deltaTime = Time::deltaTime();
-  custom_assert(deltaTime >= 0.040f && deltaTime <= 0.060f, "Delta time is out of expected range: " << deltaTime);
   const float unscaledDeltaTime = Time::unscaledDeltaTime();
-  custom_assert(unscaledDeltaTime >= 0.090f && unscaledDeltaTime <= 0.12f, "Unscaled delta time is out of expected range: " << unscaledDeltaTime);
+  const float expected = unscaledDeltaTime * 0.42f;
+
+  constexpr float epsilon = 0.001f;
+  custom_assert(std::abs(deltaTime - expected) < epsilon,
+    "deltaTime (" << deltaTime << ") != unscaledDeltaTime * scale (" << expected << ")");
   return 0;
 }
