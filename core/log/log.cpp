@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "log/log.hpp"
 
 namespace SpaceEngine {

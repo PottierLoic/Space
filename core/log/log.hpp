@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <chrono>
 #include <iomanip>
 #include <array>
+#include <utility>
 
 namespace SpaceEngine {
 
