@@ -5,7 +5,7 @@ using namespace SpaceEngine;
 
 int testLog() {
   // Create a log entry
-  Log log(LogLevel::INFORMATION, LogType::Core, "This is a test log message");
+  const Log log(LogLevel::INFORMATION, LogType::Core, "This is a test log message");
 
   // Test log level
   custom_assert(log.level == LogLevel::INFORMATION, "Log level incorrect");
@@ -17,19 +17,19 @@ int testLog() {
   custom_assert(log.message == "This is a test log message", "Log message incorrect");
 
   // Test log timestamp
-  std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-  std::chrono::system_clock::time_point minTimestamp = now - std::chrono::seconds(1);
-  std::chrono::system_clock::time_point maxTimestamp = now + std::chrono::seconds(1);
+  const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+  const std::chrono::system_clock::time_point minTimestamp = now - std::chrono::seconds(1);
+  const std::chrono::system_clock::time_point maxTimestamp = now + std::chrono::seconds(1);
   custom_assert(log.timestamp >= minTimestamp && log.timestamp <= maxTimestamp, "Log timestamp incorrect");
 
   // Test LogLevelToString() method
-  std::string logLevelString = Log::LogLevelToString(LogLevel::WARNING);
-  std::string expectedLogLevelString = "WARNING";
+  const std::string logLevelString = Log::LogLevelToString(LogLevel::WARNING);
+  const std::string expectedLogLevelString = "WARNING";
   custom_assert(logLevelString == expectedLogLevelString, "LogLevelToString() method incorrect");
 
   // Test LogTypeToString() method
-  std::string logTypeString = Log::LogTypeToString(LogType::Rendering);
-  std::string expectedLogTypeString = "Rendering";
+  const std::string logTypeString = Log::LogTypeToString(LogType::Rendering);
+  const std::string expectedLogTypeString = "Rendering";
   custom_assert(logTypeString == expectedLogTypeString, "LogTypeToString() method incorrect");
 
   return 0;

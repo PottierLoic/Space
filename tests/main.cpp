@@ -36,21 +36,19 @@ void run_all_tests() {
   int count = 0;
   std::cout << "\033[1;37mRunning tests . . .\033[0m" << std::endl;
 
-  size_t max_lenght = 0;
-  for (const auto& test : test_fn) {
-    size_t test_lenght = strlen(test.name);
-    if (test_lenght > max_lenght) {
-      max_lenght = test_lenght;
+  size_t max_length = 0;
+  for (const auto&[name, function] : test_fn) {
+    if (const size_t test_length = strlen(name); test_length > max_length) {
+      max_length = test_length;
     }
   }
 
-  for (const auto& test : test_fn) {
-    std::cout << "\033[1;37mRunning test: " << std::setw(max_lenght) << std::left << test.name << "         \033[0m";
-    int result = test.function();
-    if (result == 0) {
+  for (const auto&[name, function] : test_fn) {
+    std::cout <<
+      "\033[1;37mRunning test: " << std::setw(static_cast<int>(max_length)) << std::left << name << "         \033[0m";
+    if (const int result = function(); result == 0) {
       std::cout << "\033[1;32mPassed\033[0m" << std::endl;
     } else {
-      // Fail print is in the custom_assert macro
       count++;
     }
   }
