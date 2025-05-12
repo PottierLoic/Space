@@ -12,6 +12,7 @@ extern int testLog();
 extern int testLogger();
 extern int testSerialize();
 extern int testSerializeComponent();
+extern int testTime();
 
 struct TestFunction {
   const char* name;
@@ -28,6 +29,7 @@ TestFunction test_fn[] = {
   {"testLogger", testLogger},
   {"testSerialize", testSerialize},
   {"testSerializeComponent", testSerializeComponent},
+  {"TestTime", testTime},
 };
 
 void run_all_tests() {
