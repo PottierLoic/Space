@@ -57,7 +57,7 @@ jobs:
       - name: Run tests
         run: |
           cd build/tests
-          ./SpaceTests > test_output.txt 2>&1
+          ./SpaceTests | tee test_output.txt
 
       - name: Check test results
         run: |
