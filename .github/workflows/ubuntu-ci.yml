@@ -48,7 +48,7 @@ jobs:
 
       - name: Check 'SpaceEditor' executable build success
         run: |
-          if [ -e build/editor/SpaceEditor ]; then
+          if [ -e build/editor/Space ]; then
             echo "SpaceEditor executable exists."
           else
             echo "SpaceEditor executable not found. Failing the CI test."

@@ -39,7 +39,7 @@ jobs:
 
       - name: Check 'SpaceEditor' executable build success
         run: |
-          if (Test-Path build\editor\SpaceEditor.exe) {
+          if (Test-Path build\editor\Space.exe) {
             Write-Output "SpaceEditor executable exists."
           } else {
             Write-Output "SpaceEditor executable not found. Failing the CI test."
