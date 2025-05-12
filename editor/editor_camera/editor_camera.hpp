@@ -40,8 +40,8 @@ constexpr float SENSITIVITY = 0.1f;
  * - EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): Constructor with vector.
  * - glm::mat4 getViewMatrix(): Get the view matrix of the camera.
  * - void processKeyboard(CameraMovement direction, float deltaTime): Process keyboard input to move the camera.
- * - void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true): Process mouse movement to update camera angles.
- * - void processMouseScroll(float yoffset): Process mouse scroll to update zoom level.
+ * - void processMouseMovement(float xOffset, float yOffset, bool constrainPitch = true): Process mouse movement to update camera angles.
+ * - void processMouseScroll(float yOffset): Process mouse scroll to update zoom level.
  */
 class EditorCamera final : public SpaceEngine::Camera {
 public:
