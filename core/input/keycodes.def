@@ -1,0 +1,5 @@
+#define KEYCODES(X) \
+  X(A, GLFW_KEY_A) \
+  X(B, GLFW_KEY_B) \
+  X(C, GLFW_KEY_C) \
+  X(D, GLFW_KEY_D)
