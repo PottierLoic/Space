@@ -11,6 +11,7 @@
 #include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
+#include "input/input.hpp" // TODO: switch from using glfw input system to the engine input system
 #include "entity/entity.hpp"
 
 #include "component/camera.hpp"
@@ -40,9 +41,10 @@ float lastFrame = 0.0f;
 std::unique_ptr<Renderer> sceneRenderer;
 std::unique_ptr<Renderer> renderViewRenderer;
 
+// TODO Remove this and handle inputs using `Input` and not glfw
 void processInput(GLFWwindow* window) {
   if (inspectorFocus) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) //TODO: Not leave this one
       glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
       camera.processKeyboard(FORWARD, deltaTime);
@@ -66,6 +68,7 @@ void framebufferSizeCallback(GLFWwindow* /*window*/, const int width, const int 
   }
 }
 
+// TODO: Remove this and use the new Input system instead of glfw
 void mouseCallback(GLFWwindow* window, const double px, const double py) {
   if (inspectorFocus) {
     const auto x = static_cast<float>(px);
@@ -144,6 +147,9 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
+  // Input initialization
+  Input::init(window);
+
   // Initialize renderers
   sceneRenderer = std::make_unique<Renderer>();
   renderViewRenderer = std::make_unique<Renderer>();
@@ -196,6 +202,11 @@ int main() {
     lastFrame = currentFrame;
 
     processInput(window);
+    Input::update();
+
+    if (Input::isKeyPressed(KeyCode::A)) {
+      Logger::info("A key pressed");
+    }
 
     // Rendering scene and render view in editor
     sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), space->currentScene);
