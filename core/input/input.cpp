@@ -1,5 +1,4 @@
 #include "input.hpp"
-#include "log/logger.hpp"
 #include "GLFW/glfw3.h"
 
 namespace SpaceEngine {
@@ -18,6 +17,10 @@ float Input::s_lastMouseX = 0.0f;
 float Input::s_lastMouseY = 0.0f;
 float Input::s_deltaX = 0.0f;
 float Input::s_deltaY = 0.0f;
+float Input::s_scrollX = 0.0f;
+float Input::s_scrollY = 0.0f;
+float Input::s_scrollDeltaX = 0.0f;
+float Input::s_scrollDeltaY = 0.0f;
 
 constexpr auto AllKeys = std::to_array({
   #define KEY_ENTRY(name, glfw) KeyCode::name,
@@ -50,8 +53,18 @@ int glfwButtonFromMouseButton(const MouseButton button) {
   }
 }
 
+static void glfwScrollCallback(GLFWwindow* /*window*/, const double /*xoffset*/, const double yoffset) {
+  Input::onScroll(yoffset);
+}
+
+void Input::onScroll(const double offset) {
+  s_scrollDeltaY += static_cast<float>(offset);
+  s_scrollY += static_cast<float>(offset);
+}
+
 void Input::init(GLFWwindow* window) {
   s_window = window;
+  glfwSetScrollCallback(window, glfwScrollCallback);
 }
 
 void Input::update() {
@@ -86,5 +99,9 @@ float Input::getMouseX() { return s_mouseX; }
 float Input::getMouseY() { return s_mouseY; }
 float Input::getMouseDeltaX() { return s_deltaX; }
 float Input::getMouseDeltaY() { return s_deltaY; }
+float Input::getScrollX() { return s_scrollX; }
+float Input::getScrollY() { return s_scrollY; }
+float Input::getScrollDeltaX() { return s_scrollDeltaX; }
+float Input::getScrollDeltaY() { return s_scrollDeltaY; }
 
 }
