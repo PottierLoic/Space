@@ -31,7 +31,6 @@ EditorCamera camera;
 float lastX =  1920.0f / 2.0;
 float lastY =  1080.0 / 2.0;
 bool firstMouse = true;
-bool inspectorFocus = false; // TODO: move in the inspector ?
 
 // timing
 float deltaTime = 0.0f;
@@ -154,7 +153,7 @@ int main() {
 
     Input::update();
 
-    if (inspectorFocus) {
+    if (gui.inspectorFocus) {
       // Keyboard inputs handling
       if (Input::isKeyPressed(KeyCode::W))
         camera.processKeyboard(FORWARD, deltaTime);
@@ -204,11 +203,11 @@ int main() {
     ImGui::NewFrame();
     ImGui::DockSpaceOverViewport();
 
-    if (!inspectorFocus && gui.sceneHovered && io.MouseDown[1]) {
-      inspectorFocus = true;
+    if (!gui.inspectorFocus && gui.sceneHovered && Input::isMouseButtonPressed(MouseButton::Right)) {
+      gui.inspectorFocus = true;
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    } else if (inspectorFocus && !io.MouseDown[1]) {
-      inspectorFocus = false;
+    } else if (gui.inspectorFocus && !Input::isMouseButtonPressed(MouseButton::Right)) {
+      gui.inspectorFocus = false;
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
       firstMouse = true;
     }
