@@ -41,22 +41,6 @@ float lastFrame = 0.0f;
 std::unique_ptr<Renderer> sceneRenderer;
 std::unique_ptr<Renderer> renderViewRenderer;
 
-// TODO Remove this and handle inputs using `Input` and not glfw
-void processInput(GLFWwindow* window) {
-  if (inspectorFocus) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) //TODO: Not leave this one
-      glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-      camera.processKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-      camera.processKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      camera.processKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      camera.processKeyboard(RIGHT, deltaTime);
-  }
-}
-
 /* DEBUG */
 void framebufferSizeCallback(GLFWwindow* /*window*/, const int width, const int height) {
   glViewport(0, 0, width, height);
@@ -201,11 +185,20 @@ int main() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    processInput(window);
     Input::update();
 
-    if (Input::isKeyPressed(KeyCode::A)) {
-      Logger::info("A key pressed");
+    // TODO: Remove from here
+    if (inspectorFocus) {
+      if (Input::isKeyPressed(KeyCode::ESCAPE)) //TODO: Not leave this one
+        glfwSetWindowShouldClose(window, true);
+      if (Input::isKeyPressed(KeyCode::W))
+        camera.processKeyboard(FORWARD, deltaTime);
+      if (Input::isKeyPressed(KeyCode::S))
+        camera.processKeyboard(BACKWARD, deltaTime);
+      if (Input::isKeyPressed(KeyCode::A))
+        camera.processKeyboard(LEFT, deltaTime);
+      if (Input::isKeyPressed(KeyCode::D))
+        camera.processKeyboard(RIGHT, deltaTime);
     }
 
     // Rendering scene and render view in editor
