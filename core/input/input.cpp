@@ -17,10 +17,8 @@ float Input::s_lastMouseX = 0.0f;
 float Input::s_lastMouseY = 0.0f;
 float Input::s_deltaX = 0.0f;
 float Input::s_deltaY = 0.0f;
-float Input::s_scrollX = 0.0f;
-float Input::s_scrollY = 0.0f;
-float Input::s_scrollDeltaX = 0.0f;
-float Input::s_scrollDeltaY = 0.0f;
+float Input::s_scroll = 0.0f;
+float Input::s_scrollDelta = 0.0f;
 
 constexpr auto AllKeys = std::to_array({
   #define KEY_ENTRY(name, glfw) KeyCode::name,
@@ -58,8 +56,8 @@ static void glfwScrollCallback(GLFWwindow* /*window*/, const double /*xoffset*/,
 }
 
 void Input::onScroll(const double offset) {
-  s_scrollDeltaY += static_cast<float>(offset);
-  s_scrollY += static_cast<float>(offset);
+  s_scrollDelta = static_cast<float>(offset);
+  s_scroll += static_cast<float>(offset);
 }
 
 void Input::init(GLFWwindow* window) {
@@ -90,7 +88,7 @@ void Input::update() {
   s_mouseY = static_cast<float>(ypos);
 
   s_deltaX = s_mouseX - s_lastMouseX;
-  s_deltaY = s_mouseY - s_lastMouseY;
+  s_deltaY = s_lastMouseY - s_mouseY;
 }
 
 bool Input::isKeyPressed(const KeyCode key) { return s_currentKeys[key]; }
@@ -99,9 +97,12 @@ float Input::getMouseX() { return s_mouseX; }
 float Input::getMouseY() { return s_mouseY; }
 float Input::getMouseDeltaX() { return s_deltaX; }
 float Input::getMouseDeltaY() { return s_deltaY; }
-float Input::getScrollX() { return s_scrollX; }
-float Input::getScrollY() { return s_scrollY; }
-float Input::getScrollDeltaX() { return s_scrollDeltaX; }
-float Input::getScrollDeltaY() { return s_scrollDeltaY; }
+float Input::getScroll() { return s_scroll; }
+float Input::getScrollDelta() { return s_scrollDelta; }
+float Input::consumeScrollDelta() {
+  const float scrollDelta = s_scrollDelta;
+  s_scrollDelta = 0.0f;
+  return scrollDelta;
+}
 
 }

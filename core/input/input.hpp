@@ -34,10 +34,9 @@ public:
   static float getMouseY();
   static float getMouseDeltaX();
   static float getMouseDeltaY();
-  static float getScrollX();
-  static float getScrollY();
-  static float getScrollDeltaX();
-  static float getScrollDeltaY();
+  static float getScroll();
+  static float getScrollDelta();
+  static float consumeScrollDelta(); // Should be used to avoid multiple effects for one scroll
 
   static void onScroll(double offset);
 
@@ -56,10 +55,8 @@ private:
   static float s_lastMouseY;
   static float s_deltaX;
   static float s_deltaY;
-  static float s_scrollX;
-  static float s_scrollY;
-  static float s_scrollDeltaX;
-  static float s_scrollDeltaY;
+  static float s_scroll;
+  static float s_scrollDelta;
 };
 
 }
