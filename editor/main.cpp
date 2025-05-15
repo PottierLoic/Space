@@ -52,37 +52,6 @@ void framebufferSizeCallback(GLFWwindow* /*window*/, const int width, const int 
   }
 }
 
-// TODO: Remove this and use the new Input system instead of glfw
-void mouseCallback(GLFWwindow* window, const double px, const double py) {
-  if (inspectorFocus) {
-    const auto x = static_cast<float>(px);
-    const auto y = static_cast<float>(py);
-    if (firstMouse) {
-      lastX = x;
-      lastY = y;
-      firstMouse = false;
-    }
-
-    const float xOffset = x - lastX;
-    const float yOffset = lastY - y;
-
-    lastX = x;
-    lastY = y;
-
-    camera.processMouseMovement(xOffset, yOffset);
-
-    int display_w, display_h;
-    glfwGetWindowSize(window, &display_w, &display_h);
-    glfwSetCursorPos(window, display_w / 2.0, display_h / 2.0);
-    lastX = static_cast<float>(display_w) / 2.0f;
-    lastY = static_cast<float>(display_h) / 2.0f;
-  }
-}
-
-void scrollCallback(GLFWwindow* /*window*/, double /*xOffset*/, const double yOffset) {
-  camera.processMouseScroll(static_cast<float>(yOffset));
-}
-
 int main() {
   // Initialize GLFW
   if (!glfwInit()) {
@@ -116,8 +85,6 @@ int main() {
 
   glfwMakeContextCurrent(window);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-  glfwSetCursorPosCallback(window, mouseCallback);
-  glfwSetScrollCallback(window, scrollCallback);
 
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
@@ -187,10 +154,8 @@ int main() {
 
     Input::update();
 
-    // TODO: Remove from here
     if (inspectorFocus) {
-      if (Input::isKeyPressed(KeyCode::ESCAPE)) //TODO: Not leave this one
-        glfwSetWindowShouldClose(window, true);
+      // Keyboard inputs handling
       if (Input::isKeyPressed(KeyCode::W))
         camera.processKeyboard(FORWARD, deltaTime);
       if (Input::isKeyPressed(KeyCode::S))
@@ -199,6 +164,25 @@ int main() {
         camera.processKeyboard(LEFT, deltaTime);
       if (Input::isKeyPressed(KeyCode::D))
         camera.processKeyboard(RIGHT, deltaTime);
+
+      // Mouse movements handling
+      const float currentX = Input::getMouseX();
+      const float currentY = Input::getMouseY();
+      if (firstMouse) {
+        lastX = currentX;
+        lastY = currentY;
+        firstMouse = false;
+      }
+      const float xOffset = Input::getMouseDeltaX();
+      const float yOffset = Input::getMouseDeltaY();
+      lastX = currentX;
+      lastY = currentY;
+      camera.processMouseMovement(xOffset, yOffset);
+    }
+
+    // Zoom handling
+    if (Input::getScrollDelta() != 0.0f) {
+      camera.processMouseScroll(Input::consumeScrollDelta() * 5); // TODO: Not hardcode this
     }
 
     // Rendering scene and render view in editor
