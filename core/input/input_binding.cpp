@@ -16,13 +16,29 @@ void Input::bindMouseButton(const MouseButton button, std::function<void()> call
 void Input::dispatchBindings() {
   for (const auto& [key, callbacks] : s_keyBindings) {
     if (isKeyPressed(key)) {
-      for (const auto& cb : callbacks) cb();
+      for (const auto& cb : callbacks) {
+        try {
+          cb();
+        } catch (const std::exception& e) {
+          Logger::error(std::string("[Input] Exception in key callback: ") + e.what() + "\n" + "std::weak_ptr should be used instead of raw pointers");
+        } catch (...) {
+          Logger::error("[Input] Unknown exception in key callback.");
+        }
+      }
     }
   }
 
   for (const auto& [button, callbacks] : s_mouseBindings) {
     if (isMouseButtonPressed(button)) {
-      for (const auto& cb : callbacks) cb();
+      for (const auto& cb : callbacks) {
+        try {
+          cb();
+        } catch (const std::exception& e) {
+          Logger::error(std::string("[Input] Exception in mouse button callback: ") + e.what() + "\n" + "std::weak_ptr should be used instead of raw pointers");
+        } catch (...) {
+          Logger::error("[Input] Unknown exception in mouse callback.");
+        }
+      }
     }
   }
 }

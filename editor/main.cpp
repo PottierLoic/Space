@@ -136,6 +136,13 @@ int main() {
   testRenderer->setModel();
   space->currentScene->addEntity(test);
 
+  // example binding
+  Input::bindKey(KeyCode::H, [t = std::weak_ptr(test)]() {
+    if (const auto ent = t.lock()) {
+      ent->getComponent<Transform>()->position.x() += 0.01f;
+    }
+  });
+
   // read content from test file
   // if (std::ifstream file("./test.space"); file.is_open()) {
   //   json j;
@@ -152,6 +159,7 @@ int main() {
     lastFrame = currentFrame;
 
     Input::update();
+    Input::dispatchBindings(); // TODO only supposed to be in the game code
 
     if (gui.inspectorFocus) {
       // Keyboard inputs handling

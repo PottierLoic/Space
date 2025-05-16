@@ -2,13 +2,13 @@
 
 #include "keycodes.def"
 #include "mouse_buttons.def"
+#include "log/logger.hpp"
 
 #include <unordered_map>
 #include <array>
 #include <functional>
 
 #include "GLFW/glfw3.h"
-
 
 namespace SpaceEngine {
 
