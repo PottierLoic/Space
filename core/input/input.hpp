@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 #include <array>
+#include <functional>
 
 #include "GLFW/glfw3.h"
 
@@ -40,6 +41,15 @@ public:
 
   static void onScroll(double offset);
 
+  static void bindKey(KeyCode key, std::function<void()> callback);
+  static void bindMouseButton(MouseButton button, std::function<void()> callback);
+  static void unbindKey(KeyCode key);
+  static void unbindMouseButton(MouseButton button);
+  static void clearKeyBindings();
+  static void clearMouseButtonBindings();
+  static void clearAllBindings();
+  static void dispatchBindings();
+
 private:
   static GLFWwindow* s_window;
 
@@ -57,6 +67,10 @@ private:
   static float s_deltaY;
   static float s_scroll;
   static float s_scrollDelta;
+
+  static std::unordered_map<KeyCode, std::vector<std::function<void()>>> s_keyBindings;
+  static std::unordered_map<MouseButton, std::vector<std::function<void()>>> s_mouseBindings;
+
 };
 
 }
