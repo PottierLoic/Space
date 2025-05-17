@@ -10,6 +10,8 @@ std::unordered_map<KeyCode, bool> Input::s_previousKeys;
 std::unordered_map<MouseButton, bool> Input::s_currentMouseButtons;
 std::unordered_map<MouseButton, bool> Input::s_previousMouseButtons;
 
+std::size_t Input::s_nextBindingId = 0;
+
 float Input::s_mouseX = 0.0f;
 float Input::s_mouseY = 0.0f;
 float Input::s_lastMouseX = 0.0f;

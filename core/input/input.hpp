@@ -8,6 +8,7 @@
 #include <array>
 #include <functional>
 
+#include "binding.hpp"
 #include "GLFW/glfw3.h"
 
 namespace SpaceEngine {
@@ -41,8 +42,9 @@ public:
 
   static void onScroll(double offset);
 
-  static void bindKey(KeyCode key, std::function<void()> callback);
-  static void bindMouseButton(MouseButton button, std::function<void()> callback);
+  static std::size_t bindKey(KeyCode key, std::function<void()> callback, int remainingCalls = -1, InputEventType type = InputEventType::OnHold, const std::string &description = "");
+  static std::size_t bindMouseButton(MouseButton button, std::function<void()> callback, int remainingCalls = -1, InputEventType type = InputEventType::OnHold, const std::string &description = "");
+  static void unbind(std::size_t id);
   static void unbindKey(KeyCode key);
   static void unbindMouseButton(MouseButton button);
   static void clearKeyBindings();
@@ -68,9 +70,10 @@ private:
   static float s_scroll;
   static float s_scrollDelta;
 
-  static std::unordered_map<KeyCode, std::vector<std::function<void()>>> s_keyBindings;
-  static std::unordered_map<MouseButton, std::vector<std::function<void()>>> s_mouseBindings;
+  static std::unordered_map<KeyCode, std::vector<Binding>> s_keyBindings;
+  static std::unordered_map<MouseButton, std::vector<Binding>> s_mouseBindings;
 
+  static std::size_t s_nextBindingId;
 };
 
 }

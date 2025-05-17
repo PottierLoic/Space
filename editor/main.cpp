@@ -139,7 +139,7 @@ int main() {
   // example binding
   Input::bindKey(KeyCode::H, [t = std::weak_ptr(test)]() {
     if (const auto ent = t.lock()) {
-      ent->getComponent<Transform>()->position.x() += 0.01f;
+      ent->getComponent<Transform>()->position.x() += 0.1f;
     }
   });
 
