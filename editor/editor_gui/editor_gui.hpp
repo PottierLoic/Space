@@ -95,6 +95,7 @@ public:
   std::shared_ptr<Entity> selectedEntity = nullptr;
 
   bool sceneHovered = false;
+  bool inspectorFocus = false;
 
   /* Main constructor that use default flags. */
   EditorGui(unsigned int sceneTexture, unsigned int renderTexture);

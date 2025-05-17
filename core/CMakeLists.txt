@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(SpaceEngine)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 file(GLOB_RECURSE CORE_SOURCES
   "maths/*.cpp"
@@ -15,6 +15,7 @@ file(GLOB_RECURSE CORE_SOURCES
   "space/*.cpp"
   "renderer/*.cpp"
   "time/*.cpp"
+  "input/*.cpp"
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})
