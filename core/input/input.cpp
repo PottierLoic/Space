@@ -104,6 +104,7 @@ float Input::getMouseDeltaX() { return s_deltaX; }
 float Input::getMouseDeltaY() { return s_deltaY; }
 float Input::getScroll() { return s_scroll; }
 float Input::getScrollDelta() { return s_scrollDelta; }
+
 float Input::consumeScrollDelta() {
   const float scrollDelta = s_scrollDelta;
   s_scrollDelta = 0.0f;

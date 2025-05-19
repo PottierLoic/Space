@@ -137,6 +137,20 @@ public:
   static void onScroll(double offset);
 
   /**
+   * Execute the bindings of the specified key
+   * @param key: The key to simulate.
+   * @param type: The event type to simulate.
+   */
+  static void simulateKey(KeyCode key, InputEventType type = InputEventType::OnPress);
+
+  /**
+   * Execute the bindings of the specified mouse button
+   * @param button: The button to simulate.
+   * @param type: The event type to simulate.
+   */
+  static void simulateMouseButton(MouseButton button, InputEventType type = InputEventType::OnPress);
+
+  /**
    * Bind a callback to a key event.
    * @param key: The key to bind.
    * @param callback: Function to call on the event.

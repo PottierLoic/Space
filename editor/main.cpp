@@ -136,14 +136,12 @@ int main() {
   testRenderer->setModel();
   space->currentScene->addEntity(test);
 
-  // example binding
-  const auto bindingId = Input::bindKey(KeyCode::H, [t = std::weak_ptr(test)]() {
+  // example binding on `H` --> move the house on the z axis
+  Input::bindKey(KeyCode::H, [t = std::weak_ptr(test)]() {
     if (const auto ent = t.lock()) {
-      ent->getComponent<Transform>()->position.x() += 0.1f;
+      ent->getComponent<Transform>()->position.z() -= 4.0f;
     }
-  }, -1, InputEventType::OnRelease);
-
-  Input::unbind(bindingId);
+  }, -1, InputEventType::OnPress);
 
   // read content from test file
   // if (std::ifstream file("./test.space"); file.is_open()) {

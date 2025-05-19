@@ -106,4 +106,20 @@ void Input::clearAllBindings() {
   s_mouseBindings.clear();
 }
 
+void Input::simulateKey(const KeyCode key, const InputEventType type) {
+  for (const auto& binding : s_keyBindings[key]) {
+    if (binding.type == type) {
+      binding.callback();
+    }
+  }
+}
+
+void Input::simulateMouseButton(const MouseButton button, const InputEventType type) {
+  for (const auto& binding : s_mouseBindings[button]) {
+    if (binding.type == type) {
+      binding.callback();
+    }
+  }
+}
+
 }
