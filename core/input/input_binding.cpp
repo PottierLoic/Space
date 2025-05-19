@@ -7,6 +7,7 @@ std::unordered_map<MouseButton, std::vector<Binding>> Input::s_mouseBindings;
 
 
 std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description, const bool enabled) {
+  if (remainingCalls == 0) throw std::invalid_argument("[Input] Cannot bind key with 0 remaining calls.");
   Binding binding;
   binding.id = s_nextBindingId++;
   binding.description = description;
@@ -19,6 +20,7 @@ std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback, co
 }
 
 std::size_t Input::bindMouseButton(const MouseButton button, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description, const bool enabled) {
+  if (remainingCalls == 0) throw std::invalid_argument("[Input] Cannot bind mouse button with 0 remaining calls.");
   Binding binding;
   binding.id = s_nextBindingId++;
   binding.description = description;
