@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <array>
 #include <functional>
+#include <ranges>
 
 #include "binding.hpp"
 #include "GLFW/glfw3.h"

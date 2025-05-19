@@ -1,5 +1,3 @@
-#include <ranges>
-
 #include "input.hpp"
 
 namespace SpaceEngine {
@@ -35,8 +33,7 @@ std::size_t Input::bindMouseButton(const MouseButton button, std::function<void(
 void Input::dispatchBindings() {
   for (const auto& [key, bindings] : s_keyBindings) {
     for (const auto& binding : bindings) {
-      if (!binding.enabled) continue;
-      if (binding.remainingCalls == 0) continue;
+      if (!binding.enabled || binding.remainingCalls == 0) continue;
       if (binding.type == InputEventType::OnHold && !isKeyPressed(key)) continue;
       if (binding.type == InputEventType::OnRelease && !isKeyReleased(key)) continue;
       if (binding.type == InputEventType::OnPress && !isKeyJustPressed(key)) continue;
@@ -48,13 +45,13 @@ void Input::dispatchBindings() {
       } catch (...) {
         Logger::error("[Input] Unknown exception in key callback.");
       }
+      if (binding.remainingCalls == 0) unbind(binding.id);
     }
   }
 
   for (const auto& [button, bindings] : s_mouseBindings) {
     for (const auto& binding : bindings) {
-      if (!binding.enabled) continue;
-      if (binding.remainingCalls == 0) continue;
+      if (!binding.enabled || binding.remainingCalls == 0) continue;
       if (binding.type == InputEventType::OnHold && !isMouseButtonPressed(button)) continue;
       if (binding.type == InputEventType::OnRelease && !isMouseButtonReleased(button)) continue;
       if (binding.type == InputEventType::OnPress && !isMouseButtonJustPressed(button)) continue;
@@ -66,6 +63,7 @@ void Input::dispatchBindings() {
       } catch (...) {
         Logger::error("[Input] Unknown exception in key callback.");
       }
+      if (binding.remainingCalls == 0) unbind(binding.id);
     }
   }
 }
@@ -114,7 +112,9 @@ void Input::simulateKey(const KeyCode key, const InputEventType type) {
   for (const auto& binding : s_keyBindings[key]) {
     if (!binding.enabled) continue;
     if (binding.type == type) {
+      if (binding.remainingCalls == 0) continue;
       binding.callback();
+      binding.remainingCalls -= 1;
     }
   }
 }
@@ -123,7 +123,9 @@ void Input::simulateMouseButton(const MouseButton button, const InputEventType t
   for (const auto& binding : s_mouseBindings[button]) {
     if (!binding.enabled) continue;
     if (binding.type == type) {
+      if (binding.remainingCalls == 0) continue;
       binding.callback();
+      binding.remainingCalls -= 1;
     }
   }
 }
