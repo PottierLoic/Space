@@ -157,9 +157,10 @@ public:
    * @param remainingCalls: Number of times the binding should trigger (-1 for infinite).
    * @param type: The input event type (press, release, hold).
    * @param description: A short description of the binding (for debugging/logging).
+   * @param enabled: Either the binding is enabled or not.
    * @return The unique ID of the binding.
    */
-  static std::size_t bindKey(KeyCode key, std::function<void()> callback, int remainingCalls = -1, InputEventType type = InputEventType::OnHold, const std::string &description = "");
+  static std::size_t bindKey(KeyCode key, std::function<void()> callback, int remainingCalls = -1, InputEventType type = InputEventType::OnHold, const std::string &description = "", bool enabled = true);
 
   /**
    * Bind a callback to a mouse button event.
@@ -168,9 +169,10 @@ public:
    * @param remainingCalls: Number of times the binding should trigger (-1 for infinite).
    * @param type: The input event type (press, release, hold).
    * @param description: A short description of the binding (for debugging/logging).
+   * @param enabled: Either the binding is enabled or not.
    * @return The unique ID of the binding.
    */
-  static std::size_t bindMouseButton(MouseButton button, std::function<void()> callback, int remainingCalls = -1, InputEventType type = InputEventType::OnHold, const std::string &description = "");
+  static std::size_t bindMouseButton(MouseButton button, std::function<void()> callback, int remainingCalls = -1, InputEventType type = InputEventType::OnHold, const std::string &description = "", bool enabled = true);
 
   /**
    * Unbind a specific input callback using its binding ID.
@@ -209,6 +211,19 @@ public:
    * Execute all eligible key and mouse callbacks based on input state.
    */
   static void dispatchBindings();
+
+  /**
+   * Enable the binding of a specific key or mouse button.
+   * @param id: The binding ID to toggle.
+   */
+  static void enableBinding(std::size_t id);
+
+  /**
+   * Disable the binding of a specific key or mouse button.
+   * @param id
+   */
+  static void disableBinding(std::size_t id);
+
 
 private:
   static GLFWwindow* s_window;

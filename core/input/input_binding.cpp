@@ -8,24 +8,26 @@ std::unordered_map<KeyCode, std::vector<Binding>> Input::s_keyBindings;
 std::unordered_map<MouseButton, std::vector<Binding>> Input::s_mouseBindings;
 
 
-std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description) {
+std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description, const bool enabled) {
   Binding binding;
   binding.id = s_nextBindingId++;
   binding.description = description;
   binding.callback = std::move(callback);
   binding.remainingCalls = remainingCalls;
   binding.type = type;
+  binding.enabled = enabled;
   s_keyBindings[key].push_back(binding);
   return binding.id;
 }
 
-std::size_t Input::bindMouseButton(const MouseButton button, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description) {
+std::size_t Input::bindMouseButton(const MouseButton button, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description, const bool enabled) {
   Binding binding;
   binding.id = s_nextBindingId++;
   binding.description = description;
   binding.callback = std::move(callback);
   binding.remainingCalls = remainingCalls;
   binding.type = type;
+  binding.enabled = enabled;
   s_mouseBindings[button].push_back(binding);
   return binding.id;
 }
@@ -33,6 +35,7 @@ std::size_t Input::bindMouseButton(const MouseButton button, std::function<void(
 void Input::dispatchBindings() {
   for (const auto& [key, bindings] : s_keyBindings) {
     for (const auto& binding : bindings) {
+      if (!binding.enabled) continue;
       if (binding.remainingCalls == 0) continue;
       if (binding.type == InputEventType::OnHold && !isKeyPressed(key)) continue;
       if (binding.type == InputEventType::OnRelease && !isKeyReleased(key)) continue;
@@ -50,6 +53,7 @@ void Input::dispatchBindings() {
 
   for (const auto& [button, bindings] : s_mouseBindings) {
     for (const auto& binding : bindings) {
+      if (!binding.enabled) continue;
       if (binding.remainingCalls == 0) continue;
       if (binding.type == InputEventType::OnHold && !isMouseButtonPressed(button)) continue;
       if (binding.type == InputEventType::OnRelease && !isMouseButtonReleased(button)) continue;
@@ -108,6 +112,7 @@ void Input::clearAllBindings() {
 
 void Input::simulateKey(const KeyCode key, const InputEventType type) {
   for (const auto& binding : s_keyBindings[key]) {
+    if (!binding.enabled) continue;
     if (binding.type == type) {
       binding.callback();
     }
@@ -116,8 +121,47 @@ void Input::simulateKey(const KeyCode key, const InputEventType type) {
 
 void Input::simulateMouseButton(const MouseButton button, const InputEventType type) {
   for (const auto& binding : s_mouseBindings[button]) {
+    if (!binding.enabled) continue;
     if (binding.type == type) {
       binding.callback();
+    }
+  }
+}
+
+void Input::enableBinding(const std::size_t id) {
+  for (auto &bindings: s_keyBindings | std::views::values) {
+    for (const auto &binding : bindings) {
+      if (binding.id == id) {
+        binding.enabled = true;
+        return;
+      }
+    }
+  }
+  for (auto &bindings: s_mouseBindings | std::views::values) {
+    for (const auto &binding : bindings) {
+      if (binding.id == id) {
+        binding.enabled = true;
+        return;
+      }
+    }
+  }
+}
+
+void Input::disableBinding(const std::size_t id) {
+  for (auto &bindings: s_keyBindings | std::views::values) {
+    for (const auto &binding : bindings) {
+      if (binding.id == id) {
+        binding.enabled = false;
+        return;
+      }
+    }
+  }
+  for (auto &bindings: s_mouseBindings | std::views::values) {
+    for (const auto &binding : bindings) {
+      if (binding.id == id) {
+        binding.enabled = false;
+        return;
+      }
     }
   }
 }

@@ -12,6 +12,7 @@ enum class InputEventType {
 
 struct Binding {
   std::size_t id = 0;
+  mutable bool enabled;
   std::string description;
   std::function<void()> callback;
   mutable int remainingCalls = -1;
