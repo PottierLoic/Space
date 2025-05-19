@@ -30,8 +30,12 @@ public:
   static void init(GLFWwindow* window);
   static void update();
   static bool isKeyPressed(KeyCode key);
+  static bool isKeyJustPressed(KeyCode key);
+  static bool isKeyReleased(KeyCode key);
   static bool isMouseButtonPressed(MouseButton button);
 
+  static bool isMouseButtonJustPressed(MouseButton button);
+  static bool isMouseButtonReleased(MouseButton button);
   static float getMouseX();
   static float getMouseY();
   static float getMouseDeltaX();

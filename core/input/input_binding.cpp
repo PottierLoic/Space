@@ -1,3 +1,5 @@
+#include <ranges>
+
 #include "input.hpp"
 
 namespace SpaceEngine {
@@ -25,15 +27,16 @@ std::size_t Input::bindMouseButton(const MouseButton button, std::function<void(
   binding.remainingCalls = remainingCalls;
   binding.type = type;
   s_mouseBindings[button].push_back(binding);
-  return binding.id;}
+  return binding.id;
+}
 
 void Input::dispatchBindings() {
   for (const auto& [key, bindings] : s_keyBindings) {
     for (const auto& binding : bindings) {
       if (binding.remainingCalls == 0) continue;
       if (binding.type == InputEventType::OnHold && !isKeyPressed(key)) continue;
-      if (binding.type == InputEventType::OnRelease && isKeyPressed(key)) continue; // TODO: make a isKeyJustReleased for this
-      if (binding.type == InputEventType::OnPress && !isKeyPressed(key)) continue; // TODO: make a isKeyJustPressed for this
+      if (binding.type == InputEventType::OnRelease && !isKeyReleased(key)) continue;
+      if (binding.type == InputEventType::OnPress && !isKeyJustPressed(key)) continue;
       binding.remainingCalls -= 1;
       try {
         binding.callback();
@@ -49,8 +52,8 @@ void Input::dispatchBindings() {
     for (const auto& binding : bindings) {
       if (binding.remainingCalls == 0) continue;
       if (binding.type == InputEventType::OnHold && !isMouseButtonPressed(button)) continue;
-      if (binding.type == InputEventType::OnRelease && isMouseButtonPressed(button)) continue; // TODO: make a isButtonJustReleased for this
-      if (binding.type == InputEventType::OnPress && !isMouseButtonPressed(button)) continue; // TODO: make a isButtonJustPressed for this
+      if (binding.type == InputEventType::OnRelease && !isMouseButtonReleased(button)) continue;
+      if (binding.type == InputEventType::OnPress && !isMouseButtonJustPressed(button)) continue;
       binding.remainingCalls -= 1;
       try {
         binding.callback();
@@ -58,6 +61,25 @@ void Input::dispatchBindings() {
         Logger::error(std::string("[Input] Exception in key callback: ") + e.what() + "\n" + "std::weak_ptr should be used instead of raw pointers");
       } catch (...) {
         Logger::error("[Input] Unknown exception in key callback.");
+      }
+    }
+  }
+}
+
+void Input::unbind(const size_t id) {
+  for (auto &bindings: s_keyBindings | std::views::values) {
+    for (auto it = bindings.begin(); it != bindings.end(); ++it) {
+      if (it->id == id) {
+        bindings.erase(it);
+        return;
+      }
+    }
+  }
+  for (auto &bindings: s_mouseBindings | std::views::values) {
+    for (auto it = bindings.begin(); it != bindings.end(); ++it) {
+      if (it->id == id) {
+        bindings.erase(it);
+        return;
       }
     }
   }

@@ -93,7 +93,11 @@ void Input::update() {
 }
 
 bool Input::isKeyPressed(const KeyCode key) { return s_currentKeys[key]; }
+bool Input::isKeyJustPressed(const KeyCode key) { return s_currentKeys[key] && !s_previousKeys[key]; }
+bool Input::isKeyReleased(const KeyCode key) { return !s_currentKeys[key] && s_previousKeys[key]; }
 bool Input::isMouseButtonPressed(const MouseButton button) { return s_currentMouseButtons[button]; }
+bool Input::isMouseButtonJustPressed(const MouseButton button) { return s_currentMouseButtons[button] && !s_previousMouseButtons[button]; }
+bool Input::isMouseButtonReleased(const MouseButton button) { return !s_currentMouseButtons[button] && s_previousMouseButtons[button]; }
 float Input::getMouseX() { return s_mouseX; }
 float Input::getMouseY() { return s_mouseY; }
 float Input::getMouseDeltaX() { return s_deltaX; }

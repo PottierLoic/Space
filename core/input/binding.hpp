@@ -12,7 +12,7 @@ enum class InputEventType {
 
 struct Binding {
   std::size_t id = 0;
-  std::string description = "";
+  std::string description;
   std::function<void()> callback;
   mutable int remainingCalls = -1;
   InputEventType type = InputEventType::OnPress;
