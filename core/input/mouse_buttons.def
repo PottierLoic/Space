@@ -1,0 +1,9 @@
+#define MOUSE_BUTTONS(X)        \
+  X(Left,   GLFW_MOUSE_BUTTON_LEFT)      \
+  X(Right,  GLFW_MOUSE_BUTTON_RIGHT)     \
+  X(Middle, GLFW_MOUSE_BUTTON_MIDDLE)    \
+  X(Button4, GLFW_MOUSE_BUTTON_4)        \
+  X(Button5, GLFW_MOUSE_BUTTON_5)        \
+  X(Button6, GLFW_MOUSE_BUTTON_6)        \
+  X(Button7, GLFW_MOUSE_BUTTON_7)        \
+  X(Button8, GLFW_MOUSE_BUTTON_8)

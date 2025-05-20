@@ -11,6 +11,7 @@
 #include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
+#include "input/input.hpp" // TODO: switch from using glfw input system to the engine input system
 #include "entity/entity.hpp"
 
 #include "component/camera.hpp"
@@ -30,7 +31,6 @@ EditorCamera camera;
 float lastX =  1920.0f / 2.0;
 float lastY =  1080.0 / 2.0;
 bool firstMouse = true;
-bool inspectorFocus = false; // TODO: move in the inspector ?
 
 // timing
 float deltaTime = 0.0f;
@@ -39,21 +39,6 @@ float lastFrame = 0.0f;
 // Renderers
 std::unique_ptr<Renderer> sceneRenderer;
 std::unique_ptr<Renderer> renderViewRenderer;
-
-void processInput(GLFWwindow* window) {
-  if (inspectorFocus) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-      glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-      camera.processKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-      camera.processKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      camera.processKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      camera.processKeyboard(RIGHT, deltaTime);
-  }
-}
 
 /* DEBUG */
 void framebufferSizeCallback(GLFWwindow* /*window*/, const int width, const int height) {
@@ -64,36 +49,6 @@ void framebufferSizeCallback(GLFWwindow* /*window*/, const int width, const int 
   if (renderViewRenderer) {
     renderViewRenderer->resize(width, height);
   }
-}
-
-void mouseCallback(GLFWwindow* window, const double px, const double py) {
-  if (inspectorFocus) {
-    const auto x = static_cast<float>(px);
-    const auto y = static_cast<float>(py);
-    if (firstMouse) {
-      lastX = x;
-      lastY = y;
-      firstMouse = false;
-    }
-
-    const float xOffset = x - lastX;
-    const float yOffset = lastY - y;
-
-    lastX = x;
-    lastY = y;
-
-    camera.processMouseMovement(xOffset, yOffset);
-
-    int display_w, display_h;
-    glfwGetWindowSize(window, &display_w, &display_h);
-    glfwSetCursorPos(window, display_w / 2.0, display_h / 2.0);
-    lastX = static_cast<float>(display_w) / 2.0f;
-    lastY = static_cast<float>(display_h) / 2.0f;
-  }
-}
-
-void scrollCallback(GLFWwindow* /*window*/, double /*xOffset*/, const double yOffset) {
-  camera.processMouseScroll(static_cast<float>(yOffset));
 }
 
 int main() {
@@ -129,8 +84,6 @@ int main() {
 
   glfwMakeContextCurrent(window);
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-  glfwSetCursorPosCallback(window, mouseCallback);
-  glfwSetScrollCallback(window, scrollCallback);
 
   // Initialize Glad
   if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
@@ -143,6 +96,9 @@ int main() {
   }
 
   glEnable(GL_DEPTH_TEST);
+
+  // Input initialization
+  Input::init(window);
 
   // Initialize renderers
   sceneRenderer = std::make_unique<Renderer>();
@@ -180,6 +136,13 @@ int main() {
   testRenderer->setModel();
   space->currentScene->addEntity(test);
 
+  // example binding on `H` --> move the house on the z axis
+  Input::bindKey(KeyCode::H, [t = std::weak_ptr(test)]() {
+    if (const auto ent = t.lock()) {
+      ent->getComponent<Transform>()->position.z() -= 4.0f;
+    }
+  }, -1, InputEventType::OnPress);
+
   // read content from test file
   // if (std::ifstream file("./test.space"); file.is_open()) {
   //   json j;
@@ -195,7 +158,39 @@ int main() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    processInput(window);
+    Input::update();
+    Input::dispatchBindings(); // TODO only supposed to be in the game code
+
+    if (gui.inspectorFocus) {
+      // Keyboard inputs handling
+      if (Input::isKeyPressed(KeyCode::W))
+        camera.processKeyboard(FORWARD, deltaTime);
+      if (Input::isKeyPressed(KeyCode::S))
+        camera.processKeyboard(BACKWARD, deltaTime);
+      if (Input::isKeyPressed(KeyCode::A))
+        camera.processKeyboard(LEFT, deltaTime);
+      if (Input::isKeyPressed(KeyCode::D))
+        camera.processKeyboard(RIGHT, deltaTime);
+
+      // Mouse movements handling
+      const float currentX = Input::getMouseX();
+      const float currentY = Input::getMouseY();
+      if (firstMouse) {
+        lastX = currentX;
+        lastY = currentY;
+        firstMouse = false;
+      }
+      const float xOffset = Input::getMouseDeltaX();
+      const float yOffset = Input::getMouseDeltaY();
+      lastX = currentX;
+      lastY = currentY;
+      camera.processMouseMovement(xOffset, yOffset);
+    }
+
+    // Zoom handling
+    if (Input::getScrollDelta() != 0.0f) {
+      camera.processMouseScroll(Input::consumeScrollDelta() * 5); // TODO: Not hardcode this
+    }
 
     // Rendering scene and render view in editor
     sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), space->currentScene);
@@ -216,11 +211,11 @@ int main() {
     ImGui::NewFrame();
     ImGui::DockSpaceOverViewport();
 
-    if (!inspectorFocus && gui.sceneHovered && io.MouseDown[1]) {
-      inspectorFocus = true;
+    if (!gui.inspectorFocus && gui.sceneHovered && Input::isMouseButtonPressed(MouseButton::Right)) {
+      gui.inspectorFocus = true;
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    } else if (inspectorFocus && !io.MouseDown[1]) {
-      inspectorFocus = false;
+    } else if (gui.inspectorFocus && !Input::isMouseButtonPressed(MouseButton::Right)) {
+      gui.inspectorFocus = false;
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
       firstMouse = true;
     }
