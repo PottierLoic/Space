@@ -16,6 +16,9 @@ file(GLOB_RECURSE CORE_SOURCES
   "renderer/*.cpp"
   "time/*.cpp"
   "input/*.cpp"
+  "resource_management/*.cpp"
+  "resource_management/loaders/*.cpp"
+  "resource_management/resources/*.cpp"
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})
