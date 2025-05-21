@@ -14,6 +14,7 @@ extern int testSerialize();
 extern int testSerializeComponent();
 extern int testTime();
 extern int testInputBinding();
+extern int testResourceManager();
 
 struct TestFunction {
   const char* name;
@@ -31,7 +32,8 @@ TestFunction test_fn[] = {
   {"testSerialize", testSerialize},
   {"testSerializeComponent", testSerializeComponent},
   {"TestTime", testTime},
-  {"testInputBinding", testInputBinding}
+  {"testInputBinding", testInputBinding},
+  {"testResourceManager", testResourceManager}
 };
 
 void run_all_tests() {
