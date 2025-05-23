@@ -1,7 +1,5 @@
 #include "res_audio.hpp"
 
-#include "log/logger.hpp"
-
 namespace SpaceEngine {
 
 ResAudio::ResAudio(const std::string& path, std::vector<uint8_t> data)
@@ -24,7 +22,6 @@ bool ResAudio::isOutdated() const {
 }
 
 std::shared_ptr<Resource> ResAudio::reload() const {
-  Logger::info("Reloaded audio: " + getPath()); // TODO remove its for debug
   return loadFromFile(getPath());
 }
 

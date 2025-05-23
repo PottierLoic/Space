@@ -3,11 +3,13 @@
 #include<memory>
 #include <typeindex>
 #include <unordered_map>
+#include <ranges>
 
 #include "resource.hpp"
 #include "resources/res_audio.hpp"
 #include "resource_user.hpp"
 #include "hot_reloadable.hpp"
+#include "log/logger.hpp"
 
 namespace SpaceEngine {
 

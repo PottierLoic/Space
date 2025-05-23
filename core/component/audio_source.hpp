@@ -15,8 +15,7 @@ namespace SpaceEngine {
 /**
  * The AudioSource class represents a sound source.
  *
- * Properties:
- * -
+ * TODO properties
  *
  * Methods:
  * - AudioSource(): Default constructor: Initializes a new AudioSource component with default values.

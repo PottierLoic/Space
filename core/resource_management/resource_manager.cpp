@@ -1,8 +1,5 @@
 #include "resource_manager.hpp"
 
-#include <iostream>
-#include <ranges>
-
 namespace SpaceEngine {
 
 void ResourceManager::clear() {
@@ -48,6 +45,7 @@ void ResourceManager::reloadOutdated() {
           for (auto it = users.begin(); it != users.end();) {
             if (const auto user = it->lock()) {
               user->onResourceReloaded(path);
+              Logger::info("Reloaded resource: " + path + "");
               ++it;
             } else {
               it = users.erase(it);

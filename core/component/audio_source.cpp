@@ -19,7 +19,6 @@ void AudioSource::play() const {
 void AudioSource::onResourceReloaded(const std::string &path) {
   if (path == m_audioPath) {
     m_audio = ResourceManager::load<ResAudio>(path);
-    Logger::info("Reloaded audio: " + path);
   }
 }
 
