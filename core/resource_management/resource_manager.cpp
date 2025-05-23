@@ -1,6 +1,7 @@
 #include "resource_manager.hpp"
 
 #include <iostream>
+#include <ranges>
 
 namespace SpaceEngine {
 
@@ -9,18 +10,23 @@ void ResourceManager::clear() {
 }
 
 template<typename T>
-std::shared_ptr<T> ResourceManager::load(const std::string& path) {
+std::shared_ptr<T> ResourceManager::load(const std::string& path, const std::shared_ptr<IResourceUser>& user) {
   static_assert(std::is_base_of_v<Resource, T>, "Error: T must derive from Resource.");
 
   auto& typedMap = s_resources[typeid(T)];
 
   if (const auto it = typedMap.find(path); it != typedMap.end()) {
-    std::cout<<"already loaded, loading from cache"<<std::endl;
+    if (user) s_resourceUsers[path].push_back(user);
     return std::static_pointer_cast<T>(it->second);
   }
 
   auto resource = T::loadFromFile(path);
-  typedMap[path] = resource;
+  if (resource) {
+    typedMap[path] = resource;
+    if (user) {
+      s_resourceUsers[path].push_back(user);
+    }
+  }
   return resource;
 }
 
@@ -30,7 +36,30 @@ bool ResourceManager::isLoaded(const std::string& path) {
   return typedMap.contains(path);
 }
 
-template std::shared_ptr<ResAudio> ResourceManager::load<ResAudio>(const std::string&);
+void ResourceManager::reloadOutdated() {
+  for (auto &typedMap: s_resources | std::views::values) {
+    for (auto& [path, resource] : typedMap) {
+      if (const auto reloadable = std::dynamic_pointer_cast<IHotReloadable>(resource); reloadable && reloadable->isOutdated()) {
+        const auto updated = reloadable->reload();
+        typedMap[path] = updated;
+
+        if (s_resourceUsers.contains(path)) {
+          auto& users = s_resourceUsers[path];
+          for (auto it = users.begin(); it != users.end();) {
+            if (const auto user = it->lock()) {
+              user->onResourceReloaded(path);
+              ++it;
+            } else {
+              it = users.erase(it);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+template std::shared_ptr<ResAudio> ResourceManager::load<ResAudio>(const std::string&, const std::shared_ptr<IResourceUser>&);
 template bool ResourceManager::isLoaded<ResAudio>(const std::string&);
 
 }
