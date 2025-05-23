@@ -59,6 +59,14 @@ void ResourceManager::reloadOutdated() {
   }
 }
 
+void ResourceManager::update(const float deltaTime) {
+  s_reloadTimer += deltaTime;
+  if (s_reloadTimer >= RELOAD_INTERVAL) {
+    reloadOutdated();
+    s_reloadTimer = 0.0f;
+  }
+}
+
 template std::shared_ptr<ResAudio> ResourceManager::load<ResAudio>(const std::string&, const std::shared_ptr<IResourceUser>&);
 template bool ResourceManager::isLoaded<ResAudio>(const std::string&);
 
