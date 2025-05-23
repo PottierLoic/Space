@@ -39,6 +39,12 @@ public:
    * @brief Set the owner of the component.
    */
   void setOwner(const std::weak_ptr<Entity> &owner);
+
+  /**
+   * @brief Called when the parent entity is destroyed.
+   * Used to unregister component in the ResourceManager.
+   */
+  virtual void onEntityDestroyed();
 };
 
 }

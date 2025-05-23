@@ -60,8 +60,36 @@ void ResourceManager::reloadOutdated() {
 void ResourceManager::update(const float deltaTime) {
   s_reloadTimer += deltaTime;
   if (s_reloadTimer >= RELOAD_INTERVAL) {
+    unloadUnusedResources();
     reloadOutdated();
     s_reloadTimer = 0.0f;
+  }
+}
+
+void ResourceManager::unregisterUser(const std::string& path, const std::shared_ptr<IResourceUser>& user) {
+  const auto it = s_resourceUsers.find(path);
+  if (it == s_resourceUsers.end()) return;
+
+  auto& vec = it->second;
+  std::erase_if(vec, [&](const std::weak_ptr<IResourceUser>& w) {
+    return w.expired() || w.lock() == user;
+  });
+
+  if (vec.empty()) {
+    s_resourceUsers.erase(it);
+  }
+}
+
+void ResourceManager::unloadUnusedResources() {
+  for (auto &map: s_resources | std::views::values) {
+    for (auto it = map.begin(); it != map.end(); ) {
+      if (it->second.use_count() == 1) {
+        s_resourceUsers.erase(it->first);
+        it = map.erase(it);
+      } else {
+        ++it;
+      }
+    }
   }
 }
 

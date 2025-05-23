@@ -140,14 +140,9 @@ int main() {
   test->addComponent<AudioSource>();
   test->getComponent<AudioSource>()->setAudio("./tests/data/audio.wav");
 
-  auto source2 = Entity::create("audiosource2");
-  space->currentScene->addEntity(source2);
-
-  // example binding on `H` --> move the house on the z axis
-  Input::bindKey(KeyCode::H, [s = std::weak_ptr(source2)]() {
-    if (const auto ent = s.lock()) {
-      ent->addComponent<AudioSource>();
-      ent->getComponent<AudioSource>()->setAudio("./tests/data/audio.wav");
+  Input::bindKey(KeyCode::I, [t = std::weak_ptr(test)]() {
+    if (const auto ent = t.lock()) {
+      ent->removeComponent<AudioSource>();
     }
   }, -1, InputEventType::OnPress);
 

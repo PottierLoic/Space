@@ -33,6 +33,7 @@ public:
   void play() const;
 
   void onResourceReloaded(const std::string& path) override;
+  void onEntityDestroyed() override;
 
 private:
   std::shared_ptr<ResAudio> m_audio;

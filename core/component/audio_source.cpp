@@ -22,4 +22,10 @@ void AudioSource::onResourceReloaded(const std::string &path) {
   }
 }
 
+void AudioSource::onEntityDestroyed() {
+  if (m_audio) {
+    ResourceManager::unregisterUser(m_audioPath, std::dynamic_pointer_cast<IResourceUser>(shared_from_this()));
+  }
+}
+
 }
