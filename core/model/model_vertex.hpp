@@ -6,7 +6,7 @@ namespace SpaceEngine {
 
 #define MAX_BONE_INFLUENCE 4
 
-struct Vertex {
+struct ModelVertex {
   glm::vec3 position;
   glm::vec3 normal;
   glm::vec2 texCoords;

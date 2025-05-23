@@ -1,8 +1,8 @@
-#include "model/mesh.hpp"
+#include "model/model_mesh.hpp"
 
 namespace SpaceEngine {
 
-Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices, const std::vector<Texture> &textures) {
+ModelMesh::ModelMesh(const std::vector<ModelVertex> &vertices, const std::vector<unsigned int> &indices, const std::vector<ModelTexture> &textures) {
   this->vertices = vertices;
   this->indices = indices;
   this->textures = textures;
@@ -10,7 +10,7 @@ Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> 
   setupMesh();
 }
 
-void Mesh::setupMesh() {
+void ModelMesh::setupMesh() {
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
@@ -18,43 +18,43 @@ void Mesh::setupMesh() {
   glBindVertexArray(VAO);
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(ModelVertex), &vertices[0], GL_STATIC_DRAW);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
   // vertex positions
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), nullptr);
 
   // vertex normals
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, normal)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), reinterpret_cast<void *>(offsetof(ModelVertex, normal)));
 
   // vertex texture coords
   glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, texCoords)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), reinterpret_cast<void *>(offsetof(ModelVertex, texCoords)));
 
   // vertex tangent
   glEnableVertexAttribArray(3);
-  glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, tangent)));
+  glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), reinterpret_cast<void *>(offsetof(ModelVertex, tangent)));
 
   // vertex bitangent
   glEnableVertexAttribArray(4);
-  glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, bitangent)));
+  glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), reinterpret_cast<void *>(offsetof(ModelVertex, bitangent)));
 
   // ids
   glEnableVertexAttribArray(5);
-  glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, m_BoneIDs)));
+  glVertexAttribIPointer(5, 4, GL_INT, sizeof(ModelVertex), reinterpret_cast<void *>(offsetof(ModelVertex, m_BoneIDs)));
 
   // weights
   glEnableVertexAttribArray(6);
-  glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, m_Weights)));
+  glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), reinterpret_cast<void *>(offsetof(ModelVertex, m_Weights)));
 
   glBindVertexArray(0);
 }
 
-void Mesh::draw(const Shader &shader) const {
+void ModelMesh::draw(const Shader &shader) const {
   unsigned int diffuseNr = 1;
   unsigned int specularNr = 1;
   unsigned int normalNr = 1;

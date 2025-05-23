@@ -20,7 +20,7 @@ class Entity; // Forward declaration of Entity class to avoid circular dependenc
  * - Component(std::weak_ptr<Entity> owner): Constructor that sets the owning entity.
  * - virtual ~Component(): Virtual destructor to allow proper cleanup in derived classes.
  */
-class Component {
+class Component : public std::enable_shared_from_this<Component> {
 protected:
   std::weak_ptr<Entity> owner; // Pointer to the entity owning the component.
 
@@ -39,6 +39,12 @@ public:
    * @brief Set the owner of the component.
    */
   void setOwner(const std::weak_ptr<Entity> &owner);
+
+  /**
+   * @brief Called when the parent entity is destroyed.
+   * Used to unregister component in the ResourceManager.
+   */
+  virtual void onEntityDestroyed();
 };
 
 }
