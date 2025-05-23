@@ -16,7 +16,8 @@ public:
   explicit ResAudio(const std::string& path, std::vector<uint8_t> data);
   static std::shared_ptr<ResAudio> loadFromFile(const std::string& path);
 
-  [[nodiscard]] const std::vector<uint8_t>& getData() const;
+  [[nodiscard]] const std::vector<uint8_t>& getData() const { return m_data;}
+  [[nodiscard]] const char* getTypeName() const override { return "ResAudio"; }
   [[nodiscard]] std::shared_ptr<Resource> reload() const override;
   [[nodiscard]] bool isOutdated() const override;
 

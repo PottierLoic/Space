@@ -17,6 +17,7 @@ void EditorGui::display() {
   if (showRender) { displayRender(); }
   if (showConsole) { displayConsole(); }
   if (showScene) { displayScene(); }
+  if (showResourceManager) { displayResourceManager(); }
 }
 
 void EditorGui::displayBar() {
@@ -76,6 +77,8 @@ void EditorGui::displayBar() {
       ImGui::Checkbox("Project", &showProject);
       ImGui::Checkbox("Scene", &showScene);
       ImGui::Checkbox("Render", &showRender);
+      ImGui::Separator();
+      ImGui::Checkbox("Resource Manager", &showResourceManager);
       ImGui::Separator();
       if (ImGui::MenuItem("Toggle fullscreen", "F11")) {}
       ImGui::Separator();
@@ -189,6 +192,50 @@ void EditorGui::displayScene() {
       }
 
       ImGui::Image(reinterpret_cast<void *>(sceneTexture), image_size);
+    }
+    ImGui::End();
+  }
+}
+
+void EditorGui::displayResourceManager() {
+  if (ImGui::Begin("Resource Manager")) {
+    if (ImGui::BeginTable("ResourceTable", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable)) {
+      ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed);
+      ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableSetupColumn("Alive", ImGuiTableColumnFlags_WidthFixed);
+      ImGui::TableSetupColumn("Users Count", ImGuiTableColumnFlags_WidthFixed);
+      ImGui::TableSetupColumn("Users", ImGuiTableColumnFlags_WidthFixed);
+      ImGui::TableHeadersRow();
+      for (const auto& [typeIndex, resMap] : ResourceManager::getResources()) {
+        const std::string typeName = typeIndex.name();
+        for (const auto& [path, resPtr] : resMap) {
+          ImGui::TableNextRow();
+          ImGui::TableSetColumnIndex(0);
+          ImGui::TextUnformatted(resPtr->getTypeName());
+          ImGui::TableSetColumnIndex(1);
+          ImGui::TextUnformatted(path.c_str());
+          ImGui::TableSetColumnIndex(2);
+          const float alive = resPtr->getTimeSinceLoad().count();
+          ImGui::Text("%.2fs", alive);
+          ImGui::TableSetColumnIndex(3);
+          const auto& userMap = ResourceManager::getResourceUsers();
+          const size_t userCount = userMap.contains(path) ? userMap.at(path).size() : 0;
+          ImGui::Text("%zu", userCount);
+          ImGui::TableSetColumnIndex(4);
+          if (userCount == 0) {
+            ImGui::TextDisabled("None");
+          } else {
+            for (const auto& weak : userMap.at(path)) {
+              if (auto user = weak.lock()) {
+                ImGui::Text("- %s", typeid(*user).name());
+              } else {
+                ImGui::TextDisabled("- expired");
+              }
+            }
+          }
+        }
+      }
+      ImGui::EndTable();
     }
     ImGui::End();
   }

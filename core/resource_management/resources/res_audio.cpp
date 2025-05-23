@@ -13,10 +13,6 @@ std::shared_ptr<ResAudio> ResAudio::loadFromFile(const std::string& path) {
   return std::make_shared<ResAudio>(path, std::move(data));
 }
 
-const std::vector<uint8_t>& ResAudio::getData() const {
-  return m_data;
-}
-
 bool ResAudio::isOutdated() const {
   return std::filesystem::last_write_time(getPath()) != m_timestamp;
 }

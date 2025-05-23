@@ -24,6 +24,9 @@ public:
   static void clear();
   static void update(float deltaTime);
 
+  static const std::unordered_map<std::type_index, std::unordered_map<std::string, std::shared_ptr<Resource>>>& getResources() { return s_resources; }
+  static const std::unordered_map<std::string, std::vector<std::weak_ptr<IResourceUser>>>& getResourceUsers() { return s_resourceUsers; }
+
 private:
   inline static std::unordered_map<std::type_index, std::unordered_map<std::string, std::shared_ptr<Resource>>> s_resources;
   inline static std::unordered_map<std::string, std::vector<std::weak_ptr<IResourceUser>>> s_resourceUsers;
