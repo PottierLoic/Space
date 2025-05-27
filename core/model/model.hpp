@@ -10,8 +10,8 @@
 #include "stb_image.h"
 
 #include "log/logger.hpp"
-#include "model/mesh.hpp"
-#include "model/texture.hpp"
+#include "model/model_mesh.hpp"
+#include "model/model_texture.hpp"
 #include "shader/shader.hpp"
 
 namespace SpaceEngine {
@@ -25,13 +25,13 @@ public:
   std::string directory;
 
 private:
-  std::vector<Texture> textures_loaded;
-  std::vector<Mesh> meshes;
+  std::vector<ModelTexture> textures_loaded;
+  std::vector<ModelMesh> meshes;
 
   void loadModel(const std::string& path);
   void processNode(const aiNode *node, const aiScene *scene);
-  Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-  std::vector<Texture> loadMaterialTextures(const aiMaterial *mat, aiTextureType type, const std::string& typeName);
+  ModelMesh processMesh(aiMesh *mesh, const aiScene *scene);
+  std::vector<ModelTexture> loadMaterialTextures(const aiMaterial *mat, aiTextureType type, const std::string& typeName);
 };
 
 }

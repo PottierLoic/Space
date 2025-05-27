@@ -16,6 +16,7 @@
 
 #include "component/camera.hpp"
 #include "component/model_renderer.hpp"
+#include "component/audio_source.hpp"
 #include "log/logger.hpp"
 #include "serializer/serializer.hpp"
 
@@ -136,10 +137,12 @@ int main() {
   testRenderer->setModel();
   space->currentScene->addEntity(test);
 
-  // example binding on `H` --> move the house on the z axis
-  Input::bindKey(KeyCode::H, [t = std::weak_ptr(test)]() {
+  test->addComponent<AudioSource>();
+  test->getComponent<AudioSource>()->setAudio("./tests/data/audio.wav");
+
+  Input::bindKey(KeyCode::I, [t = std::weak_ptr(test)]() {
     if (const auto ent = t.lock()) {
-      ent->getComponent<Transform>()->position.z() -= 4.0f;
+      ent->removeComponent<AudioSource>();
     }
   }, -1, InputEventType::OnPress);
 
@@ -160,6 +163,8 @@ int main() {
 
     Input::update();
     Input::dispatchBindings(); // TODO only supposed to be in the game code
+
+    ResourceManager::update(deltaTime);
 
     if (gui.inspectorFocus) {
       // Keyboard inputs handling

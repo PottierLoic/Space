@@ -12,6 +12,7 @@
 #include "space/space.hpp"
 #include "scene/scene.hpp"
 #include "entity/entity.hpp"
+#include "resource_management/resource_manager.hpp"
 
 #include "component/component.hpp"
 #include "component/transform.hpp"
@@ -29,6 +30,8 @@ using SpaceEngine::Physic;
 using SpaceEngine::ModelRenderer;
 using SpaceEngine::Camera;
 using SpaceEngine::Logger;
+using SpaceEngine::ResourceManager;
+using SpaceEngine::IHotReloadable;
 
 namespace SpaceEditor {
 
@@ -56,13 +59,14 @@ namespace SpaceEditor {
  * - void cherryTheme(): Set the actual gui theme to cherry theme.
  */
 class EditorGui {
-private:
   bool showInspector = true;      // Inspector section visibility flag.
   bool showHierarchy = true;      // Hierarchy section visibility flag.
   bool showProject = true;        // Project section visibility flag.
   bool showScene = true;          // Scene section visibility flag.
   bool showRender = true;         // Render section visibility flag.
   bool showConsole = true;       // Console section visibility flag.
+
+  bool showResourceManager = false; // Resource manager section visibility flag.
 
   bool polygonMode = true;        // Polygon mode flag. (Draw the full model or just the wireframe)
   unsigned int sceneTexture;      // Scene view texture
@@ -85,7 +89,9 @@ private:
   /* Display the render section. */
   void displayRender() const;
   /* Display the console section. */
-  static void displayConsole();
+  void displayConsole();
+  /* Display the resource manager section. */
+  void displayResourceManager();
 
 public:
   /* Reference to the actual Space */
@@ -97,7 +103,7 @@ public:
   bool sceneHovered = false;
   bool inspectorFocus = false;
 
-  /* Main constructor that use default flags. */
+  /* Main constructor that uses default flags. */
   EditorGui(unsigned int sceneTexture, unsigned int renderTexture);
 
   /* Display the whole EditorGui. */

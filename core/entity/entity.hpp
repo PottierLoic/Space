@@ -65,7 +65,7 @@ public:
   template <typename T, typename... Args>
   bool addComponent(Args&&... args) {
     const std::type_index typeIndex(typeid(T));
-    if (components.find(typeIndex) != components.end()) {
+    if (components.contains(typeIndex)) {
       return false;
     }
 
@@ -96,6 +96,7 @@ public:
   template <typename T>
   void removeComponent() {
     if (const auto it = components.find(typeid(T)); it != components.end()) {
+      it->second->onEntityDestroyed();
       components.erase(it);
     }
   }
