@@ -227,7 +227,8 @@ void EditorGui::displayResourceManager() {
           } else {
             for (const auto& weak : userMap.at(path)) {
               if (auto user = weak.lock()) {
-                ImGui::Text("- %s", typeid(*user.get()).name());
+                auto* user_ptr = user.get();
+                ImGui::Text("- %s", typeid(*user_ptr).name());
               } else {
                 ImGui::TextDisabled("- expired");
               }
