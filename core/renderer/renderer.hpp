@@ -12,6 +12,8 @@
 #include "component/transform.hpp"
 #include "component/model_renderer.hpp"
 #include "scene/scene.hpp"
+#include "ecs/world.hpp"
+#include "ecs/entity.hpp"
 
 namespace SpaceEngine {
 

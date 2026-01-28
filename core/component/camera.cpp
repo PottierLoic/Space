@@ -1,5 +1,4 @@
 #include "component/camera.hpp"
-#include "entity/entity.hpp" // Can only be done here to avoid circular includes.
 
 namespace SpaceEngine {
 
@@ -12,15 +11,11 @@ Camera::Camera() {
   updateCameraVectors();
 }
 
-glm::mat4 Camera::getViewMatrix() const {
-  if (const auto lockedOwner = owner.lock(); !lockedOwner) {
-    return glm::mat4(1.0f);
-  } else {
-    const auto tf = lockedOwner->getComponent<Transform>();
-    const auto positionVec = glm::vec3(tf->position.x(), tf->position.y(), tf->position.z());
-    const glm::vec3 lookTarget = positionVec + front;
-    return glm::lookAt(positionVec, lookTarget, up);
-  }
+glm::mat4 Camera::getViewMatrix(const World& world, Entity e) const {
+  const auto& tf = world.get_component<Transform>(e);
+  const auto positionVec = glm::vec3(tf.position.x(), tf.position.y(), tf.position.z());
+  const glm::vec3 lookTarget = positionVec + front;
+  return glm::lookAt(positionVec, lookTarget, up);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const {

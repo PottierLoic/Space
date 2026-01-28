@@ -12,13 +12,13 @@
 
 /* TODO: REMOVE */
 #include "input/input.hpp" // TODO: switch from using glfw input system to the engine input system
-#include "entity/entity.hpp"
+#include "ecs/world.hpp"
 
 #include "component/camera.hpp"
 #include "component/model_renderer.hpp"
 #include "component/audio_source.hpp"
 #include "log/logger.hpp"
-#include "serializer/serializer.hpp"
+//#include "serializer/serializer.hpp" // TODO rework to use new ECS
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
@@ -130,21 +130,11 @@ int main() {
   gui.space = space;
 
   // Examples
-  auto test = Entity::create("test");
-  test->addComponent<ModelRenderer>();
-  auto testRenderer = test->getComponent<ModelRenderer>();
-  testRenderer->path = "./models/dio/dio.fbx";
-  testRenderer->setModel();
-  space->currentScene->addEntity(test);
-
-  test->addComponent<AudioSource>();
-  test->getComponent<AudioSource>()->setAudio("./tests/data/audio.wav");
-
-  Input::bindKey(KeyCode::I, [t = std::weak_ptr(test)]() {
-    if (const auto ent = t.lock()) {
-      ent->removeComponent<AudioSource>();
-    }
-  }, -1, InputEventType::OnPress);
+  auto test = space->currentScene->world.create();
+  space->currentScene->world.add_component<Transform>(test, Transform{"test"});
+  auto& mr = space->currentScene->world.add_component<ModelRenderer>(test, ModelRenderer{});
+  mr.path = "./models/dio/dio.fbx";
+  mr.setModel();
 
   // read content from test file
   // if (std::ifstream file("./test.space"); file.is_open()) {
@@ -199,9 +189,10 @@ int main() {
 
     // Rendering scene and render view in editor
     sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), space->currentScene);
-    if (space->currentScene && space->currentScene->selectedCamera.lock()) {
-      const auto sceneCamera = space->currentScene->selectedCamera.lock();
-      renderViewRenderer->render(sceneCamera->getViewMatrix(), sceneCamera->getProjectionMatrix(), space->currentScene);
+    if (space->currentScene) { // TODO rework this
+      const auto sceneCamera = space->currentScene->selectedCamera;
+      Camera camera = space->currentScene->world.get_component<Camera>(sceneCamera);
+      renderViewRenderer->render(camera.getViewMatrix(space->currentScene->world, sceneCamera), camera.getProjectionMatrix(), space->currentScene);
     }
 
     // Clear the main framebuffer

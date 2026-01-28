@@ -52,8 +52,9 @@ void EditorGui::displayBar() {
     if (ImGui::BeginMenu("Add")) {
       if (ImGui::MenuItem("Empty", "??")) {
         if (space && space->currentScene) {
-          const auto ent = Entity::create("New entity");
-          space->currentScene->entities.push_back(ent);
+          Entity e = space->currentScene->world.create();
+          selectedEntity = e;
+          space->currentScene->world.add_component<Transform>(e, Transform{"new entity"});
         }
       }
       ImGui::Separator();
@@ -101,17 +102,24 @@ void EditorGui::displayBar() {
 }
 
 void EditorGui::displayInspector() {
-  if (ImGui::Begin("Inspector")) {
-    if (selectedEntity) {
-      for (const auto&[fst, snd] : selectedEntity->components) {
-        std::type_index typeIndex = fst;
-        const auto component = snd;
-        if (auto viewerIt = componentViewers.find(typeIndex); viewerIt != componentViewers.end()) {
-          viewerIt->second(component);
-        }
-      }
-    }
+  if (!ImGui::Begin("Inspector")) {
+    ImGui::End();
+    return;
   }
+
+  if (!selectedEntity) {
+    ImGui::TextDisabled("No entity selected");
+    ImGui::End();
+    return;
+  }
+
+  Entity e = *selectedEntity;
+  World& world = space->currentScene->world;
+
+  for (auto& [type, drawFn] : componentViewers) {
+    drawFn(world, e);
+  }
+
   ImGui::End();
 }
 
@@ -119,8 +127,8 @@ void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
     if (space && space->currentScene) {
       int index = 0;
-      for (auto& entity : space->currentScene->entities) {
-        std::string uniqueLabel = entity->getComponent<Transform>()->name + "##" + std::to_string(index);
+      for (auto entity : space->currentScene->world.view<Transform>()) {
+        std::string uniqueLabel = space->currentScene->world.get_component<Transform>(entity).name + "##" + std::to_string(index);
         if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
           selectedEntity = entity;
         }
