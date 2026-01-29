@@ -25,8 +25,7 @@ void EditorGui::displayBar() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
       if (ImGui::MenuItem("New", "CTRL+N")) {
-        space->currentScene = std::make_shared<Scene>(); // working
-        space = std::make_shared<Space>("test", "test");
+        scene = std::make_shared<Scene>();
       }
       if (ImGui::MenuItem("Open", "CTRL+O")) {}
       if (ImGui::MenuItem("Save", "CTRL+S")) {}
@@ -51,10 +50,10 @@ void EditorGui::displayBar() {
 
     if (ImGui::BeginMenu("Add")) {
       if (ImGui::MenuItem("Empty", "??")) {
-        if (space && space->currentScene) {
-          Entity e = space->currentScene->world.create();
+        if (scene) {
+          Entity e = scene->world.create();
           selectedEntity = e;
-          space->currentScene->world.add_component<Transform>(e, Transform{"new entity"});
+          scene->world.add_component<Transform>(e, Transform{"new entity"});
         }
       }
       ImGui::Separator();
@@ -114,7 +113,7 @@ void EditorGui::displayInspector() {
   }
 
   Entity e = *selectedEntity;
-  World& world = space->currentScene->world;
+  World& world = scene->world;
 
   for (auto& [type, drawFn] : componentViewers) {
     drawFn(world, e);
@@ -125,10 +124,10 @@ void EditorGui::displayInspector() {
 
 void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
-    if (space && space->currentScene) {
+    if (scene) {
       int index = 0;
-      for (auto entity : space->currentScene->world.view<Transform>()) {
-        std::string uniqueLabel = space->currentScene->world.get_component<Transform>(entity).name + "##" + std::to_string(index);
+      for (auto entity : scene->world.view<Transform>()) {
+        std::string uniqueLabel = scene->world.get_component<Transform>(entity).name + "##" + std::to_string(index);
         if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
           selectedEntity = entity;
         }
@@ -141,16 +140,14 @@ void EditorGui::displayHierarchy() {
 
 void EditorGui::displayProject() const {
   if (ImGui::Begin("Project")) {
-    if (space) {
-      // TODO: Render the project folder.
-    }
+    // TODO: Display project tree
   }
   ImGui::End();
 }
 
 void EditorGui::displayRender() const {
   if (ImGui::Begin("Render")) {
-    if (space && space->currentScene) {
+    if (scene) {
       const ImVec2 window_size = ImGui::GetContentRegionAvail();
       constexpr float aspect_ratio = 1920.0f / 1080.0f;
       const float window_aspect_ratio = window_size.x / window_size.y;
@@ -185,7 +182,7 @@ void EditorGui::displayConsole() {
 void EditorGui::displayScene() {
   if (showScene) {
     ImGui::Begin("Scene");
-    if (space && space->currentScene) {
+    if (scene) {
       sceneHovered = ImGui::IsWindowHovered();
 
       const ImVec2 window_size = ImGui::GetContentRegionAvail();

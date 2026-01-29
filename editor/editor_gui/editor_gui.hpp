@@ -10,7 +10,6 @@
 #include "imgui/imgui_stdlib.h"
 
 #include "log/logger.hpp"
-#include "space/space.hpp"
 #include "scene/scene.hpp"
 #include "resource_management/resource_manager.hpp"
 #include "ecs/world.hpp"
@@ -21,7 +20,6 @@
 #include "component/model_renderer.hpp"
 #include "component/light.hpp"
 
-using SpaceEngine::Space;
 using SpaceEngine::Scene;
 using SpaceEngine::World;
 using SpaceEngine::Entity;
@@ -62,7 +60,7 @@ class EditorGui {
   void displayResourceManager();
 
 public:
-  std::shared_ptr<Space> space = nullptr;
+  std::shared_ptr<Scene> scene = nullptr;
 
   std::optional<Entity> selectedEntity;
 

@@ -11,8 +11,6 @@ file(GLOB_RECURSE CORE_SOURCES
   "component/*.cpp"
   "shader/*.cpp"
   "log/*.cpp"
-#  "serializer/*.cpp"
-  "space/*.cpp"
   "renderer/*.cpp"
   "time/*.cpp"
   "input/*.cpp"
