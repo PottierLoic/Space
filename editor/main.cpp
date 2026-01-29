@@ -143,8 +143,6 @@ int main() {
     Input::update();
     Input::dispatchBindings(); // TODO only supposed to be in the game code
 
-    ResourceManager::update(deltaTime);
-
     if (gui.inspectorFocus) {
       // Keyboard inputs handling
       if (Input::isKeyPressed(KeyCode::W))

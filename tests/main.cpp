@@ -10,7 +10,6 @@ extern int testLog();
 extern int testLogger();
 extern int testTime();
 extern int testInputBinding();
-extern int testResourceManager();
 
 struct TestFunction {
   const char* name;
@@ -25,7 +24,6 @@ TestFunction test_fn[] = {
   {"testLogger", testLogger},
   {"TestTime", testTime},
   {"testInputBinding", testInputBinding},
-  {"testResourceManager", testResourceManager}
 };
 
 void run_all_tests() {

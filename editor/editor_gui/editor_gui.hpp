@@ -11,7 +11,6 @@
 
 #include "log/logger.hpp"
 #include "scene/scene.hpp"
-#include "resource_management/resource_manager.hpp"
 #include "ecs/world.hpp"
 
 #include "component/transform.hpp"
@@ -28,8 +27,6 @@ using SpaceEngine::Physic;
 using SpaceEngine::ModelRenderer;
 using SpaceEngine::Camera;
 using SpaceEngine::Logger;
-using SpaceEngine::ResourceManager;
-using SpaceEngine::IHotReloadable;
 
 namespace SpaceEditor {
 
@@ -40,8 +37,7 @@ class EditorGui {
   bool showScene = true;
   bool showRender = true;
   bool showConsole = true;
-
-  bool showResourceManager = false;
+//  bool showResourceManager = false; // TODO: introduce back when refactor complete
 
   bool polygonMode = true;
   unsigned int sceneTexture;
@@ -57,7 +53,7 @@ class EditorGui {
   void displayScene();
   void displayRender() const;
   void displayConsole();
-  void displayResourceManager();
+//  void displayResourceManager(); // TODO: introduce back when refactor complete
 
 public:
   std::shared_ptr<Scene> scene = nullptr;
