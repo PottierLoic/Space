@@ -7,18 +7,16 @@
 #include "editor_gui/editor_gui.hpp"
 #include "editor_camera/editor_camera.hpp"
 #include "shader/shader.hpp"
-#include "space/space.hpp"
 #include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
 #include "input/input.hpp" // TODO: switch from using glfw input system to the engine input system
-#include "entity/entity.hpp"
+#include "ecs/world.hpp"
 
 #include "component/camera.hpp"
 #include "component/model_renderer.hpp"
 #include "component/audio_source.hpp"
 #include "log/logger.hpp"
-#include "serializer/serializer.hpp"
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
@@ -126,34 +124,15 @@ int main() {
   auto gui = EditorGui(sceneRenderer->getRenderedTexture(), renderViewRenderer->getRenderedTexture());
 
   //TODO : Remove too
-  auto space = std::make_shared<Space>("./", "test_space");
-  gui.space = space;
+  auto scene = std::make_shared<Scene>();
+  gui.scene = scene;
 
-  // Examples
-  auto test = Entity::create("test");
-  test->addComponent<ModelRenderer>();
-  auto testRenderer = test->getComponent<ModelRenderer>();
-  testRenderer->path = "./models/dio/dio.fbx";
-  testRenderer->setModel();
-  space->currentScene->addEntity(test);
-
-  test->addComponent<AudioSource>();
-  test->getComponent<AudioSource>()->setAudio("./tests/data/audio.wav");
-
-  Input::bindKey(KeyCode::I, [t = std::weak_ptr(test)]() {
-    if (const auto ent = t.lock()) {
-      ent->removeComponent<AudioSource>();
-    }
-  }, -1, InputEventType::OnPress);
-
-  // read content from test file
-  // if (std::ifstream file("./test.space"); file.is_open()) {
-  //   json j;
-  //   file >> j;
-  //   file.close();
-  //   auto scene = Serializer::deserializeScene(j);
-  //   space->currentScene = scene;
-  // }
+  // TODO : remove too (Examples entities)
+  auto test = scene->world.create();
+  scene->world.add_component<Transform>(test, Transform{"test"});
+  auto& mr = scene->world.add_component<ModelRenderer>(test, ModelRenderer{});
+  mr.path = "./models/dio/dio.fbx";
+  mr.setModel();
 
   // Main loop
   while (!glfwWindowShouldClose(window)) {
@@ -163,8 +142,6 @@ int main() {
 
     Input::update();
     Input::dispatchBindings(); // TODO only supposed to be in the game code
-
-    ResourceManager::update(deltaTime);
 
     if (gui.inspectorFocus) {
       // Keyboard inputs handling
@@ -198,10 +175,11 @@ int main() {
     }
 
     // Rendering scene and render view in editor
-    sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), space->currentScene);
-    if (space->currentScene && space->currentScene->selectedCamera.lock()) {
-      const auto sceneCamera = space->currentScene->selectedCamera.lock();
-      renderViewRenderer->render(sceneCamera->getViewMatrix(), sceneCamera->getProjectionMatrix(), space->currentScene);
+    sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), scene);
+    if (scene) { // TODO rework this
+      const auto sceneCamera = scene->selectedCamera;
+      Camera camera = scene->world.get_component<Camera>(sceneCamera);
+      renderViewRenderer->render(camera.getViewMatrix(scene->world, sceneCamera), camera.getProjectionMatrix(), scene);
     }
 
     // Clear the main framebuffer

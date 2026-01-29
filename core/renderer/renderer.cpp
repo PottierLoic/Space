@@ -72,10 +72,8 @@ void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
   glViewport(0, 0, viewportWidth, viewportHeight);
 
   glm::vec4 clearColor(0.1f, 0.1f, 0.1f, 1.0f);
-  if (scene->selectedCamera.lock()) {
-    const auto camera = scene->selectedCamera.lock();
-    clearColor = glm::vec4(camera->skyboxColor.x, camera->skyboxColor.y, camera->skyboxColor.z, camera->skyboxColor.w);
-  }
+  const auto camera = scene->world.get_component<Camera>(scene->selectedCamera);
+  clearColor = glm::vec4(camera.skyboxColor.x, camera.skyboxColor.y, camera.skyboxColor.z, camera.skyboxColor.w);
 
   glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -85,24 +83,26 @@ void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
   shader->setMat4("view", viewMatrix);
 
   // Render all entities with model renderers
-  for (const auto& entity : scene->entities) {
-    if (const auto modelRenderer = entity->getComponent<ModelRenderer>(); modelRenderer && modelRenderer->model) {
-      const auto transform = entity->getComponent<Transform>();
-      auto model = glm::mat4(1.0f);
-      // Apply transformations
-      model = glm::translate(model, glm::vec3(transform->position.x(),
-                                              transform->position.y(),
-                                              transform->position.z()));
-      model = glm::scale(model, glm::vec3(transform->scale.x(),
-                                          transform->scale.y(),
-                                          transform->scale.z()));
-      model = glm::rotate(model, glm::radians(transform->rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
-      model = glm::rotate(model, glm::radians(transform->rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
-      model = glm::rotate(model, glm::radians(transform->rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
+  for (Entity e : scene->world.view<ModelRenderer, Transform>()) {
+    const auto& mr = scene->world.get_component<ModelRenderer>(e);
+    const auto& tf = scene->world.get_component<Transform>(e);
 
-      shader->setMat4("model", model);
-      modelRenderer->model->draw(*shader);
-    }
+    if (!mr.model) continue;
+
+    auto model = glm::mat4(1.0f);
+    // Apply transformations
+    model = glm::translate(model, glm::vec3(tf.position.x(),
+                                            tf.position.y(),
+                                            tf.position.z()));
+    model = glm::scale(model, glm::vec3(tf.scale.x(),
+                                        tf.scale.y(),
+                                        tf.scale.z()));
+    model = glm::rotate(model, glm::radians(tf.rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(tf.rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(tf.rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    shader->setMat4("model", model);
+    mr.model->draw(*shader);
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

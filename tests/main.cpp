@@ -6,15 +6,10 @@
 extern int testVector2();
 extern int testVector3();
 extern int testVector4();
-extern int testEntity();
-extern int testSpace();
 extern int testLog();
 extern int testLogger();
-extern int testSerialize();
-extern int testSerializeComponent();
 extern int testTime();
 extern int testInputBinding();
-extern int testResourceManager();
 
 struct TestFunction {
   const char* name;
@@ -25,15 +20,10 @@ TestFunction test_fn[] = {
   {"testVector2", testVector2},
   {"testVector3", testVector3},
   {"testVector4", testVector4},
-  {"testEntity", testEntity},
-  {"testSpace", testSpace},
   {"testLog", testLog},
   {"testLogger", testLogger},
-  {"testSerialize", testSerialize},
-  {"testSerializeComponent", testSerializeComponent},
   {"TestTime", testTime},
   {"testInputBinding", testInputBinding},
-  {"testResourceManager", testResourceManager}
 };
 
 void run_all_tests() {

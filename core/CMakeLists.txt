@@ -11,14 +11,10 @@ file(GLOB_RECURSE CORE_SOURCES
   "component/*.cpp"
   "shader/*.cpp"
   "log/*.cpp"
-  "serializer/*.cpp"
-  "space/*.cpp"
   "renderer/*.cpp"
   "time/*.cpp"
   "input/*.cpp"
-  "resource_management/*.cpp"
-  "resource_management/loaders/*.cpp"
-  "resource_management/resources/*.cpp"
+  "ecs/*.cpp"
 )
 
 add_library(SpaceEngine STATIC ${CORE_SOURCES})

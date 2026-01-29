@@ -17,7 +17,7 @@ void EditorGui::display() {
   if (showRender) { displayRender(); }
   if (showConsole) { displayConsole(); }
   if (showScene) { displayScene(); }
-  if (showResourceManager) { displayResourceManager(); }
+//  if (showResourceManager) { displayResourceManager(); } // TODO: introduce back when refactor complete
 }
 
 void EditorGui::displayBar() {
@@ -25,8 +25,7 @@ void EditorGui::displayBar() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
       if (ImGui::MenuItem("New", "CTRL+N")) {
-        space->currentScene = std::make_shared<Scene>(); // working
-        space = std::make_shared<Space>("test", "test");
+        scene = std::make_shared<Scene>();
       }
       if (ImGui::MenuItem("Open", "CTRL+O")) {}
       if (ImGui::MenuItem("Save", "CTRL+S")) {}
@@ -51,9 +50,10 @@ void EditorGui::displayBar() {
 
     if (ImGui::BeginMenu("Add")) {
       if (ImGui::MenuItem("Empty", "??")) {
-        if (space && space->currentScene) {
-          const auto ent = Entity::create("New entity");
-          space->currentScene->entities.push_back(ent);
+        if (scene) {
+          Entity e = scene->world.create();
+          selectedEntity = e;
+          scene->world.add_component<Transform>(e, Transform{"new entity"});
         }
       }
       ImGui::Separator();
@@ -78,7 +78,7 @@ void EditorGui::displayBar() {
       ImGui::Checkbox("Scene", &showScene);
       ImGui::Checkbox("Render", &showRender);
       ImGui::Separator();
-      ImGui::Checkbox("Resource Manager", &showResourceManager);
+//      ImGui::Checkbox("Resource Manager", &showResourceManager); // TODO: introduce back when refactor complete
       ImGui::Separator();
       if (ImGui::MenuItem("Toggle fullscreen", "F11")) {}
       ImGui::Separator();
@@ -101,26 +101,33 @@ void EditorGui::displayBar() {
 }
 
 void EditorGui::displayInspector() {
-  if (ImGui::Begin("Inspector")) {
-    if (selectedEntity) {
-      for (const auto&[fst, snd] : selectedEntity->components) {
-        std::type_index typeIndex = fst;
-        const auto component = snd;
-        if (auto viewerIt = componentViewers.find(typeIndex); viewerIt != componentViewers.end()) {
-          viewerIt->second(component);
-        }
-      }
-    }
+  if (!ImGui::Begin("Inspector")) {
+    ImGui::End();
+    return;
   }
+
+  if (!selectedEntity) {
+    ImGui::TextDisabled("No entity selected");
+    ImGui::End();
+    return;
+  }
+
+  Entity e = *selectedEntity;
+  World& world = scene->world;
+
+  for (auto& [type, drawFn] : componentViewers) {
+    drawFn(world, e);
+  }
+
   ImGui::End();
 }
 
 void EditorGui::displayHierarchy() {
   if (ImGui::Begin("Hierarchy")) {
-    if (space && space->currentScene) {
+    if (scene) {
       int index = 0;
-      for (auto& entity : space->currentScene->entities) {
-        std::string uniqueLabel = entity->getComponent<Transform>()->name + "##" + std::to_string(index);
+      for (auto entity : scene->world.view<Transform>()) {
+        std::string uniqueLabel = scene->world.get_component<Transform>(entity).name + "##" + std::to_string(index);
         if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
           selectedEntity = entity;
         }
@@ -133,16 +140,14 @@ void EditorGui::displayHierarchy() {
 
 void EditorGui::displayProject() const {
   if (ImGui::Begin("Project")) {
-    if (space) {
-      // TODO: Render the project folder.
-    }
+    // TODO: Display project tree
   }
   ImGui::End();
 }
 
 void EditorGui::displayRender() const {
   if (ImGui::Begin("Render")) {
-    if (space && space->currentScene) {
+    if (scene) {
       const ImVec2 window_size = ImGui::GetContentRegionAvail();
       constexpr float aspect_ratio = 1920.0f / 1080.0f;
       const float window_aspect_ratio = window_size.x / window_size.y;
@@ -177,7 +182,7 @@ void EditorGui::displayConsole() {
 void EditorGui::displayScene() {
   if (showScene) {
     ImGui::Begin("Scene");
-    if (space && space->currentScene) {
+    if (scene) {
       sceneHovered = ImGui::IsWindowHovered();
 
       const ImVec2 window_size = ImGui::GetContentRegionAvail();
@@ -196,51 +201,51 @@ void EditorGui::displayScene() {
     ImGui::End();
   }
 }
-
-void EditorGui::displayResourceManager() {
-  if (ImGui::Begin("Resource Manager")) {
-    if (ImGui::BeginTable("ResourceTable", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable)) {
-      ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed);
-      ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
-      ImGui::TableSetupColumn("Alive", ImGuiTableColumnFlags_WidthFixed);
-      ImGui::TableSetupColumn("Users Count", ImGuiTableColumnFlags_WidthFixed);
-      ImGui::TableSetupColumn("Users", ImGuiTableColumnFlags_WidthFixed);
-      ImGui::TableHeadersRow();
-      for (const auto& [typeIndex, resMap] : ResourceManager::getResources()) {
-        const std::string typeName = typeIndex.name();
-        for (const auto& [path, resPtr] : resMap) {
-          ImGui::TableNextRow();
-          ImGui::TableSetColumnIndex(0);
-          ImGui::TextUnformatted(resPtr->getTypeName());
-          ImGui::TableSetColumnIndex(1);
-          ImGui::TextUnformatted(path.c_str());
-          ImGui::TableSetColumnIndex(2);
-          const float alive = resPtr->getTimeSinceLoad().count();
-          ImGui::Text("%.2fs", alive);
-          ImGui::TableSetColumnIndex(3);
-          const auto& userMap = ResourceManager::getResourceUsers();
-          const size_t userCount = userMap.contains(path) ? userMap.at(path).size() : 0;
-          ImGui::Text("%zu", userCount);
-          ImGui::TableSetColumnIndex(4);
-          if (userCount == 0) {
-            ImGui::TextDisabled("None");
-          } else {
-            for (const auto& weak : userMap.at(path)) {
-              if (auto user = weak.lock()) {
-                auto* user_ptr = user.get();
-                ImGui::Text("- %s", typeid(*user_ptr).name());
-              } else {
-                ImGui::TextDisabled("- expired");
-              }
-            }
-          }
-        }
-      }
-      ImGui::EndTable();
-    }
-    ImGui::End();
-  }
-}
+//
+//void EditorGui::displayResourceManager() { // TODO: introduce back when refactor complete
+//  if (ImGui::Begin("Resource Manager")) {
+//    if (ImGui::BeginTable("ResourceTable", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable)) {
+//      ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed);
+//      ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
+//      ImGui::TableSetupColumn("Alive", ImGuiTableColumnFlags_WidthFixed);
+//      ImGui::TableSetupColumn("Users Count", ImGuiTableColumnFlags_WidthFixed);
+//      ImGui::TableSetupColumn("Users", ImGuiTableColumnFlags_WidthFixed);
+//      ImGui::TableHeadersRow();
+//      for (const auto& [typeIndex, resMap] : ResourceManager::getResources()) {
+//        const std::string typeName = typeIndex.name();
+//        for (const auto& [path, resPtr] : resMap) {
+//          ImGui::TableNextRow();
+//          ImGui::TableSetColumnIndex(0);
+//          ImGui::TextUnformatted(resPtr->getTypeName());
+//          ImGui::TableSetColumnIndex(1);
+//          ImGui::TextUnformatted(path.c_str());
+//          ImGui::TableSetColumnIndex(2);
+//          const float alive = resPtr->getTimeSinceLoad().count();
+//          ImGui::Text("%.2fs", alive);
+//          ImGui::TableSetColumnIndex(3);
+//          const auto& userMap = ResourceManager::getResourceUsers();
+//          const size_t userCount = userMap.contains(path) ? userMap.at(path).size() : 0;
+//          ImGui::Text("%zu", userCount);
+//          ImGui::TableSetColumnIndex(4);
+//          if (userCount == 0) {
+//            ImGui::TextDisabled("None");
+//          } else {
+//            for (const auto& weak : userMap.at(path)) {
+//              if (auto user = weak.lock()) {
+//                auto* user_ptr = user.get();
+//                ImGui::Text("- %s", typeid(*user_ptr).name());
+//              } else {
+//                ImGui::TextDisabled("- expired");
+//              }
+//            }
+//          }
+//        }
+//      }
+//      ImGui::EndTable();
+//    }
+//    ImGui::End();
+//  }
+//}
 
 void EditorGui::cherryTheme() {
   // cherry colors, 3 intensities
