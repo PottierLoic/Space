@@ -1,36 +1,38 @@
 #pragma once
 
+#include "types/types.hpp"
+
 namespace SpaceEngine {
 
 class IStorage {
 public:
     virtual ~IStorage() = default;
-    virtual void remove(uint32_t id) = 0;
+    virtual void remove(u32 id) = 0;
     virtual void clear() = 0;
 };
 
 template<typename T>
 class Storage final : public IStorage{
 private:
-    std::unordered_map<uint32_t, T> data;
+    std::unordered_map<u32, T> data;
 public:
-    bool has(uint32_t id) const {
+    bool has(u32 id) const {
         return data.find(id) != data.end();
     }
 
-    T& get(uint32_t id) {
+    T& get(u32 id) {
         auto it = data.find(id);
         if (it == data.end()) throw std::runtime_error("Storage::get: missing component");
         return it->second;
     }
 
-    const T& get(uint32_t id) const {
+    const T& get(u32 id) const {
         auto it = data.find(id);
         if (it == data.end()) throw std::runtime_error("Storage::get: missing component");
         return it->second;
     }
 
-    T& add(uint32_t id, T value) {
+    T& add(u32 id, T value) {
         auto [it, inserted] = data.emplace(id, std::move(value));
         if (!inserted) {
             it->second = std::move(value);
@@ -38,7 +40,7 @@ public:
         return it->second;
     }
 
-    void remove(uint32_t id) override {
+    void remove(u32 id) override {
         data.erase(id);
     }
 

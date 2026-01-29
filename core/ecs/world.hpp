@@ -4,6 +4,7 @@
 #include <typeindex>
 #include <memory>
 
+#include "types/types.hpp"
 #include "entity.hpp"
 #include "storage.hpp"
 
@@ -12,7 +13,7 @@ namespace SpaceEngine {
 class World {
 private:
     std::unordered_map<std::type_index, std::unique_ptr<IStorage>> storages;
-    uint32_t next_id = 0;
+    u32 next_id = 0;
 
     template<typename T>
     Storage<T>& storage() {
@@ -37,7 +38,7 @@ public:
     ~World() = default;
 
     Entity create() {
-        uint32_t id = next_id++;
+        u32 id = next_id++;
         return Entity{id};
     }
 
@@ -72,17 +73,6 @@ public:
         return storage<T>().get(e.id);
     }
 
-    // TODO TEMP remove once views are implemented
-    template<typename T>
-    Storage<T>& storage_raw() {
-        return storage<T>();
-    }
-
-    template<typename T>
-    const Storage<T>& storage_raw() const {
-        return storage<T>();
-    }
-
     template<typename T>
     class View1 {
     public:
@@ -90,8 +80,8 @@ public:
 
         class Iterator {
         public:
-            using MapIt = typename std::unordered_map<uint32_t, T>::const_iterator;
-            Iterator(const World& w, const std::unordered_map<uint32_t, T>* map, MapIt it, MapIt end): world(w), map(map), it(it), end(end) {}
+            using MapIt = typename std::unordered_map<u32, T>::const_iterator;
+            Iterator(const World& w, const std::unordered_map<u32, T>* map, MapIt it, MapIt end): world(w), map(map), it(it), end(end) {}
             Entity operator*() const { return Entity{ it->first }; }
             Iterator& operator++() {
                 ++it;
@@ -100,7 +90,7 @@ public:
             bool operator !=(const Iterator& other) const { return it != other.it; }
         private:
             const World& world;
-            const std::unordered_map<uint32_t, T>* map;
+            const std::unordered_map<u32, T>* map;
             MapIt it;
             MapIt end;
         };
@@ -127,10 +117,10 @@ public:
 
         class Iterator {
         public:
-            using MapIt = typename std::unordered_map<uint32_t, A>::const_iterator;
+            using MapIt = typename std::unordered_map<u32, A>::const_iterator;
 
             Iterator(const World& w,
-                     const std::unordered_map<uint32_t, A>* amap,
+                     const std::unordered_map<u32, A>* amap,
                      MapIt it,
                      MapIt end)
                     : world(w), amap(amap), it(it), end(end) {
@@ -159,7 +149,7 @@ public:
             }
 
             const World& world;
-            const std::unordered_map<uint32_t, A>* amap;
+            const std::unordered_map<u32, A>* amap;
             MapIt it;
             MapIt end;
         };

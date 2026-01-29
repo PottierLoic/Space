@@ -1,9 +1,11 @@
 #pragma once
 
+#include "types/types.hpp"
+
 namespace SpaceEngine {
 
 struct Entity {
-    std::uint32_t id{};
+    u32 id{};
 
     bool operator==(const Entity& other) const {
         return id == other.id;
