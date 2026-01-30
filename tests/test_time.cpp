@@ -16,6 +16,7 @@ int testTime() {
 
   constexpr float epsilon = 0.001f;
   custom_assert(std::abs(deltaTime - expected) < epsilon,
-    "deltaTime (" << deltaTime << ") != unscaledDeltaTime * scale (" << expected << ")");
+                "deltaTime (" << deltaTime << ") != unscaledDeltaTime * scale (" << expected
+                              << ")");
   return 0;
 }

@@ -1,5 +1,5 @@
-#include "test.hpp"
 #include "maths/vector.hpp"
+#include "test.hpp"
 
 using namespace SpaceEngine;
 
@@ -13,14 +13,14 @@ int testVector2() {
   // Vector/Scalar addition
   custom_assert(vec1 + 3 == Vec2f(4.0f, 5.0f), "Vec2f scalar addition failed")
 
-  // Vector/Vector subtraction
-  custom_assert(vec1 - vec2 == Vec2f(-2.0f, -3.0f), "Vec2f subtraction failed");
+      // Vector/Vector subtraction
+      custom_assert(vec1 - vec2 == Vec2f(-2.0f, -3.0f), "Vec2f subtraction failed");
 
   // Vector/Scalar subtraction
   custom_assert(vec2 - 3 == Vec2f(0.0f, 2.0f), "Vec2f scalar subtraction failed")
 
-  // Multiplication by a scalar
-  custom_assert(vec1 * 2.0 == Vec2f(2.0f, 4.0f), "Vec2f scalar multiplication failed");
+      // Multiplication by a scalar
+      custom_assert(vec1 * 2.0 == Vec2f(2.0f, 4.0f), "Vec2f scalar multiplication failed");
 
   // Division by a scalar
   custom_assert(vec1 / 2.0 == Vec2f(0.5f, 1.0f), "Vec2f scalar division failed");

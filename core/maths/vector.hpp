@@ -2,14 +2,14 @@
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <cstdint>
+#include <iostream>
 
 namespace SpaceEngine {
 
-template<typename T, std::size_t N>
+template <typename T, std::size_t N>
 class Vector {
-public:
+ public:
   std::array<T, N> data;
 
   // Constructors
@@ -69,9 +69,12 @@ public:
 
 // Aliases
 
-template <typename T> using Vec2 = Vector<T, 2>;
-template <typename T> using Vec3 = Vector<T, 3>;
-template <typename T> using Vec4 = Vector<T, 4>;
+template <typename T>
+using Vec2 = Vector<T, 2>;
+template <typename T>
+using Vec3 = Vector<T, 3>;
+template <typename T>
+using Vec4 = Vector<T, 4>;
 
 using Vec2b = Vec2<uint8_t>;
 using Vec3b = Vec3<uint8_t>;
@@ -93,6 +96,6 @@ using Vec2d = Vec2<double>;
 using Vec3d = Vec3<double>;
 using Vec4d = Vec4<double>;
 
-}
+}  // namespace SpaceEngine
 
 #include "vector.inl"

@@ -22,37 +22,43 @@ float Input::s_scroll = 0.0f;
 float Input::s_scrollDelta = 0.0f;
 
 constexpr auto AllKeys = std::to_array({
-  #define KEY_ENTRY(name, glfw) KeyCode::name,
+#define KEY_ENTRY(name, glfw) KeyCode::name,
     KEYCODES(KEY_ENTRY)
-  #undef KEY_ENTRY
+#undef KEY_ENTRY
 });
 
 constexpr auto AllMouseButtons = std::to_array({
-  #define MOUSE_ENTRY(name, glfw) MouseButton::name,
-  MOUSE_BUTTONS(MOUSE_ENTRY)
-  #undef MOUSE_ENTRY
+#define MOUSE_ENTRY(name, glfw) MouseButton::name,
+    MOUSE_BUTTONS(MOUSE_ENTRY)
+#undef MOUSE_ENTRY
 });
-
 
 int glfwKeyFromKeyCode(const KeyCode key) {
   switch (key) {
-  #define DEFINE_CASE(name, glfw) case KeyCode::name: return glfw;
-  KEYCODES(DEFINE_CASE)
-  #undef DEFINE_CASE
-    default: return GLFW_KEY_UNKNOWN;
+#define DEFINE_CASE(name, glfw) \
+  case KeyCode::name:           \
+    return glfw;
+    KEYCODES(DEFINE_CASE)
+#undef DEFINE_CASE
+    default:
+      return GLFW_KEY_UNKNOWN;
   }
 }
 
 int glfwButtonFromMouseButton(const MouseButton button) {
   switch (button) {
-  #define DEFINE_CASE(name, glfw) case MouseButton::name: return glfw;
-  MOUSE_BUTTONS(DEFINE_CASE)
-  #undef DEFINE_CASE
-    default: return -1;
+#define DEFINE_CASE(name, glfw) \
+  case MouseButton::name:       \
+    return glfw;
+    MOUSE_BUTTONS(DEFINE_CASE)
+#undef DEFINE_CASE
+    default:
+      return -1;
   }
 }
 
-static void glfwScrollCallback(GLFWwindow* /*window*/, const double /*xoffset*/, const double yoffset) {
+static void glfwScrollCallback(GLFWwindow* /*window*/, const double /*xoffset*/,
+                               const double yoffset) {
   Input::onScroll(yoffset);
 }
 
@@ -92,18 +98,42 @@ void Input::update() {
   s_deltaY = s_lastMouseY - s_mouseY;
 }
 
-bool Input::isKeyPressed(const KeyCode key) { return s_currentKeys[key]; }
-bool Input::isKeyJustPressed(const KeyCode key) { return s_currentKeys[key] && !s_previousKeys[key]; }
-bool Input::isKeyReleased(const KeyCode key) { return !s_currentKeys[key] && s_previousKeys[key]; }
-bool Input::isMouseButtonPressed(const MouseButton button) { return s_currentMouseButtons[button]; }
-bool Input::isMouseButtonJustPressed(const MouseButton button) { return s_currentMouseButtons[button] && !s_previousMouseButtons[button]; }
-bool Input::isMouseButtonReleased(const MouseButton button) { return !s_currentMouseButtons[button] && s_previousMouseButtons[button]; }
-float Input::getMouseX() { return s_mouseX; }
-float Input::getMouseY() { return s_mouseY; }
-float Input::getMouseDeltaX() { return s_deltaX; }
-float Input::getMouseDeltaY() { return s_deltaY; }
-float Input::getScroll() { return s_scroll; }
-float Input::getScrollDelta() { return s_scrollDelta; }
+bool Input::isKeyPressed(const KeyCode key) {
+  return s_currentKeys[key];
+}
+bool Input::isKeyJustPressed(const KeyCode key) {
+  return s_currentKeys[key] && !s_previousKeys[key];
+}
+bool Input::isKeyReleased(const KeyCode key) {
+  return !s_currentKeys[key] && s_previousKeys[key];
+}
+bool Input::isMouseButtonPressed(const MouseButton button) {
+  return s_currentMouseButtons[button];
+}
+bool Input::isMouseButtonJustPressed(const MouseButton button) {
+  return s_currentMouseButtons[button] && !s_previousMouseButtons[button];
+}
+bool Input::isMouseButtonReleased(const MouseButton button) {
+  return !s_currentMouseButtons[button] && s_previousMouseButtons[button];
+}
+float Input::getMouseX() {
+  return s_mouseX;
+}
+float Input::getMouseY() {
+  return s_mouseY;
+}
+float Input::getMouseDeltaX() {
+  return s_deltaX;
+}
+float Input::getMouseDeltaY() {
+  return s_deltaY;
+}
+float Input::getScroll() {
+  return s_scroll;
+}
+float Input::getScrollDelta() {
+  return s_scrollDelta;
+}
 
 float Input::consumeScrollDelta() {
   const float scrollDelta = s_scrollDelta;
@@ -111,4 +141,4 @@ float Input::consumeScrollDelta() {
   return scrollDelta;
 }
 
-}
+}  // namespace SpaceEngine

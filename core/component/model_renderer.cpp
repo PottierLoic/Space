@@ -11,4 +11,4 @@ void ModelRenderer::setModel() {
   model = std::make_shared<Model>(path.c_str());
 }
 
-}
+}  // namespace SpaceEngine

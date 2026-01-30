@@ -10,4 +10,4 @@ Scene::Scene() {
   selectedCamera = camera;
 }
 
-}
+}  // namespace SpaceEngine

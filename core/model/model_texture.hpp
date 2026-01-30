@@ -10,4 +10,4 @@ struct ModelTexture {
   std::string path;
 };
 
-}
+}  // namespace SpaceEngine

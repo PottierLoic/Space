@@ -20,7 +20,10 @@ glm::mat4 Camera::getViewMatrix(const World& world, Entity e) const {
 
 glm::mat4 Camera::getProjectionMatrix() const {
   if (projectionType == ProjectionType::PERSPECTIVE) {
-    glm::mat4 projection = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
+    glm::mat4 projection = glm::perspective(glm::radians(fieldOfView),
+                                            aspectRatio,
+                                            nearPlane,
+                                            farPlane);
     projection[1][1] *= -1;
     return projection;
   } else {
@@ -33,13 +36,11 @@ glm::mat4 Camera::getProjectionMatrix() const {
 }
 
 void Camera::updateCameraVectors() {
-  front = glm::normalize(glm::vec3(
-    cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-    sin(glm::radians(pitch)),
-    sin(glm::radians(yaw)) * cos(glm::radians(pitch))
-  ));
+  front = glm::normalize(glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+                                   sin(glm::radians(pitch)),
+                                   sin(glm::radians(yaw)) * cos(glm::radians(pitch))));
   right = glm::normalize(glm::cross(front, worldUp));
   up = glm::normalize(glm::cross(right, front));
 }
 
-}
+}  // namespace SpaceEngine

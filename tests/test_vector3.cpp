@@ -1,5 +1,5 @@
-#include "test.hpp"
 #include "maths/vector.hpp"
+#include "test.hpp"
 
 using namespace SpaceEngine;
 
@@ -64,7 +64,7 @@ int testVector3() {
   // inequality
   custom_assert(vec1 != vec2, "Vec3f inequality failed");
 
-   // extension
+  // extension
   const auto extendedVec = Vec4f(vec1, 4.0f);
   custom_assert(extendedVec == Vec4f(1.0f, 2.0f, 3.0f, 4.0f), "Vec3f to Vec4f extension failed");
 

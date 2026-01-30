@@ -10,7 +10,7 @@
 #include "renderer/renderer.hpp"
 
 /* TODO: REMOVE */
-#include "input/input.hpp" // TODO: switch from using glfw input system to the engine input system
+#include "input/input.hpp"  // TODO: switch from using glfw input system to the engine input system
 #include "ecs/world.hpp"
 
 #include "component/camera.hpp"
@@ -27,8 +27,8 @@ using namespace SpaceEditor;
 
 // Camera
 EditorCamera camera;
-float lastX =  1920.0f / 2.0;
-float lastY =  1080.0 / 2.0;
+float lastX = 1920.0f / 2.0;
+float lastY = 1080.0 / 2.0;
 bool firstMouse = true;
 
 // timing
@@ -57,22 +57,22 @@ int main() {
     return -1;
   }
 
-  #if defined(IMGUI_IMPL_OPENGL_ES2)
-    auto glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-  #elif defined(__APPLE__)
-    auto glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  #else
-    auto glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  #endif
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+  auto glsl_version = "#version 100";
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+  auto glsl_version = "#version 150";
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#else
+  auto glsl_version = "#version 130";
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#endif
 
   GLFWwindow* window = glfwCreateWindow(1920, 1080, "Space Engine", nullptr, nullptr);
   if (window == nullptr) {
@@ -102,7 +102,7 @@ int main() {
   // Initialize renderers
   sceneRenderer = std::make_unique<Renderer>();
   renderViewRenderer = std::make_unique<Renderer>();
-  
+
   if (!sceneRenderer->initialize(1920, 1080) || !renderViewRenderer->initialize(1920, 1080)) {
     std::cout << "Failed to initialize renderers" << std::endl;
     return -1;
@@ -111,7 +111,8 @@ int main() {
   // Setup ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO(); (void)io;
+  ImGuiIO& io = ImGui::GetIO();
+  (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -121,7 +122,8 @@ int main() {
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  auto gui = EditorGui(sceneRenderer->getRenderedTexture(), renderViewRenderer->getRenderedTexture());
+  auto gui = EditorGui(sceneRenderer->getRenderedTexture(),
+                       renderViewRenderer->getRenderedTexture());
 
   //TODO : Remove too
   auto scene = std::make_shared<Scene>();
@@ -141,18 +143,14 @@ int main() {
     lastFrame = currentFrame;
 
     Input::update();
-    Input::dispatchBindings(); // TODO only supposed to be in the game code
+    Input::dispatchBindings();  // TODO only supposed to be in the game code
 
     if (gui.inspectorFocus) {
       // Keyboard inputs handling
-      if (Input::isKeyPressed(KeyCode::W))
-        camera.processKeyboard(FORWARD, deltaTime);
-      if (Input::isKeyPressed(KeyCode::S))
-        camera.processKeyboard(BACKWARD, deltaTime);
-      if (Input::isKeyPressed(KeyCode::A))
-        camera.processKeyboard(LEFT, deltaTime);
-      if (Input::isKeyPressed(KeyCode::D))
-        camera.processKeyboard(RIGHT, deltaTime);
+      if (Input::isKeyPressed(KeyCode::W)) camera.processKeyboard(FORWARD, deltaTime);
+      if (Input::isKeyPressed(KeyCode::S)) camera.processKeyboard(BACKWARD, deltaTime);
+      if (Input::isKeyPressed(KeyCode::A)) camera.processKeyboard(LEFT, deltaTime);
+      if (Input::isKeyPressed(KeyCode::D)) camera.processKeyboard(RIGHT, deltaTime);
 
       // Mouse movements handling
       const float currentX = Input::getMouseX();
@@ -171,15 +169,17 @@ int main() {
 
     // Zoom handling
     if (Input::getScrollDelta() != 0.0f) {
-      camera.processMouseScroll(Input::consumeScrollDelta() * 5); // TODO: Not hardcode this
+      camera.processMouseScroll(Input::consumeScrollDelta() * 5);  // TODO: Not hardcode this
     }
 
     // Rendering scene and render view in editor
     sceneRenderer->render(camera.getEditorViewMatrix(), camera.getProjectionMatrix(), scene);
-    if (scene) { // TODO rework this
+    if (scene) {  // TODO rework this
       const auto sceneCamera = scene->selectedCamera;
       Camera camera = scene->world.get_component<Camera>(sceneCamera);
-      renderViewRenderer->render(camera.getViewMatrix(scene->world, sceneCamera), camera.getProjectionMatrix(), scene);
+      renderViewRenderer->render(camera.getViewMatrix(scene->world, sceneCamera),
+                                 camera.getProjectionMatrix(),
+                                 scene);
     }
 
     // Clear the main framebuffer
@@ -194,7 +194,8 @@ int main() {
     ImGui::NewFrame();
     ImGui::DockSpaceOverViewport();
 
-    if (!gui.inspectorFocus && gui.sceneHovered && Input::isMouseButtonPressed(MouseButton::Right)) {
+    if (!gui.inspectorFocus && gui.sceneHovered &&
+        Input::isMouseButtonPressed(MouseButton::Right)) {
       gui.inspectorFocus = true;
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     } else if (gui.inspectorFocus && !Input::isMouseButtonPressed(MouseButton::Right)) {

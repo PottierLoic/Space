@@ -1,5 +1,5 @@
-#include "test.hpp"
 #include "log/log.hpp"
+#include "test.hpp"
 
 using namespace SpaceEngine;
 
@@ -20,7 +20,8 @@ int testLog() {
   const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
   const std::chrono::system_clock::time_point minTimestamp = now - std::chrono::seconds(1);
   const std::chrono::system_clock::time_point maxTimestamp = now + std::chrono::seconds(1);
-  custom_assert(log.timestamp >= minTimestamp && log.timestamp <= maxTimestamp, "Log timestamp incorrect");
+  custom_assert(log.timestamp >= minTimestamp && log.timestamp <= maxTimestamp,
+                "Log timestamp incorrect");
 
   // Test LogLevelToString() method
   const std::string logLevelString = Log::LogLevelToString(LogLevel::WARNING);

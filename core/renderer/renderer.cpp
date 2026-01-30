@@ -35,7 +35,11 @@ void Renderer::setupFramebuffer(const int width, const int height) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER,
+                         GL_COLOR_ATTACHMENT0,
+                         GL_TEXTURE_2D,
+                         textureColorBuffer,
+                         0);
 
   // Create renderbuffer for depth and stencil
   glGenRenderbuffers(1, &rbo);
@@ -62,7 +66,8 @@ void Renderer::resize(const int width, const int height) {
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 }
 
-void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Scene>& scene) const {
+void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix,
+                      const std::shared_ptr<Scene>& scene) const {
   if (!scene) {
     return;
   }
@@ -73,7 +78,10 @@ void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
 
   glm::vec4 clearColor(0.1f, 0.1f, 0.1f, 1.0f);
   const auto camera = scene->world.get_component<Camera>(scene->selectedCamera);
-  clearColor = glm::vec4(camera.skyboxColor.x, camera.skyboxColor.y, camera.skyboxColor.z, camera.skyboxColor.w);
+  clearColor = glm::vec4(camera.skyboxColor.x,
+                         camera.skyboxColor.y,
+                         camera.skyboxColor.z,
+                         camera.skyboxColor.w);
 
   glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -91,12 +99,8 @@ void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
 
     auto model = glm::mat4(1.0f);
     // Apply transformations
-    model = glm::translate(model, glm::vec3(tf.position.x(),
-                                            tf.position.y(),
-                                            tf.position.z()));
-    model = glm::scale(model, glm::vec3(tf.scale.x(),
-                                        tf.scale.y(),
-                                        tf.scale.z()));
+    model = glm::translate(model, glm::vec3(tf.position.x(), tf.position.y(), tf.position.z()));
+    model = glm::scale(model, glm::vec3(tf.scale.x(), tf.scale.y(), tf.scale.z()));
     model = glm::rotate(model, glm::radians(tf.rotation.x()), glm::vec3(1.0f, 0.0f, 0.0f));
     model = glm::rotate(model, glm::radians(tf.rotation.y()), glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::rotate(model, glm::radians(tf.rotation.z()), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -108,4 +112,4 @@ void Renderer::render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-}
+}  // namespace SpaceEngine

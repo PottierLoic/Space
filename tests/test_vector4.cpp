@@ -1,5 +1,5 @@
-#include "test.hpp"
 #include "maths/vector.hpp"
+#include "test.hpp"
 
 using namespace SpaceEngine;
 
@@ -56,7 +56,8 @@ int testVector4() {
   custom_assert(vec3 == Vec4f(0.5f, 1.0f, 1.5f, 2.0f), "Vec4f /= failed");
 
   // operator[]
-  custom_assert(vec1[0] == 1.0f && vec1[1] == 2.0f && vec1[2] == 3.0f && vec1[3] == 4.0f, "Vec4f operator[] failed");
+  custom_assert(vec1[0] == 1.0f && vec1[1] == 2.0f && vec1[2] == 3.0f && vec1[3] == 4.0f,
+                "Vec4f operator[] failed");
 
   // equality
   custom_assert(vec1 == Vec4f(1.0f, 2.0f, 3.0f, 4.0f), "Vec4f equality failed");
@@ -65,7 +66,7 @@ int testVector4() {
   custom_assert(vec1 != vec2, "Vec4f inequality failed");
 
   // truncation to Vec3f
-  custom_assert(Vec3f(vec1) == Vec3f(1.0f, 2.0f,3.0f), "Vec4f to Vec3f truncation failed");
+  custom_assert(Vec3f(vec1) == Vec3f(1.0f, 2.0f, 3.0f), "Vec4f to Vec3f truncation failed");
 
   // dot product
   custom_assert(vec1.dot(vec2) == 70.0f, "Vec4f dot product failed");

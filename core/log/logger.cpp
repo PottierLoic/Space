@@ -31,7 +31,7 @@ void Logger::fatal(const std::string& message) {
 
 std::vector<Log> Logger::getLogEntries() {
   std::vector<Log> filteredLogs;
-  for (const auto& log: logEntries) {
+  for (const auto& log : logEntries) {
     if (filter.matches(log)) {
       filteredLogs.push_back(log);
     }
@@ -43,4 +43,4 @@ void Logger::clearLogEntries() {
   logEntries.clear();
 }
 
-}
+}  // namespace SpaceEngine

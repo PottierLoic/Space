@@ -9,11 +9,12 @@
 namespace SpaceEngine {
 
 class Logger {
-public:
+ public:
   static LogFilter filter;
 
   /**
-   * @brief Logs a message with the specified log level, type, title, and message.
+   * @brief Logs a message with the specified log level, type, title, and
+   * message.
    *
    * @param level The log level of the message.
    * @param type The type of the log entry.
@@ -33,8 +34,8 @@ public:
    */
   static void clearLogEntries();
 
-private:
+ private:
   static std::vector<Log> logEntries;
 };
 
-}
+}  // namespace SpaceEngine

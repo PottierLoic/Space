@@ -30,8 +30,12 @@ void EditorCamera::processMouseMovement(float xOffset, float yOffset, const bool
   pitch += yOffset;
 
   if (constrainPitch) {
-    if (pitch > 89.0f) { pitch = 89.0f; }
-    if (pitch < -89.0f) { pitch = -89.0f; }
+    if (pitch > 89.0f) {
+      pitch = 89.0f;
+    }
+    if (pitch < -89.0f) {
+      pitch = -89.0f;
+    }
   }
 
   updateCameraVectors();
@@ -39,8 +43,12 @@ void EditorCamera::processMouseMovement(float xOffset, float yOffset, const bool
 
 void EditorCamera::processMouseScroll(const float yOffset) {
   fieldOfView -= yOffset;
-  if (fieldOfView < 1.0f ) { fieldOfView = 1.0f; }
-  if (fieldOfView > 179.0f ) { fieldOfView = 179.0f; }
+  if (fieldOfView < 1.0f) {
+    fieldOfView = 1.0f;
+  }
+  if (fieldOfView > 179.0f) {
+    fieldOfView = 179.0f;
+  }
 }
 
 glm::mat4 EditorCamera::getEditorViewMatrix() const {
@@ -50,7 +58,10 @@ glm::mat4 EditorCamera::getEditorViewMatrix() const {
 
 glm::mat4 EditorCamera::getEditorProjectionMatrix() const {
   if (projectionType == ProjectionType::PERSPECTIVE) {
-    glm::mat4 projection = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
+    glm::mat4 projection = glm::perspective(glm::radians(fieldOfView),
+                                            aspectRatio,
+                                            nearPlane,
+                                            farPlane);
     projection[1][1] *= -1;
     return projection;
   }
@@ -61,4 +72,4 @@ glm::mat4 EditorCamera::getEditorProjectionMatrix() const {
   return projection;
 }
 
-}
+}  // namespace SpaceEditor

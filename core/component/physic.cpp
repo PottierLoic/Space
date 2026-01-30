@@ -9,4 +9,4 @@ Physic::Physic() {
   this->gravity = false;
 }
 
-}
+}  // namespace SpaceEngine

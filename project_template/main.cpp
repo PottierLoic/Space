@@ -1,29 +1,28 @@
-#include <string>
 #include <iostream>
+#include <string>
 
-#include "shader/shader.hpp"
-#include "scene/scene.hpp"
-#include "space/space.hpp"
-#include "model/model.hpp" // maybe removed soon
+#include "model/model.hpp"  // maybe removed soon
 #include "renderer/renderer.hpp"
+#include "scene/scene.hpp"
+#include "shader/shader.hpp"
+#include "space/space.hpp"
 
 /* TODO: REMOVE */
 /* DEBUG */
-#include "entity/entity.hpp"
-#include "component/component.hpp"
-#include "component/transform.hpp"
-#include "component/physic.hpp"
-#include "component/model_renderer.hpp"
 #include "component/camera.hpp"
-
+#include "component/component.hpp"
+#include "component/model_renderer.hpp"
+#include "component/physic.hpp"
+#include "component/transform.hpp"
+#include "entity/entity.hpp"
 
 // OPENGL TEST TODO REMOVE
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "stb_image.h"
 
 using namespace SpaceEngine;
 
@@ -46,23 +45,22 @@ int main() {
     return -1;
   }
 
-
-  #if defined(IMGUI_IMPL_OPENGL_ES2)
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-  #elif defined(__APPLE__)
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  #else
-    const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  #endif
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+  const char* glsl_version = "#version 100";
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+  const char* glsl_version = "#version 150";
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#else
+  const char* glsl_version = "#version 130";
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#endif
 
   // Create a window with graphic context
   GLFWwindow* window = glfwCreateWindow(1280, 720, "Space Engine", nullptr, nullptr);
@@ -92,7 +90,7 @@ int main() {
 
   // Initialize renderer
   renderer = std::make_unique<Renderer>();
-  if (!renderer->initialize(1920, 1080)) { // TODO: Not hardcode resolution
+  if (!renderer->initialize(1920, 1080)) {  // TODO: Not hardcode resolution
     std::cout << "Failed to initialize renderer" << std::endl;
     return -1;
   }

@@ -5,15 +5,14 @@
 namespace SpaceEngine {
 
 struct Entity {
-    u32 id{};
+  u32 id{};
 
-    bool operator==(const Entity& other) const {
-        return id == other.id;
-    }
-
-    bool operator!=(const Entity& other) const {
-        return id != other.id;
-    }
+  bool operator==(const Entity& other) const {
+    return id == other.id;
+  }
+  bool operator!=(const Entity& other) const {
+    return id != other.id;
+  }
 };
 
-}
+}  // namespace SpaceEngine
