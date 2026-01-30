@@ -57,8 +57,7 @@ int glfwButtonFromMouseButton(const MouseButton button) {
   }
 }
 
-static void glfwScrollCallback(GLFWwindow* /*window*/, const double /*xoffset*/,
-                               const double yoffset) {
+static void glfwScrollCallback(GLFWwindow*, double, const double yoffset) {
   Input::onScroll(yoffset);
 }
 

@@ -11,106 +11,102 @@ EditorGui::EditorGui(const unsigned int sceneTexture, const unsigned int renderT
 
 void EditorGui::display() {
   displayBar();
-  if (showInspector) {
-    displayInspector();
-  }
-  if (showHierarchy) {
-    displayHierarchy();
-  }
-  if (showProject) {
-    displayProject();
-  }
-  if (showRender) {
-    displayRender();
-  }
-  if (showConsole) {
-    displayConsole();
-  }
-  if (showScene) {
-    displayScene();
-  }
+  if (showInspector) displayInspector();
+  if (showHierarchy) displayHierarchy();
+  if (showProject) displayProject();
+  if (showRender) displayRender();
+  if (showConsole) displayConsole();
+  if (showScene) displayScene();
 }
 
 void EditorGui::displayBar() {
-  /* Top bar options */
-  if (ImGui::BeginMainMenuBar()) {
-    if (ImGui::BeginMenu("File")) {
-      if (ImGui::MenuItem("New", "CTRL+N")) {
-        scene = std::make_shared<Scene>();
-      }
-      if (ImGui::MenuItem("Open", "CTRL+O")) {}
-      if (ImGui::MenuItem("Save", "CTRL+S")) {}
-      if (ImGui::MenuItem("Save as", "CTRL+SHIFT+S")) {}
-      ImGui::Separator();
-      if (ImGui::MenuItem("Import", "CTRL+I???")) {}
-      if (ImGui::MenuItem("Export", "CTRL+E???")) {}
-      ImGui::Separator();
-      if (ImGui::MenuItem("Quit", "CTRL+W???")) {}
-      ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Edit")) {
-      if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-      if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}
-      ImGui::Separator();
-      if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-      if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-      if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-      ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Add")) {
-      if (ImGui::MenuItem("Empty", "??")) {
-        if (scene) {
-          Entity e = scene->world.create();
-          selectedEntity = e;
-          scene->world.add_component<Transform>(e, Transform{"new entity"});
-        }
-      }
-      ImGui::Separator();
-      // 2D Forms
-      if (ImGui::MenuItem("Circle", "??")) {}
-      if (ImGui::MenuItem("Quad", "??")) {}
-      ImGui::Separator();
-      // 3D Forms
-      if (ImGui::MenuItem("Sphere", "??")) {}
-      if (ImGui::MenuItem("Cube", "??")) {}
-      if (ImGui::MenuItem("Cylinder", "??")) {}
-      ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Window")) {
-      if (ImGui::MenuItem("Zoom in", "CTRL+PGUP")) {}
-      if (ImGui::MenuItem("Zoom out", "CTRL+PGDN")) {}
-      ImGui::Separator();
-      ImGui::Checkbox("Inspector", &showInspector);
-      ImGui::Checkbox("Hierarchy", &showHierarchy);
-      ImGui::Checkbox("Project", &showProject);
-      ImGui::Checkbox("Scene", &showScene);
-      ImGui::Checkbox("Render", &showRender);
-      ImGui::Separator();
-      if (ImGui::MenuItem("Toggle fullscreen", "F11")) {}
-      ImGui::Separator();
-      // TODO: Add layouts
-      ImGui::Separator();
-      if (ImGui::MenuItem("Reset layout", "CTRL+SHIFT+R")) {}
-      ImGui::Separator();
-      if (ImGui::Checkbox("Wireframe Mode", &polygonMode)) {
-        if (polygonMode) {
-          glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        } else {
-          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        }
-      }
-      ImGui::EndMenu();
-    }
-
+  if (!ImGui::BeginMainMenuBar()) {
     ImGui::EndMainMenuBar();
+    return;
   }
+
+  if (ImGui::BeginMenu("File")) {
+    if (ImGui::MenuItem("New", "CTRL+N")) {
+      scene = std::make_shared<Scene>();
+    }
+    if (ImGui::MenuItem("Open", "CTRL+O")) {}
+    if (ImGui::MenuItem("Save", "CTRL+S")) {}
+    if (ImGui::MenuItem("Save as", "CTRL+SHIFT+S")) {}
+    ImGui::Separator();
+    if (ImGui::MenuItem("Import", "CTRL+I???")) {}
+    if (ImGui::MenuItem("Export", "CTRL+E???")) {}
+    ImGui::Separator();
+    if (ImGui::MenuItem("Quit", "CTRL+W???")) {}
+    ImGui::EndMenu();
+  }
+
+  if (ImGui::BeginMenu("Edit")) {
+    if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+    if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}
+    ImGui::Separator();
+    if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+    if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+    if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+    ImGui::EndMenu();
+  }
+
+  if (ImGui::BeginMenu("Add")) {
+    if (ImGui::MenuItem("Empty", "??")) {
+      if (scene) {
+        Entity e = scene->world.create();
+        selectedEntity = e;
+        scene->world.add_component<Transform>(e, Transform{"new entity"});
+      }
+    }
+    ImGui::Separator();
+    // 2D Forms
+    if (ImGui::MenuItem("Circle", "??")) {}
+    if (ImGui::MenuItem("Quad", "??")) {}
+    ImGui::Separator();
+    // 3D Forms
+    if (ImGui::MenuItem("Sphere", "??")) {}
+    if (ImGui::MenuItem("Cube", "??")) {}
+    if (ImGui::MenuItem("Cylinder", "??")) {}
+    ImGui::EndMenu();
+  }
+
+  if (ImGui::BeginMenu("Window")) {
+    if (ImGui::MenuItem("Zoom in", "CTRL+PGUP")) {}
+    if (ImGui::MenuItem("Zoom out", "CTRL+PGDN")) {}
+    ImGui::Separator();
+    ImGui::Checkbox("Inspector", &showInspector);
+    ImGui::Checkbox("Hierarchy", &showHierarchy);
+    ImGui::Checkbox("Project", &showProject);
+    ImGui::Checkbox("Scene", &showScene);
+    ImGui::Checkbox("Render", &showRender);
+    ImGui::Separator();
+    if (ImGui::MenuItem("Toggle fullscreen", "F11")) {}
+    ImGui::Separator();
+    // TODO: Add layouts
+    ImGui::Separator();
+    if (ImGui::MenuItem("Reset layout", "CTRL+SHIFT+R")) {}
+    ImGui::Separator();
+    if (ImGui::Checkbox("Wireframe Mode", &polygonMode)) {
+      if (polygonMode) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      }
+    }
+    ImGui::EndMenu();
+  }
+
+  ImGui::EndMainMenuBar();
 }
 
 void EditorGui::displayInspector() {
   if (!ImGui::Begin("Inspector")) {
+    ImGui::End();
+    return;
+  }
+
+  if (!scene) {
+    ImGui::TextDisabled("No scene loaded");
     ImGui::End();
     return;
   }
@@ -132,84 +128,108 @@ void EditorGui::displayInspector() {
 }
 
 void EditorGui::displayHierarchy() {
-  if (ImGui::Begin("Hierarchy")) {
-    if (scene) {
-      int index = 0;
-      for (auto entity : scene->world.view<Transform>()) {
-        std::string uniqueLabel = scene->world.get_component<Transform>(entity).name + "##" +
-                                  std::to_string(index);
-        if (ImGui::Selectable(uniqueLabel.c_str(), selectedEntity == entity)) {
-          selectedEntity = entity;
-        }
-        index++;
-      }
+  if (!ImGui::Begin("Hierarchy")) {
+    ImGui::End();
+    return;
+  }
+
+  if (!scene) {
+    ImGui::TextDisabled("No scene loaded");
+    ImGui::End();
+    return;
+  }
+
+  for (Entity entity : scene->world.view<Transform>()) {
+    const auto& transform = scene->world.get_component<Transform>(entity);
+    ImGui::PushID(entity.id);
+    if (ImGui::Selectable(transform.name.c_str(), selectedEntity == entity)) {
+      selectedEntity = entity;
     }
+    ImGui::PopID();
   }
   ImGui::End();
 }
 
 void EditorGui::displayProject() const {
-  if (ImGui::Begin("Project")) {
-    // TODO: Display project tree
+  if (!ImGui::Begin("Project")) {
+    ImGui::End();
+    return;
   }
+  // TODO: Display project tree
   ImGui::End();
 }
 
 void EditorGui::displayRender() const {
-  if (ImGui::Begin("Render")) {
-    if (scene) {
-      const ImVec2 window_size = ImGui::GetContentRegionAvail();
-      constexpr float aspect_ratio = 1920.0f / 1080.0f;
-      const float window_aspect_ratio = window_size.x / window_size.y;
-
-      ImVec2 image_size;
-      if (window_aspect_ratio > aspect_ratio) {
-        image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
-      } else {
-        image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
-      }
-
-      ImGui::Image(reinterpret_cast<void*>(renderTexture), image_size);
-    }
+  if (!ImGui::Begin("Render")) {
+    ImGui::End();
+    return;
   }
+
+  if (!scene) {
+    ImGui::TextDisabled("No scene loaded");
+    ImGui::End();
+    return;
+  }
+
+  const ImVec2 window_size = ImGui::GetContentRegionAvail();
+  constexpr float aspect_ratio = 1920.0f / 1080.0f;
+  const float window_aspect_ratio = window_size.x / window_size.y;
+
+  ImVec2 image_size;
+  if (window_aspect_ratio > aspect_ratio) {
+    image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+  } else {
+    image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+  }
+
+  ImGui::Image(reinterpret_cast<void*>(renderTexture), image_size);
   ImGui::End();
 }
 
 void EditorGui::displayConsole() {
-  if (ImGui::Begin("Console")) {
-    ImGui::Text("Search: ");
-    ImGui::SameLine();
-    ImGui::InputText("##log_search", &Logger::filter.keyword);
-    ImGui::SeparatorText("Logs");
-    for (const auto& log : Logger::getLogEntries()) {
-      std::string text = log.toString();
-      ImGui::Text("%s", text.c_str());
-    }
+  if (!ImGui::Begin("Console")) {
+    ImGui::End();
+    return;
+  }
+
+  ImGui::Text("Search: ");
+  ImGui::SameLine();
+  ImGui::InputText("##log_search", &Logger::filter.keyword);
+  ImGui::SeparatorText("Logs");
+  for (const auto& log : Logger::getLogEntries()) {
+    std::string text = log.toString();
+    ImGui::Text("%s", text.c_str());
   }
   ImGui::End();
 }
 
 void EditorGui::displayScene() {
-  if (showScene) {
-    ImGui::Begin("Scene");
-    if (scene) {
-      sceneHovered = ImGui::IsWindowHovered();
-
-      const ImVec2 window_size = ImGui::GetContentRegionAvail();
-      constexpr float aspect_ratio = 1920.0f / 1080.0f;
-      const float window_aspect_ratio = window_size.x / window_size.y;
-
-      ImVec2 image_size;
-      if (window_aspect_ratio > aspect_ratio) {
-        image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
-      } else {
-        image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
-      }
-
-      ImGui::Image(reinterpret_cast<void*>(sceneTexture), image_size);
-    }
+  if (!ImGui::Begin("Scene")) {
     ImGui::End();
+    return;
   }
+
+  if (!scene) {
+    ImGui::TextDisabled("No scene loaded");
+    ImGui::End();
+    return;
+  }
+
+  sceneHovered = ImGui::IsWindowHovered();
+
+  const ImVec2 window_size = ImGui::GetContentRegionAvail();
+  constexpr float aspect_ratio = 1920.0f / 1080.0f;
+  const float window_aspect_ratio = window_size.x / window_size.y;
+
+  ImVec2 image_size;
+  if (window_aspect_ratio > aspect_ratio) {
+    image_size = ImVec2(window_size.y * aspect_ratio, window_size.y);
+  } else {
+    image_size = ImVec2(window_size.x, window_size.x / aspect_ratio);
+  }
+
+  ImGui::Image(reinterpret_cast<void*>(sceneTexture), image_size);
+  ImGui::End();
 }
 
 void EditorGui::cherryTheme() {

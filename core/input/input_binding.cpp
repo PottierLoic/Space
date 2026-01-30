@@ -118,61 +118,55 @@ void Input::clearAllBindings() {
 }
 
 void Input::simulateKey(const KeyCode key, const InputEventType type) {
-  for (const auto& binding : s_keyBindings[key]) {
+  for (auto& binding : s_keyBindings[key]) {
     if (!binding.enabled) continue;
-    if (binding.type == type) {
-      if (binding.remainingCalls == 0) continue;
-      binding.callback();
-      binding.remainingCalls -= 1;
-    }
+    if (binding.type != type) continue;
+    if (binding.remainingCalls == 0) continue;
+    binding.callback();
+    --binding.remainingCalls;
   }
 }
 
 void Input::simulateMouseButton(const MouseButton button, const InputEventType type) {
-  for (const auto& binding : s_mouseBindings[button]) {
+  for (auto& binding : s_mouseBindings[button]) {
     if (!binding.enabled) continue;
-    if (binding.type == type) {
-      if (binding.remainingCalls == 0) continue;
-      binding.callback();
-      binding.remainingCalls -= 1;
-    }
+    if (binding.type != type) continue;
+    if (binding.remainingCalls == 0) continue;
+    binding.callback();
+    --binding.remainingCalls;
   }
 }
 
 void Input::enableBinding(const std::size_t id) {
   for (auto& bindings : s_keyBindings | std::views::values) {
-    for (const auto& binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = true;
-        return;
-      }
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = true;
+      return;
     }
   }
   for (auto& bindings : s_mouseBindings | std::views::values) {
-    for (const auto& binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = true;
-        return;
-      }
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = true;
+      return;
     }
   }
 }
 
 void Input::disableBinding(const std::size_t id) {
   for (auto& bindings : s_keyBindings | std::views::values) {
-    for (const auto& binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = false;
-        return;
-      }
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = false;
+      return;
     }
   }
   for (auto& bindings : s_mouseBindings | std::views::values) {
-    for (const auto& binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = false;
-        return;
-      }
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = false;
+      return;
     }
   }
 }

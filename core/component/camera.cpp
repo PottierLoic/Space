@@ -19,20 +19,23 @@ glm::mat4 Camera::getViewMatrix(const World& world, Entity e) const {
 }
 
 glm::mat4 Camera::getProjectionMatrix() const {
-  if (projectionType == ProjectionType::PERSPECTIVE) {
-    glm::mat4 projection = glm::perspective(glm::radians(fieldOfView),
-                                            aspectRatio,
-                                            nearPlane,
-                                            farPlane);
-    projection[1][1] *= -1;
-    return projection;
-  } else {
-    const float width = orthographicSize * aspectRatio;
-    const float height = orthographicSize;
-    glm::mat4 projection = glm::ortho(-width, width, -height, height, nearPlane, farPlane);
-    projection[1][1] *= -1;
-    return projection;
+  glm::mat4 projection;
+  switch (projectionType) {
+    case ProjectionType::PERSPECTIVE:
+      projection = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
+      break;
+    case ProjectionType::ORTHOGRAPHIC:
+      projection = glm::ortho(-orthographicSize * aspectRatio,
+                              orthographicSize * aspectRatio,
+                              -orthographicSize,
+                              orthographicSize,
+                              nearPlane,
+                              farPlane);
+      break;
   }
+
+  projection[1][1] *= -1;
+  return projection;
 }
 
 void Camera::updateCameraVectors() {
