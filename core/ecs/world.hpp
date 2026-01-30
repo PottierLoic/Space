@@ -1,179 +1,190 @@
 #pragma once
 
-#include <unordered_map>
-#include <typeindex>
 #include <memory>
+#include <typeindex>
+#include <unordered_map>
 
-#include "types/types.hpp"
 #include "entity.hpp"
 #include "storage.hpp"
+#include "types/types.hpp"
 
 namespace SpaceEngine {
 
 class World {
-private:
-    std::unordered_map<std::type_index, std::unique_ptr<IStorage>> storages;
-    u32 next_id = 0;
+ private:
+  std::unordered_map<std::type_index, std::unique_ptr<IStorage>> storages;
+  u32 next_id = 0;
 
-    template<typename T>
-    Storage<T>& storage() {
-        auto key = std::type_index(typeid(T));
-        auto it = storages.find(key);
-        if (it == storages.end()) {
-            auto ptr = std::make_unique<Storage<T>>();
-            auto *raw = ptr.get();
-            storages.emplace(key, std::move(ptr));
-            return *raw;
-        }
-        return *static_cast<Storage<T>*>(it->second.get());
+  template <typename T>
+  Storage<T>& storage() {
+    auto key = std::type_index(typeid(T));
+    auto it = storages.find(key);
+    if (it == storages.end()) {
+      auto ptr = std::make_unique<Storage<T>>();
+      auto* raw = ptr.get();
+      storages.emplace(key, std::move(ptr));
+      return *raw;
     }
+    return *static_cast<Storage<T>*>(it->second.get());
+  }
 
-    template<typename T>
-    const Storage<T>& storage() const {
-        return const_cast<World*>(this)->storage<T>();
+  template <typename T>
+  const Storage<T>& storage() const {
+    return const_cast<World*>(this)->storage<T>();
+  }
+
+ public:
+  World() = default;
+  ~World() = default;
+
+  Entity create() {
+    u32 id = next_id++;
+    return Entity{id};
+  }
+
+  void destroy(Entity e) {
+    for (auto& [_, storage] : storages) {
+      storage->remove(e.id);
     }
+  }
 
-public:
-    World() = default;
-    ~World() = default;
+  template <typename T>
+  bool has_component(Entity e) const {
+    return storage<T>().has(e.id);
+  }
 
-    Entity create() {
-        u32 id = next_id++;
-        return Entity{id};
-    }
+  template <typename T>
+  T& add_component(Entity e, T value) {
+    return storage<T>().add(e.id, std::move(value));
+  }
 
-    void destroy(Entity e) {
-        for (auto& [_, storage] : storages) {
-            storage->remove(e.id);
-        }
-    }
+  template <typename T>
+  void remove_component(Entity e) {
+    storage<T>().remove(e.id);
+  }
 
-    template<typename T>
-    bool has_component(Entity e) const {
-        return storage<T>().has(e.id);
-    }
+  template <typename T>
+  T& get_component(Entity e) {
+    return storage<T>().get(e.id);
+  }
 
-    template<typename T>
-    T& add_component(Entity e, T value) {
-        return storage<T>().add(e.id, std::move(value));
-    }
+  template <typename T>
+  const T& get_component(Entity e) const {
+    return storage<T>().get(e.id);
+  }
 
-    template<typename T>
-    void remove_component(Entity e) {
-        storage<T>().remove(e.id);
-    }
+  template <typename T>
+  class View1 {
+   public:
+    explicit View1(const World& w) : world(w), st(&w.storage<T>()) {}
 
-    template<typename T>
-    T& get_component(Entity e) {
-        return storage<T>().get(e.id);
-    }
+    class Iterator {
+     public:
+      using MapIt = typename std::unordered_map<u32, T>::const_iterator;
+      Iterator(const World& w, const std::unordered_map<u32, T>* map, MapIt it, MapIt end)
+          : world(w), map(map), it(it), end(end) {}
+      Entity operator*() const {
+        return Entity{it->first};
+      }
+      Iterator& operator++() {
+        ++it;
+        return *this;
+      }
+      bool operator!=(const Iterator& other) const {
+        return it != other.it;
+      }
 
-    template<typename T>
-    const T& get_component(Entity e) const {
-        return storage<T>().get(e.id);
-    }
-
-    template<typename T>
-    class View1 {
-    public:
-        explicit View1(const World& w) : world(w), st(&w.storage<T>()) {}
-
-        class Iterator {
-        public:
-            using MapIt = typename std::unordered_map<u32, T>::const_iterator;
-            Iterator(const World& w, const std::unordered_map<u32, T>* map, MapIt it, MapIt end): world(w), map(map), it(it), end(end) {}
-            Entity operator*() const { return Entity{ it->first }; }
-            Iterator& operator++() {
-                ++it;
-                return *this;
-            }
-            bool operator !=(const Iterator& other) const { return it != other.it; }
-        private:
-            const World& world;
-            const std::unordered_map<u32, T>* map;
-            MapIt it;
-            MapIt end;
-        };
-
-        Iterator begin() const {
-            const auto& m = st-> raw();
-            return Iterator{ world, &m, m.begin(), m.end() };
-        }
-
-        Iterator end() const {
-            const auto& m = st->raw();
-            return Iterator{ world, &m, m.end(), m.end() };
-        }
-
-    private:
-        const World& world;
-        const Storage<T>* st;
+     private:
+      const World& world;
+      const std::unordered_map<u32, T>* map;
+      MapIt it;
+      MapIt end;
     };
 
-    template<typename A, typename B>
-    class View2 {
-    public:
-        explicit View2(const World& w) : world(w), a(&w.storage<A>()) {}
+    Iterator begin() const {
+      const auto& m = st->raw();
+      return Iterator{world, &m, m.begin(), m.end()};
+    }
 
-        class Iterator {
-        public:
-            using MapIt = typename std::unordered_map<u32, A>::const_iterator;
+    Iterator end() const {
+      const auto& m = st->raw();
+      return Iterator{world, &m, m.end(), m.end()};
+    }
 
-            Iterator(const World& w,
-                     const std::unordered_map<u32, A>* amap,
-                     MapIt it,
-                     MapIt end)
-                    : world(w), amap(amap), it(it), end(end) {
-                skip_invalid();
-            }
+   private:
+    const World& world;
+    const Storage<T>* st;
+  };
 
-            Entity operator*() const { return Entity{ it->first }; }
+  template <typename A, typename B>
+  class View2 {
+   public:
+    explicit View2(const World& w) : world(w), a(&w.storage<A>()) {}
 
-            Iterator& operator++() {
-                ++it;
-                skip_invalid();
-                return *this;
-            }
+    class Iterator {
+     public:
+      using MapIt = typename std::unordered_map<u32, A>::const_iterator;
 
-            bool operator!=(const Iterator& other) const { return it != other.it; }
+      Iterator(const World& w, const std::unordered_map<u32, A>* amap, MapIt it, MapIt end)
+          : world(w), amap(amap), it(it), end(end) {
+        skip_invalid();
+      }
 
-        private:
-            void skip_invalid() {
-                while (it != end) {
-                    Entity e{ it->first };
-                    if (world.has_component<B>(e)) {
-                        return;
-                    }
-                    ++it;
-                }
-            }
+      Entity operator*() const {
+        return Entity{it->first};
+      }
 
-            const World& world;
-            const std::unordered_map<u32, A>* amap;
-            MapIt it;
-            MapIt end;
-        };
+      Iterator& operator++() {
+        ++it;
+        skip_invalid();
+        return *this;
+      }
 
-        Iterator begin() const {
-            const auto& m = a->raw();
-            return Iterator(world, &m, m.begin(), m.end());
+      bool operator!=(const Iterator& other) const {
+        return it != other.it;
+      }
+
+     private:
+      void skip_invalid() {
+        while (it != end) {
+          Entity e{it->first};
+          if (world.has_component<B>(e)) {
+            return;
+          }
+          ++it;
         }
+      }
 
-        Iterator end() const {
-            const auto& m = a->raw();
-            return Iterator(world, &m, m.end(), m.end());
-        }
-
-    private:
-        const World& world;
-        const Storage<A>* a;
+      const World& world;
+      const std::unordered_map<u32, A>* amap;
+      MapIt it;
+      MapIt end;
     };
 
-    template<typename T>
-    View1<T> view() const { return View1<T>(*this); }
+    Iterator begin() const {
+      const auto& m = a->raw();
+      return Iterator(world, &m, m.begin(), m.end());
+    }
 
-    template<typename A, typename B>
-    View2<A, B> view() const { return View2<A, B>(*this); }
+    Iterator end() const {
+      const auto& m = a->raw();
+      return Iterator(world, &m, m.end(), m.end());
+    }
+
+   private:
+    const World& world;
+    const Storage<A>* a;
+  };
+
+  template <typename T>
+  View1<T> view() const {
+    return View1<T>(*this);
+  }
+
+  template <typename A, typename B>
+  View2<A, B> view() const {
+    return View2<A, B>(*this);
+  }
 };
 
-}
+}  // namespace SpaceEngine

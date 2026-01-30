@@ -1,5 +1,5 @@
-#include "test.hpp"
 #include "input/input.hpp"
+#include "test.hpp"
 
 using namespace SpaceEngine;
 
@@ -9,12 +9,14 @@ int testInputBinding() {
   int onceCallCount = 0;
 
   // Bind to key
-  const auto keyId = Input::bindKey(KeyCode::A, [&]() { keyCallCount++; }, -1, InputEventType::OnPress);
+  const auto
+      keyId = Input::bindKey(KeyCode::A, [&]() { keyCallCount++; }, -1, InputEventType::OnPress);
   Input::simulateKey(KeyCode::A);
   custom_assert(keyCallCount == 1, "Key binding did not trigger");
 
   // Bind to mouse button
-  const auto mouseId = Input::bindMouseButton(MouseButton::Left, [&]() { mouseCallCount++; }, -1, InputEventType::OnPress);
+  const auto mouseId = Input::
+      bindMouseButton(MouseButton::Left, [&]() { mouseCallCount++; }, -1, InputEventType::OnPress);
   Input::simulateMouseButton(MouseButton::Left);
   custom_assert(mouseCallCount == 1, "Mouse binding did not trigger");
 
@@ -46,7 +48,8 @@ int testInputBinding() {
 
   // Rebind for clearing tests
   Input::bindKey(KeyCode::C, [&]() { keyCallCount++; }, -1, InputEventType::OnPress);
-  Input::bindMouseButton(MouseButton::Right, [&]() { mouseCallCount++; }, -1, InputEventType::OnPress);
+  Input::
+      bindMouseButton(MouseButton::Right, [&]() { mouseCallCount++; }, -1, InputEventType::OnPress);
   Input::clearKeyBindings();
   Input::clearMouseButtonBindings();
   Input::simulateKey(KeyCode::C);
@@ -56,7 +59,8 @@ int testInputBinding() {
 
   // Final cleanup
   Input::bindKey(KeyCode::D, [&]() { keyCallCount++; }, -1, InputEventType::OnPress);
-  Input::bindMouseButton(MouseButton::Button4, [&]() { mouseCallCount++; }, -1, InputEventType::OnPress);
+  Input::bindMouseButton(
+      MouseButton::Button4, [&]() { mouseCallCount++; }, -1, InputEventType::OnPress);
   Input::clearAllBindings();
   Input::simulateKey(KeyCode::D);
   custom_assert(keyCallCount == 2, "All bindings should have been cleared");

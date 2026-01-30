@@ -49,4 +49,4 @@ struct Script {
   virtual void onEnable();
 };
 
-}
+}  // namespace SpaceEngine

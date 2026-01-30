@@ -1,7 +1,7 @@
-#include <iostream>
-#include <iomanip>
 #include <cstring>
 #include <filesystem>
+#include <iomanip>
+#include <iostream>
 
 extern int testVector2();
 extern int testVector3();
@@ -17,13 +17,13 @@ struct TestFunction {
 };
 
 TestFunction test_fn[] = {
-  {"testVector2", testVector2},
-  {"testVector3", testVector3},
-  {"testVector4", testVector4},
-  {"testLog", testLog},
-  {"testLogger", testLogger},
-  {"TestTime", testTime},
-  {"testInputBinding", testInputBinding},
+    {"testVector2", testVector2},
+    {"testVector3", testVector3},
+    {"testVector4", testVector4},
+    {"testLog", testLog},
+    {"testLogger", testLogger},
+    {"TestTime", testTime},
+    {"testInputBinding", testInputBinding},
 };
 
 void run_all_tests() {
@@ -31,15 +31,15 @@ void run_all_tests() {
   std::cout << "\033[1;37mRunning tests . . .\033[0m" << std::endl;
 
   size_t max_length = 0;
-  for (const auto&[name, function] : test_fn) {
+  for (const auto& [name, function] : test_fn) {
     if (const size_t test_length = strlen(name); test_length > max_length) {
       max_length = test_length;
     }
   }
 
-  for (const auto&[name, function] : test_fn) {
-    std::cout <<
-      "\033[1;37mRunning test: " << std::setw(static_cast<int>(max_length)) << std::left << name << "         \033[0m";
+  for (const auto& [name, function] : test_fn) {
+    std::cout << "\033[1;37mRunning test: " << std::setw(static_cast<int>(max_length)) << std::left
+              << name << "         \033[0m";
     if (const int result = function(); result == 0) {
       std::cout << "\033[1;32mPassed\033[0m" << std::endl;
     } else {
@@ -62,8 +62,7 @@ int main() {
   try {
     std::filesystem::remove_all((sourceDir / "generated").string());
     std::filesystem::create_directory((sourceDir / "generated").string());
-  }
-  catch(const std::exception& e) {
+  } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';
   }
 

@@ -18,16 +18,19 @@
 namespace SpaceEngine {
 
 class Renderer {
-public:
+ public:
   Renderer();
   ~Renderer();
 
   bool initialize(int width, int height);
-  void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Scene>& scene) const;
-  [[nodiscard]] unsigned int getRenderedTexture() const { return textureColorBuffer; }
+  void render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix,
+              const std::shared_ptr<Scene>& scene) const;
+  [[nodiscard]] unsigned int getRenderedTexture() const {
+    return textureColorBuffer;
+  }
   void resize(int width, int height);
 
-private:
+ private:
   void setupFramebuffer(int width, int height);
 
   unsigned int fbo;
@@ -38,4 +41,4 @@ private:
   int viewportHeight;
 };
 
-}
+}  // namespace SpaceEngine

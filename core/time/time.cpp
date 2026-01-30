@@ -45,4 +45,4 @@ void Time::setTimeScale(const float scale) {
   s_timeScale = scale;
 }
 
-}
+}  // namespace SpaceEngine

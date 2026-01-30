@@ -25,4 +25,4 @@ bool LogFilter::matches(const Log& log) const {
   return matchesLevel && matchesType && matchesKeyword;
 }
 
-}
+}  // namespace SpaceEngine

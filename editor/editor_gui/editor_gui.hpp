@@ -1,32 +1,30 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
 #include <functional>
 #include <memory>
 #include <optional>
+#include <string>
+#include <unordered_map>
 
+#include "component/camera.hpp"
+#include "component/light.hpp"
+#include "component/model_renderer.hpp"
+#include "component/physic.hpp"
+#include "component/transform.hpp"
+#include "ecs/world.hpp"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_stdlib.h"
-
 #include "log/logger.hpp"
 #include "scene/scene.hpp"
-#include "ecs/world.hpp"
 
-#include "component/transform.hpp"
-#include "component/camera.hpp"
-#include "component/physic.hpp"
-#include "component/model_renderer.hpp"
-#include "component/light.hpp"
-
-using SpaceEngine::Scene;
-using SpaceEngine::World;
-using SpaceEngine::Entity;
-using SpaceEngine::Transform;
-using SpaceEngine::Physic;
-using SpaceEngine::ModelRenderer;
 using SpaceEngine::Camera;
+using SpaceEngine::Entity;
 using SpaceEngine::Logger;
+using SpaceEngine::ModelRenderer;
+using SpaceEngine::Physic;
+using SpaceEngine::Scene;
+using SpaceEngine::Transform;
+using SpaceEngine::World;
 
 namespace SpaceEditor {
 
@@ -37,7 +35,6 @@ class EditorGui {
   bool showScene = true;
   bool showRender = true;
   bool showConsole = true;
-//  bool showResourceManager = false; // TODO: introduce back when refactor complete
 
   bool polygonMode = true;
   unsigned int sceneTexture;
@@ -53,9 +50,8 @@ class EditorGui {
   void displayScene();
   void displayRender() const;
   void displayConsole();
-//  void displayResourceManager(); // TODO: introduce back when refactor complete
 
-public:
+ public:
   std::shared_ptr<Scene> scene = nullptr;
 
   std::optional<Entity> selectedEntity;
@@ -70,4 +66,4 @@ public:
   static void cherryTheme();
 };
 
-}
+}  // namespace SpaceEditor

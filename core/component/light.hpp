@@ -4,11 +4,7 @@
 
 namespace SpaceEngine {
 
-enum LightType {
-  POINT,
-  DIRECTIONAL,
-  SPOT
-};
+enum LightType { POINT, DIRECTIONAL, SPOT };
 
 struct Light {
   float intensity = 1.0f;
@@ -22,4 +18,4 @@ struct Light {
   Light();
 };
 
-}
+}  // namespace SpaceEngine

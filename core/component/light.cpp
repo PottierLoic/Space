@@ -2,8 +2,6 @@
 
 namespace SpaceEngine {
 
-Light::Light() {
+Light::Light() {}
 
-}
-
-}
+}  // namespace SpaceEngine

@@ -5,9 +5,11 @@ namespace SpaceEngine {
 std::unordered_map<KeyCode, std::vector<Binding>> Input::s_keyBindings;
 std::unordered_map<MouseButton, std::vector<Binding>> Input::s_mouseBindings;
 
-
-std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description, const bool enabled) {
-  if (remainingCalls == 0) throw std::invalid_argument("[Input] Cannot bind key with 0 remaining calls.");
+std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback,
+                           const int remainingCalls, const InputEventType type,
+                           const std::string& description, const bool enabled) {
+  if (remainingCalls == 0)
+    throw std::invalid_argument("[Input] Cannot bind key with 0 remaining calls.");
   Binding binding;
   binding.id = s_nextBindingId++;
   binding.description = description;
@@ -19,8 +21,11 @@ std::size_t Input::bindKey(const KeyCode key, std::function<void()> callback, co
   return binding.id;
 }
 
-std::size_t Input::bindMouseButton(const MouseButton button, std::function<void()> callback, const int remainingCalls, const InputEventType type, const std::string &description, const bool enabled) {
-  if (remainingCalls == 0) throw std::invalid_argument("[Input] Cannot bind mouse button with 0 remaining calls.");
+std::size_t Input::bindMouseButton(const MouseButton button, std::function<void()> callback,
+                                   const int remainingCalls, const InputEventType type,
+                                   const std::string& description, const bool enabled) {
+  if (remainingCalls == 0)
+    throw std::invalid_argument("[Input] Cannot bind mouse button with 0 remaining calls.");
   Binding binding;
   binding.id = s_nextBindingId++;
   binding.description = description;
@@ -43,7 +48,8 @@ void Input::dispatchBindings() {
       try {
         binding.callback();
       } catch (const std::exception& e) {
-        Logger::error(std::string("[Input] Exception in key callback: ") + e.what() + "\n" + "std::weak_ptr should be used instead of raw pointers");
+        Logger::error(std::string("[Input] Exception in key callback: ") + e.what() + "\n" +
+                      "std::weak_ptr should be used instead of raw pointers");
       } catch (...) {
         Logger::error("[Input] Unknown exception in key callback.");
       }
@@ -61,7 +67,8 @@ void Input::dispatchBindings() {
       try {
         binding.callback();
       } catch (const std::exception& e) {
-        Logger::error(std::string("[Input] Exception in key callback: ") + e.what() + "\n" + "std::weak_ptr should be used instead of raw pointers");
+        Logger::error(std::string("[Input] Exception in key callback: ") + e.what() + "\n" +
+                      "std::weak_ptr should be used instead of raw pointers");
       } catch (...) {
         Logger::error("[Input] Unknown exception in key callback.");
       }
@@ -71,7 +78,7 @@ void Input::dispatchBindings() {
 }
 
 void Input::unbind(const size_t id) {
-  for (auto &bindings: s_keyBindings | std::views::values) {
+  for (auto& bindings : s_keyBindings | std::views::values) {
     for (auto it = bindings.begin(); it != bindings.end(); ++it) {
       if (it->id == id) {
         bindings.erase(it);
@@ -79,7 +86,7 @@ void Input::unbind(const size_t id) {
       }
     }
   }
-  for (auto &bindings: s_mouseBindings | std::views::values) {
+  for (auto& bindings : s_mouseBindings | std::views::values) {
     for (auto it = bindings.begin(); it != bindings.end(); ++it) {
       if (it->id == id) {
         bindings.erase(it);
@@ -111,63 +118,57 @@ void Input::clearAllBindings() {
 }
 
 void Input::simulateKey(const KeyCode key, const InputEventType type) {
-  for (const auto& binding : s_keyBindings[key]) {
+  for (auto& binding : s_keyBindings[key]) {
     if (!binding.enabled) continue;
-    if (binding.type == type) {
-      if (binding.remainingCalls == 0) continue;
-      binding.callback();
-      binding.remainingCalls -= 1;
-    }
+    if (binding.type != type) continue;
+    if (binding.remainingCalls == 0) continue;
+    binding.callback();
+    --binding.remainingCalls;
   }
 }
 
 void Input::simulateMouseButton(const MouseButton button, const InputEventType type) {
-  for (const auto& binding : s_mouseBindings[button]) {
+  for (auto& binding : s_mouseBindings[button]) {
     if (!binding.enabled) continue;
-    if (binding.type == type) {
-      if (binding.remainingCalls == 0) continue;
-      binding.callback();
-      binding.remainingCalls -= 1;
-    }
+    if (binding.type != type) continue;
+    if (binding.remainingCalls == 0) continue;
+    binding.callback();
+    --binding.remainingCalls;
   }
 }
 
 void Input::enableBinding(const std::size_t id) {
-  for (auto &bindings: s_keyBindings | std::views::values) {
-    for (const auto &binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = true;
-        return;
-      }
+  for (auto& bindings : s_keyBindings | std::views::values) {
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = true;
+      return;
     }
   }
-  for (auto &bindings: s_mouseBindings | std::views::values) {
-    for (const auto &binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = true;
-        return;
-      }
+  for (auto& bindings : s_mouseBindings | std::views::values) {
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = true;
+      return;
     }
   }
 }
 
 void Input::disableBinding(const std::size_t id) {
-  for (auto &bindings: s_keyBindings | std::views::values) {
-    for (const auto &binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = false;
-        return;
-      }
+  for (auto& bindings : s_keyBindings | std::views::values) {
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = false;
+      return;
     }
   }
-  for (auto &bindings: s_mouseBindings | std::views::values) {
-    for (const auto &binding : bindings) {
-      if (binding.id == id) {
-        binding.enabled = false;
-        return;
-      }
+  for (auto& bindings : s_mouseBindings | std::views::values) {
+    for (auto& binding : bindings) {
+      if (binding.id != id) continue;
+      binding.enabled = false;
+      return;
     }
   }
 }
 
-}
+}  // namespace SpaceEngine

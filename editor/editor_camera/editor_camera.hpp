@@ -2,20 +2,14 @@
 
 #include <vector>
 
+#include "component/camera.hpp"
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "component/camera.hpp"
-
 namespace SpaceEditor {
 
-enum CameraMovement {
-  FORWARD,
-  BACKWARD,
-  LEFT,
-  RIGHT
-};
+enum CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT };
 
 constexpr float SPEED = 2.5f;
 constexpr float SENSITIVITY = 0.1f;
@@ -37,17 +31,21 @@ constexpr float SENSITIVITY = 0.1f;
  * - zoom (float): The zoom level of the camera.
  *
  * Methods:
- * - EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): Constructor with vector.
+ * - EditorCamera(glm::vec3 position, glm::vec3 up, float yaw, float pitch):
+ * Constructor with vector.
  * - glm::mat4 getViewMatrix(): Get the view matrix of the camera.
- * - void processKeyboard(CameraMovement direction, float deltaTime): Process keyboard input to move the camera.
- * - void processMouseMovement(float xOffset, float yOffset, bool constrainPitch = true): Process mouse movement to update camera angles.
- * - void processMouseScroll(float yOffset): Process mouse scroll to update zoom level.
+ * - void processKeyboard(CameraMovement direction, float deltaTime): Process
+ * keyboard input to move the camera.
+ * - void processMouseMovement(float xOffset, float yOffset, bool constrainPitch
+ * = true): Process mouse movement to update camera angles.
+ * - void processMouseScroll(float yOffset): Process mouse scroll to update zoom
+ * level.
  */
 class EditorCamera final : public SpaceEngine::Camera {
-public:
-  glm::vec3 position{};         /* The position of the camera. */
-  float movementSpeed = SPEED;        /* The speed at which the camera moves. */
-  float mouseSensitivity = SENSITIVITY;     /* The sensitivity of the mouse movement. */
+ public:
+  glm::vec3 position{};                 /* The position of the camera. */
+  float movementSpeed = SPEED;          /* The speed at which the camera moves. */
+  float mouseSensitivity = SENSITIVITY; /* The sensitivity of the mouse movement. */
 
   /**
    * @brief Constructor with vector.
@@ -56,7 +54,8 @@ public:
 
   /**
    * @brief Process keyboard input to move the camera.
-   * @param direction: The direction of movement (FORWARD, BACKWARD, LEFT, RIGHT).
+   * @param direction: The direction of movement (FORWARD, BACKWARD, LEFT,
+   * RIGHT).
    * @param deltaTime: Time between the current frame and the last frame.
    */
   void processKeyboard(enum CameraMovement direction, float deltaTime);
@@ -75,7 +74,7 @@ public:
    */
   void processMouseScroll(float yOffset);
 
-    /**
+  /**
    * @brief Get the view matrix of the camera.
    * @return The view matrix.
    */
@@ -88,4 +87,4 @@ public:
   [[nodiscard]] glm::mat4 getEditorProjectionMatrix() const;
 };
 
-}
+}  // namespace SpaceEditor

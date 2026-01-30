@@ -1,18 +1,18 @@
 #pragma once
 
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
 
+#include "component/camera.hpp"
+#include "component/transform.hpp"
 #include "ecs/entity.hpp"
 #include "ecs/world.hpp"
-#include "component/transform.hpp"
-#include "component/camera.hpp"
 
 namespace SpaceEngine {
 
-class Scene{
-public:
+class Scene {
+ public:
   std::string name;
 
   World world;
@@ -22,4 +22,4 @@ public:
   Scene();
 };
 
-}
+}  // namespace SpaceEngine

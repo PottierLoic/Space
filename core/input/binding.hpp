@@ -4,11 +4,7 @@
 
 namespace SpaceEngine {
 
-enum class InputEventType {
-  OnPress,
-  OnRelease,
-  OnHold
-};
+enum class InputEventType { OnPress, OnRelease, OnHold };
 
 struct Binding {
   std::size_t id = 0;
@@ -19,4 +15,4 @@ struct Binding {
   InputEventType type = InputEventType::OnPress;
 };
 
-}
+}  // namespace SpaceEngine

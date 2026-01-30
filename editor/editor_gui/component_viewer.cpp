@@ -4,8 +4,8 @@ namespace SpaceEditor {
 
 void EditorGui::initComponentViewers() {
   this->componentViewers[std::type_index(typeid(Transform))] = [](World& world, Entity e) {
-      if (!world.has_component<Transform>(e)) return;
-      auto& transform = world.get_component<Transform>(e);
+    if (!world.has_component<Transform>(e)) return;
+    auto& transform = world.get_component<Transform>(e);
     if (ImGui::CollapsingHeader("Transform")) {
       ImGui::Text("Name");
       ImGui::SameLine(100);
@@ -38,9 +38,9 @@ void EditorGui::initComponentViewers() {
   };
 
   this->componentViewers[std::type_index(typeid(Physic))] = [](World& world, Entity e) {
-      if (!world.has_component<Physic>(e)) return;
-      auto& physic = world.get_component<Physic>(e);
-      if (ImGui::CollapsingHeader("Physic")) {
+    if (!world.has_component<Physic>(e)) return;
+    auto& physic = world.get_component<Physic>(e);
+    if (ImGui::CollapsingHeader("Physic")) {
       ImGui::Text("Mass");
       ImGui::SameLine(100);
       ImGui::InputFloat("##physic_mass", &physic.mass);
@@ -57,9 +57,9 @@ void EditorGui::initComponentViewers() {
   };
 
   this->componentViewers[std::type_index(typeid(ModelRenderer))] = [](World& world, Entity e) {
-      if (!world.has_component<ModelRenderer>(e)) return;
-      auto& modelRenderer = world.get_component<ModelRenderer>(e);
-      if (ImGui::CollapsingHeader("Model Renderer")) {
+    if (!world.has_component<ModelRenderer>(e)) return;
+    auto& modelRenderer = world.get_component<ModelRenderer>(e);
+    if (ImGui::CollapsingHeader("Model Renderer")) {
       ImGui::Text("Model path");
       ImGui::SameLine();
       ImGui::InputText("##model_renderer.path", &modelRenderer.path);
@@ -71,15 +71,18 @@ void EditorGui::initComponentViewers() {
   };
 
   this->componentViewers[std::type_index(typeid(Camera))] = [](World& world, Entity e) {
-      if (!world.has_component<Camera>(e)) return;
-      auto& camera = world.get_component<Camera>(e);
-      if (ImGui::CollapsingHeader("Camera")) {
+    if (!world.has_component<Camera>(e)) return;
+    auto& camera = world.get_component<Camera>(e);
+    if (ImGui::CollapsingHeader("Camera")) {
       // Projection Type
       ImGui::Text("Projection Type");
       ImGui::SameLine(100);
-      const char* projectionTypes[] = { "Perspective", "Orthographic" };
+      const char* projectionTypes[] = {"Perspective", "Orthographic"};
       int currentType = static_cast<int>(camera.projectionType);
-      if (ImGui::Combo("##camera.projectionType", &currentType, projectionTypes, IM_ARRAYSIZE(projectionTypes))) {
+      if (ImGui::Combo("##camera.projectionType",
+                       &currentType,
+                       projectionTypes,
+                       IM_ARRAYSIZE(projectionTypes))) {
         camera.projectionType = static_cast<Camera::ProjectionType>(currentType);
       }
 
@@ -106,7 +109,11 @@ void EditorGui::initComponentViewers() {
       else {
         ImGui::Text("Orthographic Size");
         ImGui::SameLine(100);
-        ImGui::InputFloat("##camera.orthographicSize", &camera.orthographicSize, 0.1f, 1.0f, "%.2f");
+        ImGui::InputFloat("##camera.orthographicSize",
+                          &camera.orthographicSize,
+                          0.1f,
+                          1.0f,
+                          "%.2f");
       }
 
       // Camera orientation
@@ -128,9 +135,9 @@ void EditorGui::initComponentViewers() {
       ImGui::Separator();
       ImGui::SetNextItemWidth(200);
       ImGui::Text("Visual Settings");
-      ImGui::ColorPicker4("Skybox color", reinterpret_cast<float *>(&camera.skyboxColor));
+      ImGui::ColorPicker4("Skybox color", reinterpret_cast<float*>(&camera.skyboxColor));
     }
   };
 }
 
-}
+}  // namespace SpaceEditor

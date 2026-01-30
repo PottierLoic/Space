@@ -1,14 +1,14 @@
 #pragma once
 
-#include <string>
 #include <set>
+#include <string>
 
 #include "log/log.hpp"
 
 namespace SpaceEngine {
 
 class LogFilter {
-public:
+ public:
   std::set<LogLevel> levels;
   std::set<LogType> types;
   std::string keyword;
@@ -18,4 +18,4 @@ public:
   [[nodiscard]] bool matches(const Log& log) const;
 };
 
-}
+}  // namespace SpaceEngine

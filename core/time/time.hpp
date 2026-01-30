@@ -5,7 +5,7 @@
 namespace SpaceEngine {
 
 class Time {
-public:
+ public:
   static void init();
   static void update();
   static void setTimeScale(float scale);
@@ -15,7 +15,7 @@ public:
   static float unscaledDeltaTime();
   static float timeScale();
 
-private:
+ private:
   static std::chrono::steady_clock::time_point s_startTime;
   static std::chrono::steady_clock::time_point s_lastFrameTime;
 
@@ -25,4 +25,4 @@ private:
   static float s_timeScale;
 };
 
-}
+}  // namespace SpaceEngine
