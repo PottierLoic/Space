@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 EXTS = (".c", ".cc", ".cpp", ".h", ".hpp", ".inl")
-EXCLUDE_PREFIX = ("libs/", "third_party/", "build/")
+EXCLUDE_PREFIX = ("libs/", "build/")
 
 CHECK_MODE = "--check" in sys.argv
 
