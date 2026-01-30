@@ -121,8 +121,7 @@ void EditorGui::displayInspector() {
   World& world = scene->world;
 
   for (auto& [type, drawFn] : componentViewers) {
-    drawFn(world,
-           e);
+    drawFn(world, e);
   }
 
   ImGui::End();
