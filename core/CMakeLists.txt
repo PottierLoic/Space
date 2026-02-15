@@ -54,6 +54,7 @@ target_include_directories(SpaceEngine PUBLIC
   "${LIBS_ROOT}/glm"
   "${LIBS_ROOT}/stb"
   "${LIBS_ROOT}/json/include"
+  "${LIBS_ROOT}/miniaudio"
 )
 
 target_link_libraries(SpaceEngine
